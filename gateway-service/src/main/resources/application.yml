@@ -1,0 +1,27 @@
+server:
+  port: 10010
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      server-addr: 47.93.248.2:8848
+      discovery:
+        #        cluster-name: HZ #集群名字
+        namespace: ea7ec556-ca61-4ccd-b223-d3a7cf31e8cc #dev
+        ephemeral: false #是否是临时实例  datasource:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://userservice
+          predicates: #路由断言，判断请求是否符合规则
+            - Path=/user/**
+#          filters:
+#            - AddRequestHeader=Truth,Itcast is freaking awosame!
+        - id: order-service
+          uri: lb://orderservice
+          predicates:
+            - Path=/order/**
+      default-filters:
+        - AddRequestHeader=Truth,Itcast is freaking awesome!
+        - AddRequestHeader=origin,gateway
