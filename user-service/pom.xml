@@ -7,8 +7,6 @@
         <artifactId>cs-platform</artifactId>
         <version>1.0.0</version>
     </parent>
-
-
     <groupId>com.btchina</groupId>
     <artifactId>user-service</artifactId>
     <version>1.0.0</version>
@@ -118,6 +116,11 @@
             <artifactId>common-redis</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!-- <dependency> -->
+        <!--     <groupId>com.btchina</groupId> -->
+        <!--     <artifactId>feign-api</artifactId> -->
+        <!--     <version>1.0.0</version> -->
+        <!-- </dependency> -->
 
     </dependencies>
 

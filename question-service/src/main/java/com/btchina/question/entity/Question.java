@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.btchina.feign.pojo.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -71,6 +73,4 @@ public class Question implements Serializable {
     @ApiModelProperty("是否删除;1是删除，0是不删除")
     @TableLogic
     private Boolean deleted;
-
-
 }

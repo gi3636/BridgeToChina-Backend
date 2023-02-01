@@ -7,6 +7,7 @@ import com.btchina.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -30,12 +31,22 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("test")
-    public User queryById() {
+    public User test() {
         User user = userService.getBaseMapper().selectById(1);
         redisService.set("test", user);
         User user1 = (User) redisService.get("test");
         System.out.println("test" + user1);
         return user;
     }
+
+    @GetMapping("{id}")
+    public User findById(@PathVariable("id") Long id) {
+        User user = userService.getBaseMapper().selectById(id);
+        redisService.set("test", user);
+        User user1 = (User) redisService.get("test");
+        System.out.println("test" + user1.toString());
+        return user;
+    }
+
 }
 

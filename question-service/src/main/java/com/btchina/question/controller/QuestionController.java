@@ -1,6 +1,8 @@
 package com.btchina.question.controller;
 
 
+import com.btchina.feign.clients.UserClient;
+import com.btchina.feign.pojo.User;
 import com.btchina.question.entity.Question;
 import com.btchina.question.service.QuestionService;
 import com.btchina.redis.service.RedisService;
@@ -22,16 +24,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuestionController {
 
     @Autowired
+    private UserClient userClient;
+
+
+    @Autowired
     private RedisService redisService;
     @Autowired
     private QuestionService questionService;
     @GetMapping("{id}")
-    public Question queryById(@PathVariable("id") Integer id) {
+    public User queryById(@PathVariable("id") Integer id) {
         Question question = questionService.getBaseMapper().selectById(id);
         redisService.set("test1", question);
         Question question1 = (Question) redisService.get("test1");
         System.out.println("test1" + question1.toString());
-        return question;
+        User user= userClient.findById(1L);
+        System.out.println("user " + user.toString());
+        return user;
     }
 }
 

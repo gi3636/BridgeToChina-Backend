@@ -6,7 +6,7 @@ import com.btchina.redis.config.EnableRedisSerialize;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@EnableMybatisPlus// 开启mybatis分页
+@EnableMybatisPlus
 @EnableSwagger
 @EnableRedisSerialize
 @SpringBootApplication
