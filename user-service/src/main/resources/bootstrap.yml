@@ -1,6 +1,6 @@
 spring:
   application:
-    name: userservice
+    name: user-service
   profiles:
     active: dev
   cloud:
@@ -8,3 +8,6 @@ spring:
       server-addr: 47.93.248.2:8848
       config:
         file-extension: yaml #文件后缀名
+        shared-configs:
+          - data-id: redis-config.yaml
+            refresh: true

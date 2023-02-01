@@ -2,13 +2,13 @@ server:
   port: 8091
   address: 0.0.0.0
 spring:
-  cloud:
-    nacos:
-      server-addr: 47.93.248.2:8848
-      discovery:
-        cluster-name: HZ #集群名字
-        namespace: ea7ec556-ca61-4ccd-b223-d3a7cf31e8cc #dev
-        ephemeral: false #是否是临时实例  datasource:
+#  cloud:
+#    nacos:
+#      server-addr: 47.93.248.2:8848
+#      discovery:
+#        cluster-name: HZ #集群名字
+#        namespace: ea7ec556-ca61-4ccd-b223-d3a7cf31e8cc #dev
+#        ephemeral: false #是否是临时实例  datasource:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
