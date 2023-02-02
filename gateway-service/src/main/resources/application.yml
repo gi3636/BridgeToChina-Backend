@@ -6,23 +6,31 @@ spring:
   cloud:
     nacos:
       server-addr: 47.93.248.2:8848
-#      discovery:
-#        #        cluster-name: HZ #集群名字
-#        namespace: ea7ec556-ca61-4ccd-b223-d3a7cf31e8cc #dev
-#        ephemeral: false #是否是临时实例  datasource:
     gateway:
       routes:
         - id: user-service
           uri: lb://user-service
           predicates: #路由断言，判断请求是否符合规则
             - Path=/user/**
-#          filters:
-#            - AddRequestHeader=Truth,Itcast is freaking awosame!
         - id: question-service
           uri: lb://question-service
           predicates:
             - Path=/question/**
-      default-filters:
-        - AddRequestHeader=Truth,Itcast is freaking awesome!
-        - AddRequestHeader=origin,gateway
+      globalcors:
+        add-to-simple-url-handler-mapping: true # 放行options请求
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            #            allowedOrigins: # 允许哪些网站的跨域请求
+            #              - "http://www.scblogs.cn"
+            #              - "http://127.0.0.1"
+            allowedMethods: # 允许的跨域ajax请求方式
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowedHeaders: "*" # 允许在请求中携带的头信息
+            allowCredentials: true # 是否允许携带cookie
+            maxAge: 360000 # 本次跨域检查的有效期
 
