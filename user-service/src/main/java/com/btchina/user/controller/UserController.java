@@ -1,11 +1,12 @@
 package com.btchina.user.controller;
 
 
+import com.btchina.core.api.ResultCode;
+import com.btchina.core.exception.GlobalException;
 import com.btchina.redis.service.RedisService;
 import com.btchina.user.entity.User;
 import com.btchina.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user/")
-@RefreshScope
 public class UserController {
 
     @Autowired
@@ -43,8 +43,11 @@ public class UserController {
     public User findById(@PathVariable("id") Long id) {
         User user = userService.getBaseMapper().selectById(id);
         redisService.set("test", user);
-        User user1 = (User) redisService.get("test");
-        System.out.println("test" + user1.toString());
+        //User user1 = (User) redisService.get("test");
+        //System.out.println("test" + user1.toString());
+        if (user == null) {
+            throw new GlobalException(ResultCode.COMMENT_NOT_EXIST);
+        }
         return user;
     }
 

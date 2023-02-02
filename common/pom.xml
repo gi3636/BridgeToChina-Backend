@@ -16,6 +16,7 @@
         <module>common-mybatis</module>
         <module>common-swagger</module>
         <module>common-redis</module>
+        <module>common-core</module>
     </modules>
 
     <properties>
