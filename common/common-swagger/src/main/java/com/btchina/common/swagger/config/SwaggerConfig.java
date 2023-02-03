@@ -38,7 +38,7 @@ public class SwaggerConfig {
 				.enable(true)
 				// 将api的元信息设置为包含在json ResourceListing响应中。
 				.apiInfo(new ApiInfoBuilder()
-						.title("小红书接口文档")
+						.title("留华桥接口文档")
 						// 描述
 						.description("平台服务管理api")
 						.contact(new Contact("franky", "", "fenggi123@gmail.com"))
@@ -49,7 +49,7 @@ public class SwaggerConfig {
 				// 选择哪些接口作为swagger的doc发布
 				.select()
 				// 要扫描的API(Controller)基础包
-				.apis(RequestHandlerSelectors.basePackage("com.example.red.book"))
+				.apis(RequestHandlerSelectors.basePackage("com.btchina"))
 				//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
 				.paths(PathSelectors.any())
 				.build();
@@ -61,37 +61,37 @@ public class SwaggerConfig {
 	 *
 	 * @return
 	 */
-	@Bean
-	public static BeanPostProcessor springfoxHandlerProviderBeanPostProcessor() {
-		return new BeanPostProcessor() {
-
-			@Override
-			public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-				if (bean instanceof WebMvcRequestHandlerProvider || bean instanceof WebFluxRequestHandlerProvider) {
-					customizeSpringfoxHandlerMappings(getHandlerMappings(bean));
-				}
-				return bean;
-			}
-
-			private <T extends RequestMappingInfoHandlerMapping> void customizeSpringfoxHandlerMappings(List<T> mappings) {
-				List<T> copy = mappings.stream()
-						.filter(mapping -> mapping.getPatternParser() == null)
-						.collect(Collectors.toList());
-				mappings.clear();
-				mappings.addAll(copy);
-			}
-
-			@SuppressWarnings("unchecked")
-			private List<RequestMappingInfoHandlerMapping> getHandlerMappings(Object bean) {
-				try {
-					Field field = ReflectionUtils.findField(bean.getClass(), "handlerMappings");
-					field.setAccessible(true);
-					return (List<RequestMappingInfoHandlerMapping>) field.get(bean);
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					throw new IllegalStateException(e);
-				}
-			}
-		};
-	}
+	//@Bean
+	//public static BeanPostProcessor springfoxHandlerProviderBeanPostProcessor() {
+	//	return new BeanPostProcessor() {
+	//
+	//		@Override
+	//		public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+	//			if (bean instanceof WebMvcRequestHandlerProvider || bean instanceof WebFluxRequestHandlerProvider) {
+	//				customizeSpringfoxHandlerMappings(getHandlerMappings(bean));
+	//			}
+	//			return bean;
+	//		}
+	//
+	//		private <T extends RequestMappingInfoHandlerMapping> void customizeSpringfoxHandlerMappings(List<T> mappings) {
+	//			List<T> copy = mappings.stream()
+	//					.filter(mapping -> mapping.getPatternParser() == null)
+	//					.collect(Collectors.toList());
+	//			mappings.clear();
+	//			mappings.addAll(copy);
+	//		}
+	//
+	//		@SuppressWarnings("unchecked")
+	//		private List<RequestMappingInfoHandlerMapping> getHandlerMappings(Object bean) {
+	//			try {
+	//				Field field = ReflectionUtils.findField(bean.getClass(), "handlerMappings");
+	//				field.setAccessible(true);
+	//				return (List<RequestMappingInfoHandlerMapping>) field.get(bean);
+	//			} catch (IllegalArgumentException | IllegalAccessException e) {
+	//				throw new IllegalStateException(e);
+	//			}
+	//		}
+	//	};
+	//}
 
 }

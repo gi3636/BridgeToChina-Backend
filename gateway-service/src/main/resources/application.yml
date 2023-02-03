@@ -1,8 +1,10 @@
 server:
   port: 9999
+
+
 spring:
-  main:
-    web-application-type: reactive
+#  main:
+#    web-application-type: reactive
   application:
     name: gateway-service
   cloud:
@@ -13,7 +15,7 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates: #路由断言，判断请求是否符合规则
-            - Path=/user/**
+            - Path=/user/**,/auth/**  # 判断请求路径
         - id: question-service
           uri: lb://question-service
           predicates:
