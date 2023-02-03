@@ -33,12 +33,12 @@ public class AuthController {
     private UserService userService;
 
 
-    //@ApiOperation(value = "用户登录")
-    //@PostMapping("login")
-    //public CommonResult<UserVO> login(@Validated @RequestBody LoginForm loginForm) {
-    //    UserVO userVo = userService.login(loginForm.getUsername(), loginForm.getPassword());
-    //    return CommonResult.success(userVo);
-    //}
+    @ApiOperation(value = "用户登录")
+    @PostMapping("login")
+    public CommonResult<UserVO> login(@Validated @RequestBody LoginForm loginForm) {
+        UserVO userVo = userService.login(loginForm.getUsername(), loginForm.getPassword());
+        return CommonResult.success(userVo);
+    }
 
     @ApiOperation(value = "用户注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
