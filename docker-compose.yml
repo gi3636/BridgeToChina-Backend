@@ -1,0 +1,9 @@
+version: "3.2"
+
+services:
+  user-service:
+    build: ./user-service
+  order-service:
+    build: ./order-service
+  gateway-service:
+    build: ./gateway-service
