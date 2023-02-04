@@ -138,7 +138,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.btchina.question.QuestionServiceApplicationTests</mainClass>
+                    <mainClass>com.btchina.question.QuestionServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
