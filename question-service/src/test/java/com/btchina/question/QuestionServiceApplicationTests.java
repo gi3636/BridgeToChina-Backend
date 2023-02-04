@@ -1,4 +1,4 @@
-package com.btchina.user;
+package com.btchina.question;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
