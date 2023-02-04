@@ -132,7 +132,7 @@
     </dependencies>
 
     <build>
-        <finalName>app</finalName>
+        <finalName>question-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

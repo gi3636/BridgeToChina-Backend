@@ -2,8 +2,21 @@ version: "3.2"
 
 services:
   user-service:
-    build: ./user-service
-  order-service:
-    build: ./question-service
+    image: user-service:1.0
+    container_name: user-service:1.0
+    ports:
+      - "8091:8080"
+    depends_on:
+      - gateway-service
+  question-service:
+    image: question-service:1.0
+    container_name: question-service:1.0
+    ports:
+      - "8100:8080"
+    depends_on:
+      - gateway-service
   gateway-service:
-    build: ./gateway-service
+    image: gateway-service:1.0
+    container_name: gateway-service:1.0
+    ports:
+      - "9999:8080"
