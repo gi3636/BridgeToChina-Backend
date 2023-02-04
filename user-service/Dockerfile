@@ -14,4 +14,4 @@ ENV JAVA_OPTS="\
 
 EXPOSE 8080
 # 入口点， 执行JAVA运行命令
-ENTRYPOINT ["java","-jar","/root/app.jar"]
+ENTRYPOINT ["java","-jar","/root/app.jar","--spring.profiles.active=prod"]
