@@ -4,6 +4,6 @@ services:
   user-service:
     build: ./user-service
   order-service:
-    build: ./order-service
+    build: ./question-service
   gateway-service:
     build: ./gateway-service
