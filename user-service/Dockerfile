@@ -13,7 +13,7 @@ ENV JAVA_OPTS="\
 -XX:MetaspaceSize=256m \
 -XX:MaxMetaspaceSize=512m \
 -Duser.timezone=GMT+08 "
-#空参数，方便创建容器时传参
-ENV PARAMS=""
+
+EXPOSE 8080
 # 入口点， 执行JAVA运行命令
-ENTRYPOINT ["sh","-c","java -jar $JAVA_OPTS /app.jar $PARAMS"]
+ENTRYPOINT ["java","-jar","/root/app.jar"]
