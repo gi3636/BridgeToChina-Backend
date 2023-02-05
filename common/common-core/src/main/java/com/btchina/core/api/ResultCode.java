@@ -10,6 +10,7 @@ public enum ResultCode implements IErrorCode {
     VALIDATE_FAILED(404, "参数检验失败"),
     UNAUTHORIZED(401, "暂未登录或token已经过期"),
     FORBIDDEN(403, "没有相关权限"),
+    TOKEN_INVALID(500, "token验证失败"),
 
     //用户相关
     USER_NOT_FOUND(20001, "用户不存在"),

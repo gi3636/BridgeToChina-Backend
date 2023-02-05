@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    nacos:
+      server-addr: 47.93.248.2:8848
+      config:
+        file-extension: yaml
+        shared-configs:
+          - data-id: jwt-config.yaml
+            refresh: true
+          - data-id: spring-config.yaml
+            refresh: true
