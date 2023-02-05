@@ -17,6 +17,7 @@
         <module>common-swagger</module>
         <module>common-redis</module>
         <module>common-core</module>
+        <module>common-amqp</module>
     </modules>
 
     <properties>
