@@ -12,8 +12,10 @@ import java.util.Date;
 import com.btchina.feign.pojo.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -23,8 +25,9 @@ import lombok.Setter;
  * @author franky
  * @since 2023-02-01
  */
-@Getter
-@Setter
+
+@Data
+@ToString
 @TableName("tbl_question")
 @ApiModel(value = "Question对象", description = "问答表")
 public class Question implements Serializable {

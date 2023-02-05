@@ -3,6 +3,7 @@ package com.btchina.question.mq;
 
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
+import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -20,8 +21,8 @@ public class QuestionListener {
     public void listenQuestionInsert(Question question) {
         if (question != null) {
             log.info("监听到新增消息，问题为：{}", question);
-            //questionDoc questionDoc = new questionDoc(question);
-            //questionService.addEsDoc(questionDoc);
+            QuestionDoc questionDoc = new QuestionDoc(question);
+            questionService.addEsDoc(questionDoc);
         }
     }
 
