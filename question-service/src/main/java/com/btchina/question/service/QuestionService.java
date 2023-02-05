@@ -2,6 +2,7 @@ package com.btchina.question.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.question.entity.Question;
+import com.btchina.question.model.form.AddQuestionForm;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.btchina.question.entity.Question;
  */
 public interface QuestionService extends IService<Question> {
 
+    Boolean addQuestion(AddQuestionForm addQuestionForm);
 }

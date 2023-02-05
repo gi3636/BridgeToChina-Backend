@@ -1,18 +1,19 @@
 package com.btchina.question.controller;
 
 
+import com.btchina.core.api.CommonResult;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.feign.pojo.User;
 import com.btchina.question.entity.Question;
+import com.btchina.question.model.form.AddQuestionForm;
 import com.btchina.question.service.QuestionService;
 import com.btchina.redis.service.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 /**
  * <p>
  * 问答表 前端控制器
@@ -45,5 +46,19 @@ public class QuestionController {
         System.out.println("user " + user.toString());
         return user;
     }
+
+
+    @ApiOperation(value = "发布问题")
+    @PostMapping("/add")
+    public CommonResult<Void> addQuestion(@Validated @RequestBody AddQuestionForm addQuestionForm) {
+        Boolean isSuccess = questionService.addQuestion(addQuestionForm);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        // 标题 内容 标签
+        return CommonResult.success(null);
+    }
+
+
 }
 

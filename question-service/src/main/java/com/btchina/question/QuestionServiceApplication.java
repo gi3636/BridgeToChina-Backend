@@ -1,5 +1,6 @@
 package com.btchina.question;
 
+import com.btchina.amqp.config.EnableMq;
 import com.btchina.common.mybatis.config.EnableMybatisPlus;
 import com.btchina.common.swagger.config.EnableSwagger;
 import com.btchina.feign.config.DefaultFeignConfiguration;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableSwagger
 @EnableRedisSerialize
 @SpringBootApplication
+@EnableMq
 @EnableFeignClients(basePackages = {"com.btchina.feign.clients"}, defaultConfiguration = DefaultFeignConfiguration.class)
 public class QuestionServiceApplication {
 
