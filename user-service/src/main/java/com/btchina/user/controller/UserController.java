@@ -6,6 +6,8 @@ import com.btchina.core.exception.GlobalException;
 import com.btchina.redis.service.RedisService;
 import com.btchina.user.entity.User;
 import com.btchina.user.service.UserService;
+import com.btchina.user.util.AuthHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-01-30
  */
 @RestController
+@Slf4j
 @RequestMapping("/user/")
 public class UserController {
 
@@ -43,6 +46,10 @@ public class UserController {
     public User findById(@PathVariable("id") Long id) {
         User user = userService.getBaseMapper().selectById(id);
         redisService.set("test", user);
+        Integer userId = AuthHelper.getUserId();
+        String username = AuthHelper.getUsername();
+        log.info("userId:{}", userId);
+        log.info("username:{}", username);
         //User user1 = (User) redisService.get("test");
         //System.out.println("test" + user1.toString());
         if (user == null) {

@@ -8,11 +8,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.function.Consumer;
 
 /**
  * 权限认证过滤器
@@ -37,20 +39,23 @@ public class AuthorizeFilter implements GlobalFilter {
 		ServerHttpRequest request = exchange.getRequest();
 		// 获取token
 		String token = request.getHeaders().getFirst("token");
-		log.info("token: {}", token);
-		////验证token
+		// 验证token
 		if (StringUtils.isBlank(token)) {
 			throw GlobalException.from(ResultCode.UNAUTHORIZED);
 		}
 		if (!jwtTokenUtil.validateToken(token)) {
 			throw GlobalException.from(ResultCode.UNAUTHORIZED);
 		}
-
-		//if (StringUtils.hasText(token)) {
-		//	// 验证、解析token
 		//
-		//}
-		// 放行
+		Long id = jwtTokenUtil.getIdFromToken(token);
+		String username = jwtTokenUtil.getUserNameFromToken(token);
+		// 将用户信息存储在request header中
+		Consumer<HttpHeaders> httpHeaders = httpHeader -> {
+			httpHeader.set("user-id", id.toString());
+			httpHeader.set("username", username);
+		};
+		ServerHttpRequest build = request.mutate().headers(httpHeaders).build();
+		exchange = exchange.mutate().request(build).build();
 		return chain.filter(exchange);
 	}
 
@@ -63,7 +68,7 @@ public class AuthorizeFilter implements GlobalFilter {
 	 */
 	public static Long getUserId(ServerHttpRequest request) {
 		Long res = null;
-		String identity = request.getHeaders().getFirst("token");
+		String identity = request.getHeaders().getFirst("user-id");
 		if (identity != null) {
 			try {
 				res = Long.parseLong(identity);
