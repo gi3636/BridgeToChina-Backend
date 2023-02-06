@@ -29,7 +29,6 @@ public class AuthorizeFilter implements GlobalFilter {
 
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-		System.out.println("exchange: " + exchange.getRequest().getURI().getPath());
 		// 不判断token的过滤器
 		if (exchange.getAttribute(ATTRIBUTE_IGNORE_GLOBAL_FILTER) != null
 				&& exchange.getAttribute(ATTRIBUTE_IGNORE_GLOBAL_FILTER).equals(true)) {
