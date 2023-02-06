@@ -1,6 +1,15 @@
 package com.btchina.tag.controller;
 
 
+import com.btchina.core.api.CommonResult;
+import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.service.TagQuestionService;
+import com.btchina.tag.service.TagService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/tag/tagQuestion")
 public class TagQuestionController {
-
+    @Autowired
+    private TagQuestionService tagQuestionService;
+    @ApiOperation(value = "添加问题标签")
+    @PostMapping("/add")
+    public CommonResult<Void> addTag(@Validated @RequestBody AddTagForm addTagForm) {
+        Boolean isSuccess = tagQuestionService.addTag(addTagForm);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        return CommonResult.success(null);
+    }
 }
 

@@ -15,4 +15,6 @@ import com.btchina.tag.model.form.AddTagForm;
 public interface TagService extends IService<Tag> {
 
     Boolean addTag(AddTagForm addTagForm);
+
+    Tag selectOne(String name);
 }

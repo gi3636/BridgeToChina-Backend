@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name="tag-service")
 public interface TagClient {
 
-    @PostMapping("/tag/add/")
+    @PostMapping("/tag/tagQuestion/add/")
     CommonResult<Void> addTag(AddTagForm addTagForm);
 
 }

@@ -2,6 +2,7 @@ package com.btchina.tag.service;
 
 import com.btchina.tag.entity.TagQuestion;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.btchina.tag.model.form.AddTagForm;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TagQuestionService extends IService<TagQuestion> {
 
+    Boolean addTag(AddTagForm addTagForm);
 }

@@ -37,9 +37,6 @@ public class TagQuestion implements Serializable {
     @ApiModelProperty("问题Id")
     private Long questionId;
 
-    @ApiModelProperty("状态 0是取消 1是引用")
-    private Integer status;
-
     @ApiModelProperty("创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
