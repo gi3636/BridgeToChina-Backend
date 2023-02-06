@@ -4,6 +4,9 @@ import co.elastic.clients.elasticsearch._types.Refresh;
 import co.elastic.clients.elasticsearch.core.IndexRequest;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.btchina.feign.clients.TagClient;
+import com.btchina.feign.clients.UserClient;
+import com.btchina.feign.model.form.AddTagForm;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
 import com.btchina.question.mapper.QuestionMapper;
@@ -36,13 +39,23 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private TagClient tagClient;
+
     @Override
     public Boolean addQuestion(AddQuestionForm addQuestionForm) {
+        // 1. 添加问题
         Question question = new Question();
         question.setTitle(addQuestionForm.getTitle());
         question.setContent(addQuestionForm.getContent());
         question.setUserId(1L);
         Boolean isSuccess = this.baseMapper.insert(question) > 0;
+        // 2. 添加标签
+        AddTagForm addTagForm = new AddTagForm();
+        addTagForm.setId(question.getId());
+        addTagForm.setTags(addQuestionForm.getTags());
+        tagClient.addTag(addTagForm);
+        // 3. 添加es文档
         if (isSuccess) {
             rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.INSERT_KEY, question);
         }

@@ -14,20 +14,28 @@ spring:
         port: 8848
     gateway:
       routes:
+        # 注册登录服务
         - id: auth-service
           uri: lb://user-service
           predicates: #路由断言，判断请求是否符合规则
             - Path=/auth/**  # 判断请求路径
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
+        # 用户服务
         - id: user-service
           uri: lb://user-service
           predicates: #路由断言，判断请求是否符合规则
             - Path=/user/**  # 判断请求路径
+        # 问题服务
         - id: question-service
           uri: lb://question-service
           predicates:
             - Path=/question/**
+        # 标签服务
+        - id: tag-service
+          uri: lb://tag-service
+          predicates:
+            - Path=/tag/**
       globalcors:
         add-to-simple-url-handler-mapping: true # 放行options请求
         cors-configurations:

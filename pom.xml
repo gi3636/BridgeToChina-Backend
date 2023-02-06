@@ -21,6 +21,7 @@
         <module>question-service</module>
         <module>gateway-service</module>
         <module>feign-api</module>
+        <module>tag-service</module>
     </modules>
 
     <properties>

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 public class AddQuestionForm {
@@ -19,8 +20,7 @@ public class AddQuestionForm {
     @ApiModelProperty("图片,多个图片用逗号分隔")
     private String images;
 
-    @NotBlank(message = "标签不能为空")
-    @ApiModelProperty("标签,多个标签用逗号分隔")
-    private String tags;
+    @ApiModelProperty("标签")
+    private List<String> tags;
 
 }
