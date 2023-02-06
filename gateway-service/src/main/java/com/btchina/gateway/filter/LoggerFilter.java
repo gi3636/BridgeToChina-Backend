@@ -3,6 +3,7 @@ package com.btchina.gateway.filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpMethod;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class LoggerFilter implements GlobalFilter {
+public class LoggerFilter implements GlobalFilter , Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -86,4 +87,8 @@ public class LoggerFilter implements GlobalFilter {
                 , method, path, param, headers);
     }
 
+    @Override
+    public int getOrder() {
+        return -1;
+    }
 }

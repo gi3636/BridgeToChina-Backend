@@ -6,7 +6,7 @@ import com.btchina.core.exception.GlobalException;
 import com.btchina.redis.service.RedisService;
 import com.btchina.user.entity.User;
 import com.btchina.user.service.UserService;
-import com.btchina.user.util.AuthHelper;
+import com.btchina.core.util.AuthHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

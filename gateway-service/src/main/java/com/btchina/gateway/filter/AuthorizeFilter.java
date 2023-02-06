@@ -29,6 +29,7 @@ public class AuthorizeFilter implements GlobalFilter {
 
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+		log.info("经过了AuthorizeFilter");
 		// 不判断token的过滤器
 		if (exchange.getAttribute(ATTRIBUTE_IGNORE_GLOBAL_FILTER) != null
 				&& exchange.getAttribute(ATTRIBUTE_IGNORE_GLOBAL_FILTER).equals(true)) {
@@ -76,5 +77,4 @@ public class AuthorizeFilter implements GlobalFilter {
 		}
 		return res;
 	}
-
 }

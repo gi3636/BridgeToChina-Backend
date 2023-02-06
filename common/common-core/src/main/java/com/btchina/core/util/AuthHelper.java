@@ -1,8 +1,6 @@
-package com.btchina.user.util;
+package com.btchina.core.util;
 
-import com.btchina.core.exception.GlobalException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.Nullable;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
