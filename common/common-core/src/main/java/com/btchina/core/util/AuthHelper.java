@@ -72,4 +72,5 @@ public class AuthHelper {
 	public static String getUsername() {
 		return getCurrentUsername();
 	}
+
 }
