@@ -20,7 +20,7 @@ public class AuthHelper {
 	 * @return 当前用户id，当用户未登录时为null
 	 */
 	@Nullable
-	public static Integer getCurrentUserId() {
+	public static Long getCurrentUserId() {
 		// 获取当前线程的请求
 		ServletRequestAttributes attribute = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		if (attribute == null) {
@@ -28,9 +28,9 @@ public class AuthHelper {
 		}
 		// 获取请求中的用户信息
 		String header = attribute.getRequest().getHeader(USER_ID_HEADER);
-		Integer userId;
+		Long userId;
 		try {
-			userId = Integer.valueOf(header);
+			userId = Long.valueOf(header);
 		} catch (NumberFormatException ignored) {
 			// 解析失败
 			userId = null;
@@ -60,7 +60,7 @@ public class AuthHelper {
 	 *
 	 * @return 当前用户id
 	 */
-	public static Integer getUserId() {
+	public static Long getUserId() {
 		return getCurrentUserId();
 	}
 

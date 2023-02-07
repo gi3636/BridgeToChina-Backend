@@ -1,26 +1,24 @@
 package com.btchina.question.service.impl;
 
-import co.elastic.clients.elasticsearch._types.Refresh;
-import co.elastic.clients.elasticsearch.core.IndexRequest;
-import co.elastic.clients.elasticsearch.core.IndexResponse;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.feign.clients.TagClient;
-import com.btchina.feign.clients.UserClient;
 import com.btchina.feign.model.form.AddTagForm;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
 import com.btchina.question.mapper.QuestionMapper;
 import com.btchina.question.mapper.es.QuestionRepository;
 import com.btchina.question.model.doc.QuestionDoc;
+import com.btchina.question.model.enums.QueryTypeEnum;
 import com.btchina.question.model.form.AddQuestionForm;
+import com.btchina.question.model.form.QuestionQueryForm;
 import com.btchina.question.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.io.IOException;
+import java.util.List;
 
 /**
  * <p>
@@ -79,5 +77,23 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             log.error("增加es文档失败: {} ", e.getMessage(), e);
             return false;
         }
+    }
+
+    @Override
+    public List<Question> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
+        QueryTypeEnum queryTypeEnum = QueryTypeEnum.getQueryTypeEnum(questionQueryForm.getType());
+        switch (queryTypeEnum){
+            case HOT:
+                log.info("id: {}", selfId);
+                LambdaQueryWrapper<Question> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.orderByDesc(Question::getLikeCount);
+                log.info("查询热门问题");
+               return  this.baseMapper.selectList(queryWrapper);
+            case MY:
+                log.info("查询我的问题");
+                break;
+        }
+        return null;
+
     }
 }

@@ -2,10 +2,12 @@ package com.btchina.question.controller;
 
 
 import com.btchina.core.api.CommonResult;
+import com.btchina.core.util.AuthHelper;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.feign.pojo.User;
 import com.btchina.question.entity.Question;
 import com.btchina.question.model.form.AddQuestionForm;
+import com.btchina.question.model.form.QuestionQueryForm;
 import com.btchina.question.service.QuestionService;
 import com.btchina.redis.service.RedisService;
 import io.swagger.annotations.Api;
@@ -13,6 +15,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -59,6 +63,14 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
+
+    @ApiOperation(value = "获取问题列表")
+    @PostMapping("/list")
+    public CommonResult<List<Question>> getList(@Validated @RequestBody QuestionQueryForm questionQueryForm) {
+        Long selfId = AuthHelper.getUserId();
+        List<Question> result = questionService.queryQuestion(questionQueryForm, selfId);
+        return CommonResult.success(result);
+    }
 
 }
 

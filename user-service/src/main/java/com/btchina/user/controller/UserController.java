@@ -46,7 +46,7 @@ public class UserController {
     public User findById(@PathVariable("id") Long id) {
         User user = userService.getBaseMapper().selectById(id);
         redisService.set("test", user);
-        Integer userId = AuthHelper.getUserId();
+        Long userId = AuthHelper.getUserId();
         String username = AuthHelper.getUsername();
         log.info("userId:{}", userId);
         log.info("username:{}", username);

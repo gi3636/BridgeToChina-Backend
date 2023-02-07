@@ -14,7 +14,7 @@ public class PageQueryParam {
 
     @NotNull(message = "每页数量不能为空")
     @ApiModelProperty(value = "每页数量")
-    private Integer size = 10;
+    private Integer pageSize = 10;
 
     @Min(value = 1, message = "页码最小为1")
     @NotNull(message = "页码不能为空")
