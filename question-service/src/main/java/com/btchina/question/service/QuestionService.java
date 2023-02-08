@@ -5,8 +5,7 @@ import com.btchina.question.entity.Question;
 import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.form.AddQuestionForm;
 import com.btchina.question.model.form.QuestionQueryForm;
-
-import java.util.List;
+import org.springframework.data.elasticsearch.core.SearchHits;
 
 /**
  * <p>
@@ -22,5 +21,5 @@ public interface QuestionService extends IService<Question> {
 
     Boolean addEsDoc(QuestionDoc questionDoc);
 
-    List<Question> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId);
+    SearchHits<QuestionDoc> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId);
 }
