@@ -45,10 +45,7 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             throw GlobalException.from(ResultCode.QUESTION_NOT_EXIST);
         }
         // 查询是否已经点赞
-        LambdaQueryWrapper<QuestionUserLike> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(QuestionUserLike::getQuestionId, questionId);
-        queryWrapper.eq(QuestionUserLike::getUserId, userId);
-        QuestionUserLike questionUserLike = this.getOne(queryWrapper);
+        QuestionUserLike questionUserLike = getByQuestionIdAndUserId(questionId, userId);
         // 曾经点赞过
         if (questionUserLike != null) {
             // 已经点赞
@@ -69,6 +66,43 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
         return true;
     }
 
+
+    @Override
+    public Boolean unlike(Long questionId, Long userId) {
+        Question question = questionService.getById(questionId);
+        if (question == null) {
+            throw GlobalException.from(ResultCode.QUESTION_NOT_EXIST);
+        }
+        // 查询是否已经点赞
+        QuestionUserLike questionUserLike = getByQuestionIdAndUserId(questionId, userId);
+        // 曾经点赞过
+        if (questionUserLike != null) {
+            // 已经取消赞
+            if (questionUserLike.getStatus() == 0) {
+                return true;
+            }
+            questionUserLike.setStatus(0);
+            this.updateById(questionUserLike);
+        } else {
+            // 未点赞过
+            QuestionUserLike userUnlike = new QuestionUserLike();
+            userUnlike.setQuestionId(questionId);
+            userUnlike.setUserId(userId);
+            userUnlike.setStatus(0);
+            this.save(userUnlike);
+        }
+        decreaseLikeCount(question);
+        return true;
+    }
+
+
+    public QuestionUserLike getByQuestionIdAndUserId(Long questionId, Long userId) {
+        LambdaQueryWrapper<QuestionUserLike> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(QuestionUserLike::getQuestionId, questionId);
+        queryWrapper.eq(QuestionUserLike::getUserId, userId);
+        return this.getOne(queryWrapper);
+    }
+
     /**
      * 增加点赞数
      * @param question
@@ -78,6 +112,21 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             throw GlobalException.from("问题不存在");
         }
         question.setLikeCount(question.getLikeCount() + 1);
+        Boolean isSuccess = questionService.updateById(question);
+        if (isSuccess) {
+            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, question);
+        }
+    }
+
+    /**
+     * 减少点赞数
+     * @param question
+     */
+    public void decreaseLikeCount(Question  question) {
+        if (question == null) {
+            throw GlobalException.from("问题不存在");
+        }
+        question.setLikeCount(question.getLikeCount() -1);
         Boolean isSuccess = questionService.updateById(question);
         if (isSuccess) {
             rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, question);

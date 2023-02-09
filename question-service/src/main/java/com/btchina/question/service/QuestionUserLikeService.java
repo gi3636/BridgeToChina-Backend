@@ -14,4 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface QuestionUserLikeService extends IService<QuestionUserLike> {
 
     Boolean like(Long questionId, Long selfId);
+
+    Boolean unlike(Long questionId, Long userId);
 }

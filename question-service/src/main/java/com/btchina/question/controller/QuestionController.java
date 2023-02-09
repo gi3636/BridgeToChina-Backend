@@ -89,5 +89,16 @@ public class QuestionController {
         }
         return CommonResult.success(null);
     }
+
+    @ApiOperation(value = "点赞")
+    @PostMapping("/unlike")
+    public CommonResult<Void> unlike(@Validated @RequestBody QuestionLikeForm questionLikeForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = questionUserLikeService.unlike(questionLikeForm.getQuestionId(), userId);
+        if (!isSuccess) {
+            return CommonResult.failed("取消赞失败");
+        }
+        return CommonResult.success(null);
+    }
 }
 
