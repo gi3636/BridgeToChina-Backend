@@ -14,7 +14,7 @@ services:
     ports:
       - "8100:8080"
     depends_on:
-      - gateway-service、
+      - gateway-service
   tag-service:
     image: tag-service:1.0
     container_name: tag-service
