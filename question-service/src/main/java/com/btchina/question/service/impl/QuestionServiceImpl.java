@@ -96,14 +96,28 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
      * @return
      */
     @Override
-    public Boolean addEsDoc(QuestionDoc questionDoc) {
+    public void addEsDoc(QuestionDoc questionDoc) {
         try {
             QuestionDoc question = questionRepository.save(questionDoc);
             log.info("增加es文档成功: {} ", question);
-            return true;
         } catch (Exception e) {
             log.error("增加es文档失败: {} ", e.getMessage(), e);
-            return false;
+        }
+    }
+
+    /**
+     * 更新es文档
+     *
+     * @param questionDoc
+     * @return
+     */
+    @Override
+    public void updateEsDoc(QuestionDoc questionDoc) {
+        try {
+            QuestionDoc question = questionRepository.save(questionDoc);
+            log.info("更新es文档成功: {} ", question);
+        } catch (Exception e) {
+            log.error("更新es文档失败: {} ", e.getMessage(), e);
         }
     }
 
@@ -120,8 +134,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 //        new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery("type", 1), ScoreFunctionBuilders.weightFactorFunction(1))
                 //};
                 BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-                ScoreFunctionBuilder<?> scoreFunctionBuilder = ScoreFunctionBuilders.fieldValueFactorFunction("likeCount").modifier(FieldValueFactorFunction.Modifier.LN1P).factor(0.1f);
-                FunctionScoreQueryBuilder query = QueryBuilders.functionScoreQuery(boolQueryBuilder,scoreFunctionBuilder).boostMode(CombineFunction.SUM);
+                //ScoreFunctionBuilder<?> scoreFunctionBuilder = ScoreFunctionBuilders.fieldValueFactorFunction("likeCount").modifier(FieldValueFactorFunction.Modifier.LN1P).factor(0.1f);
+                //FunctionScoreQueryBuilder query = QueryBuilders.functionScoreQuery(boolQueryBuilder,scoreFunctionBuilder).boostMode(CombineFunction.SUM);
 
                 FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder(
                         "likeCount");

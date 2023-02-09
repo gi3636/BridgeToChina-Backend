@@ -6,6 +6,10 @@ import com.btchina.question.entity.Question;
 import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.ExchangeTypes;
+import org.springframework.amqp.rabbit.annotation.Exchange;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,15 +35,20 @@ public class QuestionListener {
         //questionService.deleteById(id);
     }
 
-    //@RabbitListener(bindings = @QueueBinding(
-    //        value = @Queue(name = QuestionConstant.UPDATE_QUEUE_NAME),
-    //        exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
-    //        key = QuestionConstant.UPDATE_KEY
-    //))
-    //public void listenquestionUpdate(Question question) {
-    //    if (question != null) {
-    //        QuestionDoc questionDoc = new QuestionDoc(question);
-    //        questionService.updateEsDoc(questionDoc);
-    //    }
-    //}
+    /**
+     * 监听问题更新消息
+     *
+     * @param question
+     */
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(name = QuestionConstant.UPDATE_QUEUE_NAME),
+            exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
+            key = QuestionConstant.UPDATE_KEY
+    ))
+    public void listenQuestionUpdate(Question question) {
+        if (question != null) {
+            QuestionDoc questionDoc = new QuestionDoc(question);
+            questionService.updateEsDoc(questionDoc);
+        }
+    }
 }

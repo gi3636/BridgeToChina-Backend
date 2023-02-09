@@ -8,8 +8,10 @@ import com.btchina.feign.pojo.User;
 import com.btchina.question.entity.Question;
 import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.form.AddQuestionForm;
+import com.btchina.question.model.form.QuestionLikeForm;
 import com.btchina.question.model.form.QuestionQueryForm;
 import com.btchina.question.service.QuestionService;
+import com.btchina.question.service.QuestionUserLikeService;
 import com.btchina.redis.service.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +41,10 @@ public class QuestionController {
     private RedisService redisService;
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private QuestionUserLikeService questionUserLikeService;
+
     @ApiOperation(value = "问答测试")
     @GetMapping("{id}")
     public User queryById(@PathVariable("id") Integer id) {
@@ -72,5 +78,16 @@ public class QuestionController {
         return CommonResult.success(result);
     }
 
+
+    @ApiOperation(value = "点赞")
+    @PostMapping("/like")
+    public CommonResult<Void> like(@Validated @RequestBody QuestionLikeForm questionLikeForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = questionUserLikeService.like(questionLikeForm.getQuestionId(), userId);
+        if (!isSuccess) {
+            return CommonResult.failed("点赞失败");
+        }
+        return CommonResult.success(null);
+    }
 }
 

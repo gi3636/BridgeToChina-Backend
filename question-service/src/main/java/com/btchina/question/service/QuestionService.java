@@ -18,8 +18,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 public interface QuestionService extends IService<Question> {
 
     Boolean addQuestion(AddQuestionForm addQuestionForm);
-
-    Boolean addEsDoc(QuestionDoc questionDoc);
-
     SearchHits<QuestionDoc> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId);
+    void addEsDoc(QuestionDoc questionDoc);
+    void updateEsDoc(QuestionDoc questionDoc);
 }
