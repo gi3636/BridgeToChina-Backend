@@ -20,6 +20,8 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * <p>
  * 问答表 前端控制器
@@ -75,6 +77,24 @@ public class QuestionController {
     public CommonResult<SearchHits<QuestionDoc>> getList(@Validated @RequestBody QuestionQueryForm questionQueryForm) {
         Long selfId = AuthHelper.getUserId();
         SearchHits<QuestionDoc> result = questionService.queryQuestion(questionQueryForm, selfId);
+        return CommonResult.success(result);
+    }
+
+
+    @ApiOperation(value = "获取测试列表")
+    @GetMapping("/list/test")
+    public CommonResult<List<Question>> getAllList() {
+        Long selfId = AuthHelper.getUserId();
+        List<Question> result = questionService.query().list();
+        return CommonResult.success(result);
+    }
+
+
+    @ApiOperation(value = "获取问题详情")
+    @GetMapping("/detail/{id}")
+    public CommonResult<Question> getQuestionDetails(@PathVariable("id") Long id) {
+        Long selfId = AuthHelper.getUserId();
+        Question result = questionService.getById(id);
         return CommonResult.success(result);
     }
 
