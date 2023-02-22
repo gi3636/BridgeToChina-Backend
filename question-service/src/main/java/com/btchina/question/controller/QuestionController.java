@@ -3,6 +3,7 @@ package com.btchina.question.controller;
 
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
+import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.feign.pojo.User;
@@ -11,6 +12,7 @@ import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.form.AddQuestionForm;
 import com.btchina.question.model.form.QuestionLikeForm;
 import com.btchina.question.model.form.QuestionQueryForm;
+import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
 import com.btchina.question.service.QuestionUserLikeService;
 import com.btchina.redis.service.RedisService;
@@ -90,12 +92,20 @@ public class QuestionController {
 
     @ApiOperation(value = "获取问题列表")
     @PostMapping("/list")
-    public CommonResult<SearchHits<QuestionDoc>> getList(@Validated @RequestBody QuestionQueryForm questionQueryForm) {
+    public CommonResult<PageResult<QuestionVO>> getList(@Validated @RequestBody QuestionQueryForm questionQueryForm) {
         Long selfId = AuthHelper.getUserId();
-        SearchHits<QuestionDoc> result = questionService.queryQuestion(questionQueryForm, selfId);
+        PageResult<QuestionVO> result = questionService.queryQuestion(questionQueryForm, selfId);
         return CommonResult.success(result);
     }
 
+
+    @ApiOperation(value = "获取es问题列表")
+    @PostMapping("/list/es")
+    public CommonResult<SearchHits<QuestionDoc>> getEsList(@Validated @RequestBody QuestionQueryForm questionQueryForm) {
+        Long selfId = AuthHelper.getUserId();
+        SearchHits<QuestionDoc> result = questionService.queryEsQuestion(questionQueryForm, selfId);
+        return CommonResult.success(result);
+    }
 
     @ApiOperation(value = "获取测试列表")
     @GetMapping("/list/test")

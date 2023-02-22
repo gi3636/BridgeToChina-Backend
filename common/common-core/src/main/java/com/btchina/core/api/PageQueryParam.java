@@ -3,12 +3,14 @@ package com.btchina.core.api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 
 @Data
+@ToString
 @ApiModel(description = "分页查询参数对象")
 public class PageQueryParam {
 

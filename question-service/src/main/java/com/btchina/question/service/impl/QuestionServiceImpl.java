@@ -2,6 +2,7 @@ package com.btchina.question.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.DeleteForm;
+import com.btchina.core.api.PageResult;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.model.form.AddTagForm;
@@ -13,9 +14,9 @@ import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.enums.QueryTypeEnum;
 import com.btchina.question.model.form.AddQuestionForm;
 import com.btchina.question.model.form.QuestionQueryForm;
+import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
 import org.elasticsearch.index.query.*;
@@ -24,13 +25,19 @@ import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -156,7 +163,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
-    public SearchHits<QuestionDoc> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
+    public SearchHits<QuestionDoc> queryEsQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
         QueryTypeEnum queryTypeEnum = QueryTypeEnum.getQueryTypeEnum(questionQueryForm.getType());
         switch (queryTypeEnum) {
             case HOT:
@@ -201,7 +208,62 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 //3.执行查询
                 SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query1,QuestionDoc.class);
                 return result;
-                //查询对象
+            //查询对象
+            case MY:
+                log.info("查询我的问题");
+                break;
+        }
+        return null;
+
+    }
+
+    @Override
+    public PageResult<QuestionVO> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
+        QueryTypeEnum queryTypeEnum = QueryTypeEnum.getQueryTypeEnum(questionQueryForm.getType());
+        switch (queryTypeEnum) {
+            case HOT:
+                BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+                FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder("likeCount")
+                        .modifier(FieldValueFactorFunction.Modifier.LOG1P)
+                        .factor(0.1f);
+
+                // 最终分数=_score+额外分数
+                FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders
+                        .functionScoreQuery(boolQueryBuilder, fieldQuery)
+                        .boostMode(CombineFunction.SUM);
+
+                if (questionQueryForm.getDate() != null) {
+                    RangeQueryBuilder timeRangeQuery = QueryBuilders.rangeQuery("createdTime")
+                            //.gte(LocalDateTime.now(ZoneOffset.UTC).minusDays(3))
+                            //.lte(LocalDateTime.now(ZoneOffset.UTC));
+                            .gte(questionQueryForm.getDate());
+                    boolQueryBuilder.filter(timeRangeQuery);
+                }
+
+                Pageable page = PageRequest.of(questionQueryForm.getCurrentPage()-1, questionQueryForm.getPageSize());
+                NativeSearchQuery query = new NativeSearchQueryBuilder()
+                        .withQuery(functionScoreQueryBuilder)
+                        .withSort(SortBuilders.scoreSort().order(SortOrder.DESC))
+                        .withPageable(page)
+                        .build();
+
+                // 3.执行查询
+                SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query,QuestionDoc.class);
+                List<QuestionVO> questionVOList= new ArrayList<>();
+                for (SearchHit<QuestionDoc> searchHit : result.getSearchHits()) {
+                    QuestionVO questionVO = new QuestionVO();
+                    BeanUtils.copyProperties(searchHit.getContent(), questionVO);
+                    questionVOList.add(questionVO);
+                }
+
+                //封装分页结果
+                PageResult<QuestionVO> pageResult = new PageResult<>();
+                pageResult.setTotal(result.getTotalHits());
+                pageResult.setList(questionVOList);
+                pageResult.setCurrentPage(questionQueryForm.getCurrentPage());
+                pageResult.setPageSize(questionQueryForm.getPageSize());
+                pageResult.setTotalPage((int) Math.ceil((double) result.getTotalHits() / questionQueryForm.getPageSize()));
+                return pageResult;
             case MY:
                 log.info("查询我的问题");
                 break;
