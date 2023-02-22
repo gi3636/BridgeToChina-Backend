@@ -38,7 +38,6 @@ public class TagQuestionController {
         return CommonResult.success(null);
     }
 
-
     @ApiOperation(value = "删除问题标签")
     @PostMapping("/delete")
     public CommonResult<Void> deleteTag(@RequestBody DeleteForm deleteForm) {
