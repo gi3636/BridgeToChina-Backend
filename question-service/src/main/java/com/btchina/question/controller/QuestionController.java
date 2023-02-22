@@ -2,6 +2,7 @@ package com.btchina.question.controller;
 
 
 import com.btchina.core.api.CommonResult;
+import com.btchina.core.api.DeleteForm;
 import com.btchina.core.util.AuthHelper;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.feign.pojo.User;
@@ -63,7 +64,22 @@ public class QuestionController {
     @ApiOperation(value = "发布问题")
     @PostMapping("/add")
     public CommonResult<Void> addQuestion(@Validated @RequestBody AddQuestionForm addQuestionForm) {
-        Boolean isSuccess = questionService.addQuestion(addQuestionForm);
+        Long selfId = AuthHelper.getUserId();
+        Boolean isSuccess = questionService.addQuestion(addQuestionForm, selfId);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        // 标题 内容 标签
+        return CommonResult.success(null);
+    }
+
+
+    @ApiOperation(value = "删除问题")
+    @PostMapping("/delete")
+    public CommonResult<Void> deleteQuestion(@RequestBody DeleteForm deleteForm) {
+        Long selfId = AuthHelper.getUserId();
+
+        Boolean isSuccess = questionService.deleteQuestion(deleteForm.getId(), selfId);
         if (!isSuccess) {
             return CommonResult.failed();
         }

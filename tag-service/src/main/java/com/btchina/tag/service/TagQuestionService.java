@@ -15,4 +15,6 @@ import com.btchina.tag.model.form.AddTagForm;
 public interface TagQuestionService extends IService<TagQuestion> {
 
     Boolean addTag(AddTagForm addTagForm);
+
+    Boolean deleteTag(Long questionId);
 }

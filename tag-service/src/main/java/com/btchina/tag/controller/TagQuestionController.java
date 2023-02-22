@@ -2,6 +2,7 @@ package com.btchina.tag.controller;
 
 
 import com.btchina.core.api.CommonResult;
+import com.btchina.core.api.DeleteForm;
 import com.btchina.tag.model.form.AddTagForm;
 import com.btchina.tag.service.TagQuestionService;
 import com.btchina.tag.service.TagService;
@@ -31,6 +32,17 @@ public class TagQuestionController {
     @PostMapping("/add")
     public CommonResult<Void> addTag(@Validated @RequestBody AddTagForm addTagForm) {
         Boolean isSuccess = tagQuestionService.addTag(addTagForm);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        return CommonResult.success(null);
+    }
+
+
+    @ApiOperation(value = "删除问题标签")
+    @PostMapping("/delete")
+    public CommonResult<Void> deleteTag(@RequestBody DeleteForm deleteForm) {
+        Boolean isSuccess = tagQuestionService.deleteTag(deleteForm.getId());
         if (!isSuccess) {
             return CommonResult.failed();
         }

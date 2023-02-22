@@ -32,6 +32,8 @@ public class QuestionListener {
 
     @RabbitListener(queues = QuestionConstant.DELETE_QUEUE_NAME)
     public void listenQuestionDelete(Long id) {
+        log.info("监听到删除消息，问题id为：{}", id);
+        questionService.deleteEsDoc(id);
         //questionService.deleteById(id);
     }
 

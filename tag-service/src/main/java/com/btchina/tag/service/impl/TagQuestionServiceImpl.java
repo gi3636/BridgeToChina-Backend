@@ -46,4 +46,12 @@ public class TagQuestionServiceImpl extends ServiceImpl<TagQuestionMapper, TagQu
         }
         return true;
     }
+
+    @Override
+    public Boolean deleteTag(Long questionId) {
+        LambdaQueryWrapper<TagQuestion> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TagQuestion::getQuestionId, questionId);
+        remove(queryWrapper);
+        return true;
+    }
 }

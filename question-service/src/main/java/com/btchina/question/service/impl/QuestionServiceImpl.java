@@ -1,6 +1,8 @@
 package com.btchina.question.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.btchina.core.api.DeleteForm;
+import com.btchina.core.exception.GlobalException;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.model.form.AddTagForm;
 import com.btchina.question.constant.QuestionConstant;
@@ -19,15 +21,10 @@ import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.index.query.functionscore.FieldValueFactorFunctionBuilder;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
-import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -60,18 +57,18 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     ElasticsearchRestTemplate elasticsearchRestTemplate;
 
 
-    @Autowired
-    private RestHighLevelClient client;
-    private static final String indexName = QuestionConstant.INDEX;
 
     @Override
-    public Boolean addQuestion(AddQuestionForm addQuestionForm) {
+    public Boolean addQuestion(AddQuestionForm addQuestionForm, Long userId) {
+        if (userId == null) {
+            throw GlobalException.from("用户未登录");
+        }
         // 1. 添加问题
         Random r = new Random();
         Question question = new Question();
         question.setTitle(addQuestionForm.getTitle());
         question.setContent(addQuestionForm.getContent());
-        question.setUserId(1L);
+        question.setUserId(userId);
         question.setFavoriteCount(0);
         question.setViewCount(0);
         question.setLikeCount(r.nextInt(1000));
@@ -118,6 +115,43 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             log.info("更新es文档成功: {} ", question);
         } catch (Exception e) {
             log.error("更新es文档失败: {} ", e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Boolean deleteQuestion(Long questionId, Long selfId) {
+        if (selfId == null) {
+            throw GlobalException.from("用户未登录");
+        }
+        Question question = this.baseMapper.selectById(questionId);
+
+        if (question == null) {
+            throw GlobalException.from("问题不存在");
+        }
+
+        if (!question.getUserId().equals(selfId)) {
+            throw GlobalException.from("无权限删除");
+        }
+        // 1. 删除问题
+        Boolean isSuccess = this.baseMapper.deleteById(questionId) > 0;
+        DeleteForm deleteForm = new DeleteForm();
+        deleteForm.setId(questionId);
+        // 2. 删除标签与问题的关联
+        tagClient.deleteTag(deleteForm);
+        // 3. 删除es文档
+        if (isSuccess) {
+            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.DELETE_KEY, questionId);
+        }
+        return isSuccess;
+    }
+
+    @Override
+    public void deleteEsDoc(Long id) {
+        try {
+            questionRepository.deleteById(id);
+            log.info("删除es文档成功: {} ", id);
+        } catch (Exception e) {
+            log.error("删除es文档失败: {} ", e.getMessage(), e);
         }
     }
 
