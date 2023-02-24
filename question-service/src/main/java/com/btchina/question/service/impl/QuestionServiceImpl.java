@@ -5,7 +5,9 @@ import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.feign.clients.TagClient;
-import com.btchina.feign.model.form.AddTagForm;
+import com.btchina.feign.clients.UserClient;
+import com.btchina.feign.model.form.tag.AddTagForm;
+import com.btchina.feign.pojo.User;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
 import com.btchina.question.entity.QuestionUserLike;
@@ -21,7 +23,9 @@ import com.btchina.question.service.QuestionUserLikeService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.index.query.functionscore.FieldValueFactorFunctionBuilder;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -29,6 +33,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -63,11 +68,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private TagClient tagClient;
 
     @Autowired
+    private UserClient userClient;
+
+    @Autowired
     ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @Autowired
+    @Lazy
     private QuestionUserLikeService questionUserLikeService;
-
 
 
     @Override
@@ -90,9 +98,17 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         addTagForm.setId(question.getId());
         addTagForm.setTags(addQuestionForm.getTags());
         tagClient.addTag(addTagForm);
+        QuestionDoc questionDoc = new QuestionDoc();
+        BeanUtils.copyProperties(question, questionDoc);
+        String tagString = "";
+        for (String tag : addQuestionForm.getTags()) {
+            tagString += tag + ",";
+        }
+        tagString = tagString.substring(0, tagString.length() - 1);
+        questionDoc.setTags(tagString);
         // 3. 添加es文档
         if (isSuccess) {
-            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.INSERT_KEY, question);
+            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.INSERT_KEY, questionDoc);
         }
         return isSuccess;
     }
@@ -202,7 +218,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 long dayTime = now - (now + 8 * 3600) % daySecond;
                 log.info("dayTime:{}", dayTime);
                 //指定多个field
-                NativeSearchQuery query1 =new NativeSearchQueryBuilder()
+                NativeSearchQuery query1 = new NativeSearchQueryBuilder()
                         //.withQuery(queryBuilder)
                         .withQuery(functionScoreQueryBuilder)
                         //.withPageable(page)
@@ -211,7 +227,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                         //.withSort(sort)
                         .build();
                 //3.执行查询
-                SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query1,QuestionDoc.class);
+                SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query1, QuestionDoc.class);
                 return result;
             //查询对象
             case MY:
@@ -245,7 +261,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     boolQueryBuilder.filter(timeRangeQuery);
                 }
 
-                Pageable page = PageRequest.of(questionQueryForm.getCurrentPage()-1, questionQueryForm.getPageSize());
+                Pageable page = PageRequest.of(questionQueryForm.getCurrentPage() - 1, questionQueryForm.getPageSize());
                 NativeSearchQuery query = new NativeSearchQueryBuilder()
                         .withQuery(functionScoreQueryBuilder)
                         .withSort(SortBuilders.scoreSort().order(SortOrder.DESC))
@@ -253,17 +269,19 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                         .build();
 
                 // 3.执行查询
-                SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query,QuestionDoc.class);
-                List<QuestionVO> questionVOList= new ArrayList<>();
+                SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
+                List<QuestionVO> questionVOList = new ArrayList<>();
                 for (SearchHit<QuestionDoc> searchHit : result.getSearchHits()) {
                     QuestionVO questionVO = new QuestionVO();
                     BeanUtils.copyProperties(searchHit.getContent(), questionVO);
                     QuestionUserLike userLike = questionUserLikeService.getQuestionUserLike(questionVO.getId(), selfId);
                     if (userLike != null) {
                         questionVO.setLikeStatus(userLike.getStatus());
-                    }else {
+                    } else {
                         questionVO.setLikeStatus(0);
                     }
+                    User user =userClient.findById(questionVO.getUserId());
+                    questionVO.setNickname(user.getNickname());
                     questionVOList.add(questionVO);
                 }
 

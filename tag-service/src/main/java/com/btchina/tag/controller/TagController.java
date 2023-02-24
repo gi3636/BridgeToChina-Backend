@@ -4,6 +4,7 @@ package com.btchina.tag.controller;
 import com.btchina.core.api.CommonResult;
 import com.btchina.tag.model.form.AddTagForm;
 import com.btchina.tag.service.TagService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-02-06
  */
 @RestController
+@Api(tags = "标签模块")
 @RequestMapping("/tag")
 public class TagController {
 
@@ -35,7 +37,6 @@ public class TagController {
         if (!isSuccess) {
             return CommonResult.failed();
         }
-        // 标题 内容 标签
         return CommonResult.success(null);
     }
 

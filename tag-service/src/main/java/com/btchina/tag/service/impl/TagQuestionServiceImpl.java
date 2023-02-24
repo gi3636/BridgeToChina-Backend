@@ -1,17 +1,20 @@
 package com.btchina.tag.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.btchina.tag.entity.Tag;
 import com.btchina.tag.entity.TagQuestion;
 import com.btchina.tag.manager.TagManager;
 import com.btchina.tag.mapper.TagQuestionMapper;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.QueryQuestionTagForm;
+import com.btchina.tag.model.vo.TagVO;
 import com.btchina.tag.service.TagQuestionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.tag.service.TagService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,5 +56,26 @@ public class TagQuestionServiceImpl extends ServiceImpl<TagQuestionMapper, TagQu
         queryWrapper.eq(TagQuestion::getQuestionId, questionId);
         remove(queryWrapper);
         return true;
+    }
+
+    @Override
+    public List<TagVO> queryTag(QueryQuestionTagForm queryQuestionTagForm) {
+        List<TagVO> tagVOS = new ArrayList<>();
+        List<Long> ids = queryQuestionTagForm.getIds();
+        for (Long id : ids) {
+            List<Tag> tags = new ArrayList<>();
+            LambdaQueryWrapper<TagQuestion> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(TagQuestion::getQuestionId, id);
+            List<TagQuestion> tagQuestions = list(queryWrapper);
+            for (TagQuestion tagQuestion : tagQuestions) {
+                Tag tag = tagService.getById(tagQuestion.getTagId());
+                tags.add(tag);
+            }
+            TagVO tagVO = new TagVO();
+            tagVO.setId(id);
+            tagVO.setTags(tags);
+            tagVOS.add(tagVO);
+        }
+        return tagVOS;
     }
 }

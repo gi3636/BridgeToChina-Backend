@@ -2,9 +2,9 @@ server:
   port: 8100
   address: 0.0.0.0
 spring:
-  main:
-    lazy-initialization: true
-    allow-circular-references: true
+#  main:
+#    lazy-initialization: true
+#    allow-circular-references: true
   elasticsearch:
     uris: "http://36.26.69.161:9200"
 #    username: xxxx

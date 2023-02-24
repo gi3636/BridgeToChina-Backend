@@ -4,8 +4,9 @@ package com.btchina.tag.controller;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.QueryQuestionTagForm;
+import com.btchina.tag.model.vo.TagVO;
 import com.btchina.tag.service.TagQuestionService;
-import com.btchina.tag.service.TagService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TagQuestionController {
     @Autowired
     private TagQuestionService tagQuestionService;
+
     @ApiOperation(value = "添加问题标签")
     @PostMapping("/add")
     public CommonResult<Void> addTag(@Validated @RequestBody AddTagForm addTagForm) {
@@ -47,5 +51,14 @@ public class TagQuestionController {
         }
         return CommonResult.success(null);
     }
+
+
+    @ApiOperation(value = "查询问题标签")
+    @PostMapping("/query")
+    public List<TagVO> getTags(@Validated @RequestBody QueryQuestionTagForm queryQuestionTagForm) {
+        return tagQuestionService.queryTag(queryQuestionTagForm);
+    }
+
+
 }
 

@@ -52,6 +52,11 @@ public class QuestionDoc {
     @ApiModelProperty("问题图片,多个图片用逗号分隔")
     private String images;
 
+
+    @Field(type = FieldType.Text)
+    @ApiModelProperty("问题标签,多个用逗号分隔")
+    private String tags;
+
     @Field(type = FieldType.Boolean)
     @ApiModelProperty("是否公开")
     private Boolean isPublic;

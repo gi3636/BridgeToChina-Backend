@@ -21,16 +21,24 @@ public class QuestionListener {
     @Autowired
     QuestionService questionService;
 
-    @RabbitListener(queues = QuestionConstant.INSERT_QUEUE_NAME)
-    public void listenQuestionInsert(Question question) {
-        if (question != null) {
-            log.info("监听到新增消息，问题为：{}", question);
-            QuestionDoc questionDoc = new QuestionDoc(question);
+    @RabbitListener(bindings = @QueueBinding(
+            exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
+            value = @Queue(name = QuestionConstant.INSERT_QUEUE_NAME),
+            key = {QuestionConstant.INSERT_KEY}
+    ))
+    public void listenQuestionInsert(QuestionDoc questionDoc) {
+        log.info("监听到新增消息，问题为：{}", questionDoc);
+        if (questionDoc != null) {
             questionService.addEsDoc(questionDoc);
         }
     }
 
-    @RabbitListener(queues = QuestionConstant.DELETE_QUEUE_NAME)
+
+    @RabbitListener(bindings = @QueueBinding(
+            exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
+            value = @Queue(name = QuestionConstant.DELETE_QUEUE_NAME),
+            key = QuestionConstant.DELETE_KEY
+    ))
     public void listenQuestionDelete(Long id) {
         log.info("监听到删除消息，问题id为：{}", id);
         questionService.deleteEsDoc(id);
@@ -43,11 +51,12 @@ public class QuestionListener {
      * @param question
      */
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(name = QuestionConstant.UPDATE_QUEUE_NAME),
             exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
+            value = @Queue(name = QuestionConstant.UPDATE_QUEUE_NAME),
             key = QuestionConstant.UPDATE_KEY
     ))
     public void listenQuestionUpdate(Question question) {
+        log.info("监听到更新消息，问题为：{}", question);
         if (question != null) {
             QuestionDoc questionDoc = new QuestionDoc(question);
             questionService.updateEsDoc(questionDoc);

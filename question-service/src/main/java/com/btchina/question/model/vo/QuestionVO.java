@@ -1,6 +1,7 @@
 package com.btchina.question.model.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.btchina.feign.pojo.Tag;
 import com.btchina.question.entity.Question;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,6 +19,9 @@ public class QuestionVO {
 
     @ApiModelProperty("用户Id")
     private Long userId;
+
+    @ApiModelProperty("用户昵称")
+    private String nickname;
 
     @ApiModelProperty("标题")
     private String title;
@@ -42,6 +46,9 @@ public class QuestionVO {
 
     @ApiModelProperty("图片,多个图片用逗号分隔")
     private List<String> images;
+
+    @ApiModelProperty("问题标签,多个用逗号分隔")
+    private String tags;
 
     @ApiModelProperty("创建时间")
     private Date createdTime;
