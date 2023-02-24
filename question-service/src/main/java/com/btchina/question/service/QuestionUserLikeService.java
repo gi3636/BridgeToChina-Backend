@@ -16,4 +16,6 @@ public interface QuestionUserLikeService extends IService<QuestionUserLike> {
     Boolean like(Long questionId, Long selfId);
 
     Boolean unlike(Long questionId, Long userId);
+
+    QuestionUserLike getQuestionUserLike(Long questionId, Long userId);
 }

@@ -34,6 +34,12 @@ public class QuestionVO {
     @ApiModelProperty("浏览数")
     private Integer viewCount;
 
+    @ApiModelProperty("是否点赞 0否 1是")
+    private Integer likeStatus;
+
+    @ApiModelProperty("是否收藏 0否 1是")
+    private Integer favoriteStatus;
+
     @ApiModelProperty("图片,多个图片用逗号分隔")
     private List<String> images;
 

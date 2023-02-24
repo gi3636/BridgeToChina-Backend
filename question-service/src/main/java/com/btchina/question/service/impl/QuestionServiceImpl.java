@@ -8,6 +8,7 @@ import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.model.form.AddTagForm;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
+import com.btchina.question.entity.QuestionUserLike;
 import com.btchina.question.mapper.QuestionMapper;
 import com.btchina.question.mapper.es.QuestionRepository;
 import com.btchina.question.model.doc.QuestionDoc;
@@ -16,6 +17,7 @@ import com.btchina.question.model.form.AddQuestionForm;
 import com.btchina.question.model.form.QuestionQueryForm;
 import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
+import com.btchina.question.service.QuestionUserLikeService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
@@ -62,6 +64,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Autowired
     ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @Autowired
+    private QuestionUserLikeService questionUserLikeService;
 
 
 
@@ -253,6 +258,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 for (SearchHit<QuestionDoc> searchHit : result.getSearchHits()) {
                     QuestionVO questionVO = new QuestionVO();
                     BeanUtils.copyProperties(searchHit.getContent(), questionVO);
+                    QuestionUserLike userLike = questionUserLikeService.getQuestionUserLike(questionVO.getId(), selfId);
+                    if (userLike != null) {
+                        questionVO.setLikeStatus(userLike.getStatus());
+                    }else {
+                        questionVO.setLikeStatus(0);
+                    }
                     questionVOList.add(questionVO);
                 }
 

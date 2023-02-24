@@ -95,6 +95,14 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
         return true;
     }
 
+    @Override
+    public QuestionUserLike getQuestionUserLike(Long questionId, Long userId) {
+        if (questionId == null || userId == null) {
+            return null;
+        }
+        return getByQuestionIdAndUserId(questionId, userId);
+    }
+
 
     public QuestionUserLike getByQuestionIdAndUserId(Long questionId, Long userId) {
         LambdaQueryWrapper<QuestionUserLike> queryWrapper = new LambdaQueryWrapper<>();

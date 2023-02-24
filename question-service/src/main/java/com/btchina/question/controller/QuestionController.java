@@ -71,7 +71,6 @@ public class QuestionController {
         if (!isSuccess) {
             return CommonResult.failed();
         }
-        // 标题 内容 标签
         return CommonResult.success(null);
     }
 
@@ -80,12 +79,10 @@ public class QuestionController {
     @PostMapping("/delete")
     public CommonResult<Void> deleteQuestion(@RequestBody DeleteForm deleteForm) {
         Long selfId = AuthHelper.getUserId();
-
         Boolean isSuccess = questionService.deleteQuestion(deleteForm.getId(), selfId);
         if (!isSuccess) {
             return CommonResult.failed();
         }
-        // 标题 内容 标签
         return CommonResult.success(null);
     }
 
