@@ -10,6 +10,7 @@ import com.btchina.feign.pojo.User;
 import com.btchina.question.entity.Question;
 import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.form.AddQuestionForm;
+import com.btchina.question.model.form.EditQuestionForm;
 import com.btchina.question.model.form.QuestionLikeForm;
 import com.btchina.question.model.form.QuestionQueryForm;
 import com.btchina.question.model.vo.QuestionVO;
@@ -74,6 +75,18 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
+
+
+    @ApiOperation(value = "编辑问题")
+    @PostMapping("/edit")
+    public CommonResult<Void> editQuestion(@Validated @RequestBody EditQuestionForm editQuestionForm) {
+        Long selfId = AuthHelper.getUserId();
+        Boolean isSuccess = questionService.editQuestion(editQuestionForm, selfId);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        return CommonResult.success(null);
+    }
 
     @ApiOperation(value = "删除问题")
     @PostMapping("/delete")

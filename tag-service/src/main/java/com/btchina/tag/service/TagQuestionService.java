@@ -3,6 +3,7 @@ package com.btchina.tag.service;
 import com.btchina.tag.entity.TagQuestion;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.EditQuestionTagForm;
 import com.btchina.tag.model.form.QueryQuestionTagForm;
 import com.btchina.tag.model.vo.TagVO;
 
@@ -23,4 +24,6 @@ public interface TagQuestionService extends IService<TagQuestion> {
     Boolean deleteTag(Long questionId);
 
     List<TagVO> queryTag(QueryQuestionTagForm queryQuestionTagForm);
+
+    Boolean editTag(EditQuestionTagForm editQuestionTagForm);
 }

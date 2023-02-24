@@ -4,10 +4,13 @@ package com.btchina.tag.controller;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.EditQuestionTagForm;
 import com.btchina.tag.model.form.QueryQuestionTagForm;
 import com.btchina.tag.model.vo.TagVO;
 import com.btchina.tag.service.TagQuestionService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +29,7 @@ import java.util.List;
  * @author franky
  * @since 2023-02-06
  */
+@Api(tags = "问题标签模块")
 @RestController
 @RequestMapping("/tag/tagQuestion")
 public class TagQuestionController {
@@ -59,6 +63,16 @@ public class TagQuestionController {
         return tagQuestionService.queryTag(queryQuestionTagForm);
     }
 
+
+    @ApiOperation(value = "更改问题标签")
+    @PostMapping("/edit")
+    public CommonResult<Void> editQuestionTags(@Validated @RequestBody EditQuestionTagForm editQuestionTagForm) {
+        Boolean isSuccess = tagQuestionService.editTag(editQuestionTagForm);
+        if (!isSuccess) {
+            return null;
+        }
+        return CommonResult.success(null);
+    }
 
 }
 

@@ -6,6 +6,7 @@ import com.btchina.tag.entity.TagQuestion;
 import com.btchina.tag.manager.TagManager;
 import com.btchina.tag.mapper.TagQuestionMapper;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.EditQuestionTagForm;
 import com.btchina.tag.model.form.QueryQuestionTagForm;
 import com.btchina.tag.model.vo.TagVO;
 import com.btchina.tag.service.TagQuestionService;
@@ -77,5 +78,20 @@ public class TagQuestionServiceImpl extends ServiceImpl<TagQuestionMapper, TagQu
             tagVOS.add(tagVO);
         }
         return tagVOS;
+    }
+
+    @Override
+    public Boolean editTag(EditQuestionTagForm editQuestionTagForm) {
+        Long id = editQuestionTagForm.getId();
+        List<String> tags = editQuestionTagForm.getTags();
+        // 1. 删除原有标签
+        deleteTag(id);
+        // 2. 添加新标签
+        AddTagForm addTagForm = new AddTagForm();
+        addTagForm.setId(id);
+        addTagForm.setTags(tags);
+        addTag(addTagForm);
+        return true;
+
     }
 }

@@ -3,10 +3,12 @@ package com.btchina.question.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
+import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.feign.model.form.tag.AddTagForm;
+import com.btchina.feign.model.form.tag.EditQuestionTagForm;
 import com.btchina.feign.pojo.User;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
@@ -16,6 +18,7 @@ import com.btchina.question.mapper.es.QuestionRepository;
 import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.enums.QueryTypeEnum;
 import com.btchina.question.model.form.AddQuestionForm;
+import com.btchina.question.model.form.EditQuestionForm;
 import com.btchina.question.model.form.QuestionQueryForm;
 import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
@@ -105,11 +108,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         tagClient.addTag(addTagForm);
         QuestionDoc questionDoc = new QuestionDoc();
         BeanUtils.copyProperties(question, questionDoc);
-        String tagString = "";
-        for (String tag : addQuestionForm.getTags()) {
-            tagString += tag + ",";
+        String tagString = String.join(",", addQuestionForm.getTags());
+        if (addQuestionForm.getImages() != null){
+            String images = String.join(",", addQuestionForm.getImages());
+            questionDoc.setImages(images);
         }
-        tagString = tagString.substring(0, tagString.length() - 1);
         questionDoc.setTags(tagString);
         // 3. 添加es文档
         if (isSuccess) {
@@ -204,6 +207,44 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public QuestionDoc getEsDoc(Long id) {
         return questionRepository.findById(id.toString());
+    }
+
+    @Override
+    public Boolean editQuestion(EditQuestionForm editQuestionForm, Long selfId) {
+        if (selfId == null) {
+            throw GlobalException.from("用户未登录");
+        }
+        QuestionDoc questionDoc = questionRepository.findById(editQuestionForm.getId().toString());
+        if (questionDoc == null) {
+            throw GlobalException.from("问题不存在");
+        }
+        if (!questionDoc.getUserId().equals(selfId)) {
+            throw GlobalException.from("无权限编辑");
+        }
+        questionDoc.setTitle(editQuestionForm.getTitle());
+        questionDoc.setContent(editQuestionForm.getContent());
+        String tagStr = String.join(",", editQuestionForm.getTags());
+        if (editQuestionForm.getImages() != null){
+            String images = String.join(",", editQuestionForm.getImages());
+            questionDoc.setImages(images);
+        }
+        questionDoc.setIsPublic(editQuestionForm.getIsPublic());
+        questionDoc.setTags(tagStr);
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
+        Boolean isSuccess = this.baseMapper.updateById(question) > 0;
+
+        // 1. 更新标签
+        EditQuestionTagForm editQuestionTagForm = new EditQuestionTagForm();
+        editQuestionTagForm.setId(editQuestionForm.getId());
+        editQuestionTagForm.setTags(editQuestionForm.getTags());
+        tagClient.editQuestionTags(editQuestionTagForm);
+
+        // 2. 更新es文档
+        if (isSuccess) {
+            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, questionDoc);
+        }
+        return isSuccess;
     }
 
     @Override
