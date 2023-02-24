@@ -34,7 +34,7 @@ public class IgnoreGlobalFilter extends AbstractGatewayFilterFactory<IgnoreGloba
 
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         log.info("经过了IgnoreGlobalFilter");
-
+        exchange.getAttributes().put(AuthorizeFilter.ATTRIBUTE_IGNORE_GLOBAL_FILTER, true);
         // 通过request中的id来判断用户
         ServerHttpRequest request = exchange.getRequest();
         // 获取token
@@ -52,7 +52,6 @@ public class IgnoreGlobalFilter extends AbstractGatewayFilterFactory<IgnoreGloba
         };
         ServerHttpRequest build = request.mutate().headers(httpHeaders).build();
         exchange = exchange.mutate().request(build).build();
-        exchange.getAttributes().put(AuthorizeFilter.ATTRIBUTE_IGNORE_GLOBAL_FILTER, true);
         return chain.filter(exchange);
     }
 
