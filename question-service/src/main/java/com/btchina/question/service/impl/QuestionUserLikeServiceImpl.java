@@ -7,10 +7,12 @@ import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
 import com.btchina.question.entity.QuestionUserLike;
 import com.btchina.question.mapper.QuestionUserLikeMapper;
+import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.service.QuestionService;
 import com.btchina.question.service.QuestionUserLikeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,7 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
      */
     @Override
     public Boolean like(Long questionId, Long userId) {
-        Question question = questionService.getById(questionId);
+        QuestionDoc question = questionService.getEsDoc(questionId);
         if (question == null) {
             throw GlobalException.from(ResultCode.QUESTION_NOT_EXIST);
         }
@@ -69,7 +71,7 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
 
     @Override
     public Boolean unlike(Long questionId, Long userId) {
-        Question question = questionService.getById(questionId);
+        QuestionDoc question = questionService.getEsDoc(questionId);
         if (question == null) {
             throw GlobalException.from(ResultCode.QUESTION_NOT_EXIST);
         }
@@ -113,31 +115,37 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
 
     /**
      * 增加点赞数
-     * @param question
+     *
+     * @param questionDoc
      */
-    public void increaseLikeCount(Question  question) {
-        if (question == null) {
+    public void increaseLikeCount(QuestionDoc questionDoc) {
+        if (questionDoc == null) {
             throw GlobalException.from("问题不存在");
         }
-        question.setLikeCount(question.getLikeCount() + 1);
+        questionDoc.setLikeCount(questionDoc.getLikeCount() + 1);
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
         Boolean isSuccess = questionService.updateById(question);
         if (isSuccess) {
-            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, question);
+            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, questionDoc);
         }
     }
 
     /**
      * 减少点赞数
-     * @param question
+     *
+     * @param questionDoc
      */
-    public void decreaseLikeCount(Question  question) {
-        if (question == null) {
+    public void decreaseLikeCount(QuestionDoc questionDoc) {
+        if (questionDoc == null) {
             throw GlobalException.from("问题不存在");
         }
-        question.setLikeCount(question.getLikeCount() -1);
+        questionDoc.setLikeCount(questionDoc.getLikeCount() - 1);
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
         Boolean isSuccess = questionService.updateById(question);
         if (isSuccess) {
-            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, question);
+            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, questionDoc);
         }
     }
 }

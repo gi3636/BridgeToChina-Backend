@@ -48,17 +48,16 @@ public class QuestionListener {
     /**
      * 监听问题更新消息
      *
-     * @param question
+     * @param questionDoc
      */
     @RabbitListener(bindings = @QueueBinding(
             exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
             value = @Queue(name = QuestionConstant.UPDATE_QUEUE_NAME),
             key = QuestionConstant.UPDATE_KEY
     ))
-    public void listenQuestionUpdate(Question question) {
-        log.info("监听到更新消息，问题为：{}", question);
-        if (question != null) {
-            QuestionDoc questionDoc = new QuestionDoc(question);
+    public void listenQuestionUpdate(QuestionDoc questionDoc) {
+        log.info("监听到更新消息，问题为：{}", questionDoc);
+        if (questionDoc != null) {
             questionService.updateEsDoc(questionDoc);
         }
     }

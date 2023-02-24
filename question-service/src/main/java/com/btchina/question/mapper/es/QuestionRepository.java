@@ -31,4 +31,6 @@ public interface QuestionRepository extends ElasticsearchRepository<QuestionDoc,
 	//@SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
 	//SearchPage<BlogDoc> findByDescriptiveContent(String descriptiveContent, Pageable pageable);
 
+	QuestionDoc findById(String id);
+
 }

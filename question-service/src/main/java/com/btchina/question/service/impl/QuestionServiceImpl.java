@@ -39,12 +39,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.document.Document;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.UpdateQuery;
+import org.springframework.data.elasticsearch.core.query.UpdateResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -181,6 +186,24 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         } catch (Exception e) {
             log.error("删除es文档失败: {} ", e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void updateFieldEsDoc(Long id, String field, Object value) {
+        try {
+            Document document = Document.create();
+            document.put(field, value);
+            UpdateResponse response = elasticsearchRestTemplate.update(UpdateQuery.builder(id.toString()).withDocument(document).build(), IndexCoordinates.of(QuestionConstant.INDEX));
+            System.out.println("response = " + response);
+            log.info("更新es文档成功: {} ", id);
+        } catch (Exception e) {
+            log.error("更新es文档失败: {} ", e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public QuestionDoc getEsDoc(Long id) {
+        return questionRepository.findById(id.toString());
     }
 
     @Override

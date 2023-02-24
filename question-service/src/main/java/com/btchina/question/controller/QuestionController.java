@@ -133,7 +133,7 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "点赞")
+    @ApiOperation(value = "取消赞")
     @PostMapping("/unlike")
     public CommonResult<Void> unlike(@Validated @RequestBody QuestionLikeForm questionLikeForm) {
         Long userId = AuthHelper.getUserId();
