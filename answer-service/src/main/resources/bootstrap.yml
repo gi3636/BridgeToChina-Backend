@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: answer-service
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 47.93.248.2:8848
+      config:
+        file-extension: yaml #文件后缀名
+        shared-configs:
+          - data-id: spring-config.yaml
+            refresh: true
+          - data-id: redis-config.yaml
+            refresh: true
+          - data-id: mybatis-config.yaml
+            refresh: true
+          - data-id: jwt-config.yaml
+            refresh: true
+
