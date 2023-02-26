@@ -37,4 +37,8 @@ public interface QuestionService extends IService<Question> {
 
 
     Boolean editQuestion(EditQuestionForm editQuestionForm, Long selfId);
+
+    void increaseAnswerCount(Long questionId);
+
+    void decreaseAnswerCount(Long questionId);
 }

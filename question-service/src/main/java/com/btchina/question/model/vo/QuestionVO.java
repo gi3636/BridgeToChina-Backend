@@ -36,6 +36,9 @@ public class QuestionVO {
     @ApiModelProperty("浏览数")
     private Integer viewCount;
 
+    @ApiModelProperty("回答数")
+    private Integer answerCount;
+
     @ApiModelProperty("是否点赞 0否 1是")
     private Integer likeStatus;
 

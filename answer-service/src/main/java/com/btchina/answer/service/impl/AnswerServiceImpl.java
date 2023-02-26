@@ -2,21 +2,24 @@ package com.btchina.answer.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.btchina.answer.constant.AnswerConstant;
 import com.btchina.answer.entity.Answer;
 import com.btchina.answer.entity.AnswerUserUse;
 import com.btchina.answer.mapper.AnswerMapper;
-import com.btchina.answer.model.form.AnswerUseForm;
 import com.btchina.answer.service.AnswerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.exception.GlobalException;
+import com.btchina.entity.Question;
+import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.UserClient;
-import com.btchina.model.form.answer.AddAnswerForm;
-import com.btchina.model.form.answer.QueryAnswerForm;
-import com.btchina.model.form.answer.UpdateAnswerForm;
+import com.btchina.answer.model.form.AddAnswerForm;
+import com.btchina.answer.model.form.QueryAnswerForm;
+import com.btchina.answer.model.form.UpdateAnswerForm;
 import com.btchina.model.vo.answer.AnswerVO;
 import com.btchina.model.vo.user.UserVO;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,12 +44,23 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     private UserClient userClient;
 
     @Autowired
+    private QuestionClient questionClient;
+
+    @Autowired
     private AnswerUserUseServiceImpl answerUserUseService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
 
     @Override
     public Boolean addAnswer(AddAnswerForm addAnswerForm, Long userId) {
         if (userId == null) {
             throw GlobalException.from("用户未登录");
+        }
+        Question question = questionClient.findById(addAnswerForm.getQuestionId());
+        if (question == null) {
+            throw GlobalException.from("问题不存在");
         }
         Answer answer = new Answer();
         answer.setContent(addAnswerForm.getContent());
@@ -55,7 +69,12 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         answer.setUseCount(0);
         answer.setCommentCount(0);
         answer.setIsBest(0);
-        return this.save(answer);
+        Boolean isSuccess = this.save(answer);
+        if (isSuccess) {
+            // 增加问题回答数
+            rabbitTemplate.convertAndSend(AnswerConstant.EXCHANGE_NAME, AnswerConstant.INCREASE_ROUTING_KEY, addAnswerForm.getQuestionId());
+        }
+        return isSuccess;
     }
 
     @Override
@@ -73,7 +92,12 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
             throw GlobalException.from("无权删除");
         }
 
-        return this.removeById(deleteForm.getId());
+        Boolean isSuccess = this.removeById(deleteForm.getId());
+        if (isSuccess) {
+            // 增加问题回答数
+            rabbitTemplate.convertAndSend(AnswerConstant.EXCHANGE_NAME, AnswerConstant.DECREASE_ROUTING_KEY, answer.getQuestionId());
+        }
+        return isSuccess;
     }
 
     @Override
@@ -163,6 +187,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         } else {
             decUseCount(answer.getId());
         }
+
         return true;
     }
 

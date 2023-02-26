@@ -2,6 +2,7 @@ package com.btchina.comment.service;
 
 import com.btchina.comment.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.btchina.comment.model.form.AddCommentForm;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CommentService extends IService<Comment> {
 
+    Boolean addComment(AddCommentForm addCommentForm, Long userId);
 }

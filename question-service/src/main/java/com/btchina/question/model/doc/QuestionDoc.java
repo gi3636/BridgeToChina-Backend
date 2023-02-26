@@ -48,10 +48,13 @@ public class QuestionDoc {
     @ApiModelProperty("浏览数")
     private Integer viewCount;
 
+    @Field(type = FieldType.Integer)
+    @ApiModelProperty("回答数")
+    private Integer answerCount;
+
     @Field(type = FieldType.Text)
     @ApiModelProperty("问题图片,多个图片用逗号分隔")
     private String images;
-
 
     @Field(type = FieldType.Text)
     @ApiModelProperty("问题标签,多个用逗号分隔")
@@ -70,17 +73,4 @@ public class QuestionDoc {
     private Date updatedTime;
 
 
-    public QuestionDoc(Question question) {
-        this.id = question.getId();
-        this.userId = question.getUserId();
-        this.title = question.getTitle();
-        this.content = question.getContent();
-        this.favoriteCount = question.getFavoriteCount();
-        this.likeCount = question.getLikeCount();
-        this.viewCount = question.getViewCount();
-        this.images = question.getImages();
-        this.isPublic = question.getIsPublic();
-        this.createdTime = question.getCreatedTime();
-        this.updatedTime = question.getUpdatedTime();
-    }
 }

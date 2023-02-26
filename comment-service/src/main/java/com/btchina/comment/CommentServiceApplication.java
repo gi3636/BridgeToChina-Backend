@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableSwagger
 @EnableRedisSerialize
 @SpringBootApplication
-//@EnableDefaultResponseAdvice
 @EnableDefaultExceptionAdvice
 @EnableLongToStringConfig
 public class CommentServiceApplication {

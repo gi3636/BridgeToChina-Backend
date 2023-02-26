@@ -1,4 +1,4 @@
-package com.btchina.model.form.answer;
+package com.btchina.answer.model.form;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

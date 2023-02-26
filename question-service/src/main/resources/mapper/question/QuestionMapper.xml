@@ -11,6 +11,7 @@
         <result column="favorite_count" property="favoriteCount" />
         <result column="like_count" property="likeCount" />
         <result column="view_count" property="viewCount" />
+        <result column="answer_count" property="answerCount" />
         <result column="images" property="images" />
         <result column="is_public" property="isPublic" />
         <result column="status" property="status" />

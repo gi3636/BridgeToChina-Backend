@@ -1,12 +1,8 @@
 package com.btchina.question.mapper.es;
 
 import com.btchina.question.model.doc.QuestionDoc;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.annotations.Highlight;
-import org.springframework.data.elasticsearch.annotations.HighlightField;
-import org.springframework.data.elasticsearch.annotations.HighlightParameters;
-import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.stereotype.Service;
 
 /**
  * QuestionRepository
@@ -32,5 +28,7 @@ public interface QuestionRepository extends ElasticsearchRepository<QuestionDoc,
 	//SearchPage<BlogDoc> findByDescriptiveContent(String descriptiveContent, Pageable pageable);
 
 	QuestionDoc findById(String id);
+
+
 
 }

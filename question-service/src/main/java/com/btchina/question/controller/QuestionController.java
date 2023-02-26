@@ -58,7 +58,7 @@ public class QuestionController {
         redisService.set("test1", question);
         Question question1 = (Question) redisService.get("test1");
         System.out.println("test1" + question1.toString());
-        User user= userClient.findById(1L);
+        User user = userClient.findById(1L);
         System.out.println("user " + user.toString());
         return user;
     }
@@ -74,7 +74,6 @@ public class QuestionController {
         }
         return CommonResult.success(null);
     }
-
 
 
     @ApiOperation(value = "编辑问题")
@@ -155,6 +154,26 @@ public class QuestionController {
             return CommonResult.failed("取消赞失败");
         }
         return CommonResult.success(null);
+    }
+
+
+    @ApiOperation(value = "获取问题")
+    @GetMapping("/findById/{id}")
+    public Question findById(@PathVariable("id") Long id) {
+        return questionService.getById(id);
+    }
+
+    @ApiOperation(value = "增加问题回答数")
+    @PostMapping("/increase/answer/count")
+    public void increaseAnswerCount(@Validated @RequestBody Long questionId) {
+        questionService.increaseAnswerCount(questionId);
+    }
+
+
+    @ApiOperation(value = "减少问题回答数")
+    @PostMapping("/decrease/answer/count")
+    public void decreaseAnswerCount(@Validated @RequestBody Long questionId) {
+        questionService.decreaseAnswerCount(questionId);
     }
 }
 

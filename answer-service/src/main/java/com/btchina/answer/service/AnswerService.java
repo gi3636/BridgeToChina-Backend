@@ -2,12 +2,11 @@ package com.btchina.answer.service;
 
 import com.btchina.answer.entity.Answer;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.btchina.answer.model.form.AnswerUseForm;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
-import com.btchina.model.form.answer.AddAnswerForm;
-import com.btchina.model.form.answer.QueryAnswerForm;
-import com.btchina.model.form.answer.UpdateAnswerForm;
+import com.btchina.answer.model.form.AddAnswerForm;
+import com.btchina.answer.model.form.QueryAnswerForm;
+import com.btchina.answer.model.form.UpdateAnswerForm;
 import com.btchina.model.vo.answer.AnswerVO;
 
 /**

@@ -1,4 +1,4 @@
-package com.btchina.model.form.answer;
+package com.btchina.comment.model.form;
 
 import com.btchina.core.api.PageQueryParam;
 import io.swagger.annotations.ApiModelProperty;

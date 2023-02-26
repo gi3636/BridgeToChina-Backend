@@ -1,5 +1,6 @@
 package com.btchina.answer;
 
+import com.btchina.amqp.config.EnableMq;
 import com.btchina.common.mybatis.config.EnableMybatisPlus;
 import com.btchina.common.swagger.config.EnableSwagger;
 import com.btchina.core.config.EnableLongToStringConfig;
@@ -18,6 +19,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages = {"com.btchina.feign.clients"}, defaultConfiguration = DefaultFeignConfiguration.class)
 @EnableDefaultExceptionAdvice
 @EnableLongToStringConfig
+@EnableMq
 public class AnswerServiceApplication {
 
     public static void main(String[] args) {

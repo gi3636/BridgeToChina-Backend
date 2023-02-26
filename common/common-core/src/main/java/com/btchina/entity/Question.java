@@ -1,18 +1,12 @@
-package com.btchina.question.entity;
-
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
+package com.btchina.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -25,14 +19,12 @@ import lombok.ToString;
 
 @Data
 @ToString
-@TableName("tbl_question")
 @ApiModel(value = "Question对象", description = "问答表")
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("Id")
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty("用户Id")
@@ -66,14 +58,11 @@ public class Question implements Serializable {
     private Integer status;
 
     @ApiModelProperty("创建时间")
-    @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
     @ApiModelProperty("更新时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
     @ApiModelProperty("是否删除;1是删除，0是不删除")
-    @TableLogic
     private Boolean deleted;
 }

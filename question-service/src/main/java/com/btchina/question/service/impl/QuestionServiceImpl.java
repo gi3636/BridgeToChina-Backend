@@ -97,20 +97,25 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         question.setUserId(userId);
         question.setFavoriteCount(0);
         question.setViewCount(0);
+        question.setAnswerCount(0);
+        question.setIsPublic(true);
         question.setLikeCount(r.nextInt(1000));
+        if (addQuestionForm.getImages() != null) {
+            String images = String.join(",", addQuestionForm.getImages());
+            question.setImages(images);
+        }
         Boolean isSuccess = this.baseMapper.insert(question) > 0;
+
         // 2. 添加标签
         AddTagForm addTagForm = new AddTagForm();
         addTagForm.setId(question.getId());
         addTagForm.setTags(addQuestionForm.getTags());
         tagClient.addTag(addTagForm);
+
+        // 3. 添加es文档
         QuestionDoc questionDoc = new QuestionDoc();
         BeanUtils.copyProperties(question, questionDoc);
         String tagString = String.join(",", addQuestionForm.getTags());
-        if (addQuestionForm.getImages() != null){
-            String images = String.join(",", addQuestionForm.getImages());
-            questionDoc.setImages(images);
-        }
         questionDoc.setTags(tagString);
         // 3. 添加es文档
         if (isSuccess) {
@@ -222,7 +227,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         questionDoc.setTitle(editQuestionForm.getTitle());
         questionDoc.setContent(editQuestionForm.getContent());
         String tagStr = String.join(",", editQuestionForm.getTags());
-        if (editQuestionForm.getImages() != null){
+        if (editQuestionForm.getImages() != null) {
             String images = String.join(",", editQuestionForm.getImages());
             questionDoc.setImages(images);
         }
@@ -244,6 +249,51 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         }
         return isSuccess;
     }
+
+    /**
+     * 增加问题的回答数
+     *
+     * @param questionId
+     */
+    @Override
+    public void increaseAnswerCount(Long questionId) {
+        QuestionDoc questionDoc = getEsDoc(questionId);
+        if (questionDoc == null) {
+            return;
+        }
+        if (questionDoc.getAnswerCount() == null) {
+            questionDoc.setAnswerCount(0);
+        } else {
+            questionDoc.setAnswerCount(questionDoc.getAnswerCount() + 1);
+        }
+        updateEsDoc(questionDoc);
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
+        this.baseMapper.updateById(question);
+    }
+
+    /**
+     * 减少问题的回答数
+     *
+     * @param questionId
+     */
+    @Override
+    public void decreaseAnswerCount(Long questionId) {
+        QuestionDoc questionDoc = getEsDoc(questionId);
+        if (questionDoc == null) {
+            return;
+        }
+        if (questionDoc.getAnswerCount() == null) {
+            questionDoc.setAnswerCount(0);
+        } else {
+            questionDoc.setAnswerCount(questionDoc.getAnswerCount() - 1);
+        }
+        updateEsDoc(questionDoc);
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
+        this.baseMapper.updateById(question);
+    }
+
 
     @Override
     public SearchHits<QuestionDoc> queryEsQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
@@ -342,7 +392,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     } else {
                         questionVO.setLikeStatus(0);
                     }
-                    User user =userClient.findById(questionVO.getUserId());
+                    User user = userClient.findById(questionVO.getUserId());
                     questionVO.setNickname(user.getNickname());
                     questionVOList.add(questionVO);
                 }
