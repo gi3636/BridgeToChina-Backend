@@ -1,6 +1,7 @@
 package com.btchina.answer.controller;
 
 
+import com.btchina.answer.model.form.AnswerUseForm;
 import com.btchina.answer.service.AnswerService;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
@@ -77,5 +78,18 @@ public class AnswerController {
        PageResult<AnswerVO> voList = answerService.queryAnswer(queryAnswerForm);
         return CommonResult.success(voList);
     }
+
+
+    @ApiOperation(value = "采用回答")
+    @PostMapping("/use")
+    public CommonResult<Void> use(@Validated @RequestBody AnswerUseForm answerUseForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = answerService.use(answerUseForm.getId(),answerUseForm.getStatus(), userId);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        return CommonResult.success(null);
+    }
+
 }
 

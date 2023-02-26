@@ -2,6 +2,7 @@ package com.btchina.answer.service;
 
 import com.btchina.answer.entity.Answer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.btchina.answer.model.form.AnswerUseForm;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.model.form.answer.AddAnswerForm;
@@ -26,4 +27,6 @@ public interface AnswerService extends IService<Answer> {
     Boolean updateAnswer(UpdateAnswerForm updateAnswerForm, Long userId);
 
     PageResult<AnswerVO> queryAnswer(QueryAnswerForm queryAnswerForm);
+
+    Boolean use(Long id, Integer status, Long userId);
 }

@@ -1,16 +1,16 @@
 package com.btchina.answer.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.btchina.answer.entity.Answer;
+import com.btchina.answer.entity.AnswerUserUse;
 import com.btchina.answer.mapper.AnswerMapper;
+import com.btchina.answer.model.form.AnswerUseForm;
 import com.btchina.answer.service.AnswerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.exception.GlobalException;
-import com.btchina.entity.User;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.model.form.answer.AddAnswerForm;
 import com.btchina.model.form.answer.QueryAnswerForm;
@@ -39,6 +39,9 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
 
     @Autowired
     private UserClient userClient;
+
+    @Autowired
+    private AnswerUserUseServiceImpl answerUserUseService;
 
     @Override
     public Boolean addAnswer(AddAnswerForm addAnswerForm, Long userId) {
@@ -122,5 +125,56 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         pageResult.setCurrentPage((int) answerPage.getCurrent());
         pageResult.setList(answerVOList);
         return pageResult;
+    }
+
+    @Override
+    public Boolean use(Long id, Integer status, Long userId) {
+        if (userId == null) {
+            throw GlobalException.from("用户未登录");
+        }
+        Answer answer = this.getById(id);
+        if (answer == null) {
+            throw GlobalException.from("回答不存在");
+        }
+        // 先查询该用户是否已经采用过该回答
+        LambdaQueryWrapper<AnswerUserUse> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(AnswerUserUse::getUserId, userId);
+        wrapper.eq(AnswerUserUse::getAnswerId, answer.getId());
+        AnswerUserUse answerUserUse = answerUserUseService.getOne(wrapper);
+        if (answerUserUse == null) {
+            // 如果没有采用过，则新增一条记录
+            answerUserUse = new AnswerUserUse();
+            answerUserUse.setUserId(userId);
+            answerUserUse.setAnswerId(answer.getId());
+            answerUserUse.setStatus(status);
+            answerUserUseService.save(answerUserUse);
+        } else {
+            // 如果已经采用过，则判断状态
+            if (answerUserUse.getStatus() == status) {
+                return true;
+            }
+            // 如果已经采用过，则更新状态
+            answerUserUse.setStatus(status);
+            answerUserUseService.updateById(answerUserUse);
+        }
+        // 增加采用数
+        if (answerUserUse.getStatus() == 1) {
+            incUseCount(answer.getId());
+        } else {
+            decUseCount(answer.getId());
+        }
+        return true;
+    }
+
+    private Boolean decUseCount(Long id) {
+        Answer answer = this.getById(id);
+        answer.setUseCount(answer.getUseCount() - 1);
+        return this.updateById(answer);
+    }
+
+    public Boolean incUseCount(Long answerId) {
+        Answer answer = this.getById(answerId);
+        answer.setUseCount(answer.getUseCount() + 1);
+        return this.updateById(answer);
     }
 }
