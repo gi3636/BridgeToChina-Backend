@@ -5,7 +5,7 @@ services:
     image: user-service:1.0
     container_name: user-service
     ports:
-      - "8091:8080"
+      - "8000:8080"
     depends_on:
       - gateway-service
   question-service:
@@ -20,6 +20,20 @@ services:
     container_name: tag-service
     ports:
       - "8200:8080"
+    depends_on:
+      - gateway-service
+  comment-service:
+    image: comment-service:1.0
+    container_name: comment-service
+    ports:
+      - "8300:8080"
+    depends_on:
+      - gateway-service
+  answer-service:
+    image: answer-service:1.0
+    container_name: answer-service
+    ports:
+      - "8400:8080"
     depends_on:
       - gateway-service
   gateway-service:
