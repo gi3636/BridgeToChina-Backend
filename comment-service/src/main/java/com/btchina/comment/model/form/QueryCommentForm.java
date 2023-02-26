@@ -7,9 +7,9 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class QueryAnswerForm  extends PageQueryParam {
-    @NotNull(message = "问题id不能为空")
-    @ApiModelProperty("问题id")
-    private Long questionId;
+public class QueryCommentForm  extends PageQueryParam {
+    @NotNull(message = "回答id不能为空")
+    @ApiModelProperty("回答id")
+    private Long answerId;
 
 }

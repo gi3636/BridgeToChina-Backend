@@ -1,6 +1,7 @@
 package com.btchina.answer.controller;
 
 
+import com.btchina.answer.entity.Answer;
 import com.btchina.answer.model.form.AnswerUseForm;
 import com.btchina.answer.service.AnswerService;
 import com.btchina.core.api.CommonResult;
@@ -91,5 +92,24 @@ public class AnswerController {
         return CommonResult.success(null);
     }
 
+
+    @ApiOperation(value = "增加评论数")
+    @PostMapping("/increase/comment/count")
+    public void addCommentCount(@Validated @RequestBody Long answerId) {
+        answerService.increaseCommentCount(answerId);
+    }
+
+    @ApiOperation(value = "减少评论数")
+    @PostMapping("/decrease/comment/count")
+    public void decreaseCommentCount(@Validated @RequestBody Long answerId) {
+        answerService.decreaseCommentCount(answerId);
+    }
+
+
+    @ApiOperation(value = "获取回答详情")
+    @PostMapping("/findById")
+    public Answer findById(@Validated @RequestBody Long answerId) {
+        return answerService.findById(answerId);
+    }
 }
 

@@ -12,6 +12,7 @@ import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.entity.Question;
+import com.btchina.entity.User;
 import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.answer.model.form.AddAnswerForm;
@@ -189,6 +190,25 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         }
 
         return true;
+    }
+
+    @Override
+    public Answer findById(Long answerId) {
+        return this.getById(answerId);
+    }
+
+    @Override
+    public void increaseCommentCount(Long answerId) {
+        Answer answer = this.getById(answerId);
+        answer.setCommentCount(answer.getCommentCount() + 1);
+        this.updateById(answer);
+    }
+
+    @Override
+    public void decreaseCommentCount(Long answerId) {
+        Answer answer = this.getById(answerId);
+        answer.setCommentCount(answer.getCommentCount() - 1);
+        this.updateById(answer);
     }
 
     private Boolean decUseCount(Long id) {

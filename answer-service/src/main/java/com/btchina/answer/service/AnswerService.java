@@ -28,4 +28,11 @@ public interface AnswerService extends IService<Answer> {
     PageResult<AnswerVO> queryAnswer(QueryAnswerForm queryAnswerForm);
 
     Boolean use(Long id, Integer status, Long userId);
+
+
+    Answer findById(Long answerId);
+
+    void increaseCommentCount(Long answerId);
+
+    void decreaseCommentCount(Long answerId);
 }

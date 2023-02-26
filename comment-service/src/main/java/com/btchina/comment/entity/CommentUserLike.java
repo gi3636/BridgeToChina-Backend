@@ -38,8 +38,8 @@ public class CommentUserLike implements Serializable {
     @ApiModelProperty("评论id")
     private Long commentId;
 
-    @ApiModelProperty("笔记id")
-    private Long noteId;
+    @ApiModelProperty("回答id")
+    private Long answerId;
 
     @ApiModelProperty("点赞状态 0是取消 1是点赞")
     private Integer status;

@@ -2,8 +2,14 @@ package com.btchina.comment.controller;
 
 
 import com.btchina.comment.model.form.AddCommentForm;
+import com.btchina.comment.model.form.CommentLikeForm;
+import com.btchina.comment.model.form.QueryCommentForm;
+import com.btchina.comment.model.form.UpdateCommentForm;
+import com.btchina.comment.model.vo.CommentVO;
 import com.btchina.comment.service.CommentService;
 import com.btchina.core.api.CommonResult;
+import com.btchina.core.api.DeleteForm;
+import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,5 +49,48 @@ public class CommentController {
     }
 
 
+    @ApiOperation(value = "删除评论")
+    @PostMapping("/del")
+    public CommonResult<Void> delComment(@Validated @RequestBody DeleteForm deleteForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = commentService.delComment(deleteForm, userId);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        return CommonResult.success(null);
+    }
+
+
+    @ApiOperation(value = "修改评论")
+    @PostMapping("/update")
+    public CommonResult<Void> updateComment(@Validated @RequestBody UpdateCommentForm updateCommentForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = commentService.updateComment(updateCommentForm, userId);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        return CommonResult.success(null);
+    }
+
+
+    @ApiOperation(value = "查询回答评论")
+    @PostMapping("/list")
+    public CommonResult<PageResult<CommentVO>> list(@Validated @RequestBody QueryCommentForm queryCommentForm) {
+        Long userId = AuthHelper.getUserId();
+        PageResult<CommentVO> result = commentService.queryCommentList(queryCommentForm, userId);
+        return CommonResult.success(result);
+    }
+
+
+    @ApiOperation(value = "点赞评论")
+    @PostMapping("/like")
+    public CommonResult<Void> like(@Validated @RequestBody CommentLikeForm commentLikeForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = commentService.like(commentLikeForm, userId);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        return CommonResult.success(null);
+    }
 }
 

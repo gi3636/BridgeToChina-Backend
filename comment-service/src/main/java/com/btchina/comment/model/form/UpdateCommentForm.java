@@ -4,12 +4,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class UpdateAnswerForm {
+public class UpdateCommentForm {
 
-    @ApiModelProperty("回答id")
+    @ApiModelProperty("评论id")
     private Long id;
 
-    @ApiModelProperty("回答内容")
+    @ApiModelProperty("内容")
     private String content;
 
 }

@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("tbl_comment")
+@ToString
 @ApiModel(value = "Comment对象", description = "评论表")
 public class Comment implements Serializable {
 
