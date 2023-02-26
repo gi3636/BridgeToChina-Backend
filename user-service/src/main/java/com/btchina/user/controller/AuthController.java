@@ -2,8 +2,6 @@ package com.btchina.user.controller;
 
 
 import com.btchina.core.api.CommonResult;
-import com.btchina.core.api.ResultCode;
-import com.btchina.core.exception.GlobalException;
 import com.btchina.user.model.form.LoginForm;
 import com.btchina.user.model.form.RegisterForm;
 import com.btchina.user.model.vo.UserVO;

@@ -1,6 +1,6 @@
-package com.btchina.feign.model.vo.tag;
+package com.btchina.model.vo.tag;
 
-import com.btchina.feign.pojo.Tag;
+import com.btchina.entity.Tag;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

@@ -1,6 +1,5 @@
-package com.btchina.user.model.vo;
+package com.btchina.model.vo.user;
 
-import com.btchina.user.entity.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,20 +55,5 @@ public class UserVO {
     @ApiModelProperty("专业")
     private String major;
 
-    public static UserVO convert(User user) {
-        UserVO userVO = new UserVO();
-        userVO.setId(user.getId());
-        userVO.setUsername(user.getUsername());
-        userVO.setMobile(user.getMobile());
-        userVO.setNickname(user.getNickname());
-        userVO.setAvatar(user.getAvatar());
-        userVO.setSex(user.getSex());
-        userVO.setBirthday(user.getBirthday());
-        userVO.setCountry(user.getCountry());
-        userVO.setCity(user.getCity());
-        userVO.setDescription(user.getDescription());
-        userVO.setCover(user.getCover());
-        userVO.setMajor(user.getMajor());
-        return userVO;
-    }
+
 }

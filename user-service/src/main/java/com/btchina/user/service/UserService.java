@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.user.entity.User;
 import com.btchina.user.model.form.RegisterForm;
 import com.btchina.user.model.vo.UserVO;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,4 +21,6 @@ public interface UserService extends IService<User> {
     Boolean register(RegisterForm registerForm);
 
     UserVO login(String username, String password);
+
+    Map<Long, UserVO> findByIds(List<Long> ids);
 }

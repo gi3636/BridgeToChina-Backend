@@ -1,4 +1,4 @@
-package com.btchina.feign.model.form.tag;
+package com.btchina.model.form.tag;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

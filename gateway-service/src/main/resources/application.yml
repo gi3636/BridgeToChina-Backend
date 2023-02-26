@@ -38,6 +38,20 @@ spring:
           uri: lb://tag-service
           predicates:
             - Path=/tag/**
+        # 回答服务
+        - id: answer-service
+          uri: lb://answer-service
+          predicates:
+            - Path=/answer/**
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
+        # 评论服务
+        - id: comment-service
+          uri: lb://comment-service
+          predicates:
+            - Path=/comment/**
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
       globalcors:
         add-to-simple-url-handler-mapping: true # 放行options请求
         cors-configurations:

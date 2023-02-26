@@ -1,7 +1,5 @@
 package com.btchina.question.model.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.btchina.feign.pojo.Tag;
 import com.btchina.question.entity.Question;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

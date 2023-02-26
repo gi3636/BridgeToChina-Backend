@@ -1,4 +1,4 @@
-package com.btchina.feign.pojo;
+package com.btchina.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -3,13 +3,12 @@ package com.btchina.question.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
-import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.clients.UserClient;
-import com.btchina.feign.model.form.tag.AddTagForm;
-import com.btchina.feign.model.form.tag.EditQuestionTagForm;
-import com.btchina.feign.pojo.User;
+import com.btchina.model.form.tag.AddTagForm;
+import com.btchina.model.form.tag.EditQuestionTagForm;
+import com.btchina.entity.User;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
 import com.btchina.question.entity.QuestionUserLike;
@@ -52,7 +51,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 /**

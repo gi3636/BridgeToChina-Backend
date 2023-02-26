@@ -1,4 +1,4 @@
-package com.btchina.feign.pojo;
+package com.btchina.entity;
 
 import java.io.Serializable;
 import java.util.Date;

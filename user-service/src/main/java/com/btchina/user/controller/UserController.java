@@ -5,15 +5,16 @@ import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.redis.service.RedisService;
 import com.btchina.user.entity.User;
+import com.btchina.user.model.vo.UserVO;
 import com.btchina.user.service.UserService;
 import com.btchina.core.util.AuthHelper;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -56,6 +57,13 @@ public class UserController {
             throw new GlobalException(ResultCode.COMMENT_NOT_EXIST);
         }
         return user;
+    }
+
+
+    @ApiOperation(value = "根据id列表查询用户信息")
+    @PostMapping("/findByIds")
+    public Map<Long,UserVO> findByIds(@RequestBody List<Long> ids) {
+        return userService.findByIds(ids);
     }
 
 }

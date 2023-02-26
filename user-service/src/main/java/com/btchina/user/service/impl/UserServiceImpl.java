@@ -14,6 +14,11 @@ import com.btchina.user.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 用户表 服务实现类
@@ -66,19 +71,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!DigestUtil.md5Hex(password).equals(user.getPassword())) {
             throw GlobalException.from(ResultCode.PASSWORD_WRONG);
         }
-        UserVO userVo = new UserVO();
-        userVo.setId(user.getId());
-        userVo.setUsername(user.getUsername());
-        userVo.setMobile(user.getMobile());
-        userVo.setNickname(user.getNickname());
-        userVo.setAvatar(user.getAvatar());
-        userVo.setSex(user.getSex());
-        userVo.setBirthday(user.getBirthday());
-        userVo.setCountry(user.getCountry());
-        userVo.setCity(user.getCity());
-        userVo.setDescription(user.getDescription());
-        userVo.setCover(user.getCover());
+        UserVO userVo = UserVO.convert(user);
         userVo.setToken(jwtTokenUtil.generateToken(user));
         return userVo;
+    }
+
+    @Override
+    public Map<Long, UserVO> findByIds(List<Long> ids) {
+        if (ids == null || ids.size() == 0) {
+            return null;
+        }
+        List<User> userList = this.baseMapper.selectBatchIds(ids);
+        Map<Long, UserVO> userVOMap = new HashMap<>();
+        for (User user : userList) {
+            UserVO userVO = UserVO.convert(user);
+            userVOMap.put(user.getId(), userVO);
+        }
+        return userVOMap;
     }
 }

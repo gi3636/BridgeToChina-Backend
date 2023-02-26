@@ -6,7 +6,7 @@ import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
 import com.btchina.feign.clients.UserClient;
-import com.btchina.feign.pojo.User;
+import com.btchina.entity.User;
 import com.btchina.question.entity.Question;
 import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.form.AddQuestionForm;
