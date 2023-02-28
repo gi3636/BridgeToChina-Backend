@@ -146,6 +146,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         // 封装返回结果
         PageResult<AnswerVO> pageResult = new PageResult<>();
         pageResult.setTotal(answerPage.getTotal());
+        pageResult.setTotalPage((int) answerPage.getPages());
         pageResult.setPageSize((int) answerPage.getSize());
         pageResult.setCurrentPage((int) answerPage.getCurrent());
         pageResult.setList(answerVOList);
