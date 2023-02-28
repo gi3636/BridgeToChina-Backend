@@ -1,12 +1,24 @@
 package com.btchina.model.vo.answer;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
-@Data
-public class AnswerVO {
+/**
+ * <p>
+ * 回答表
+ * </p>
+ *
+ * @author franky
+ * @since 2023-02-25
+ */
+@Getter
+@Setter
+public class AnswerVO implements Serializable {
+
 
     @ApiModelProperty("回答id")
     private Long id;
@@ -18,7 +30,10 @@ public class AnswerVO {
     private Long userId;
 
     @ApiModelProperty("用户昵称")
-    private String nickName;
+    private String nickname;
+
+    @ApiModelProperty("采用状态")
+    private Integer useStatus;
 
     @ApiModelProperty("用户头像")
     private String avatar;
@@ -28,9 +43,6 @@ public class AnswerVO {
 
     @ApiModelProperty("是否最佳回答 1是 0不是")
     private Integer isBest;
-
-    @ApiModelProperty("是否采用 1是 0不是")
-    private Integer useStatus;
 
     @ApiModelProperty("采用数")
     private Integer useCount;

@@ -138,7 +138,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
             UserVO user = userMap.get(answer.getUserId());
             AnswerVO answerVO = new AnswerVO();
             BeanUtils.copyProperties(answer, answerVO);
-            answerVO.setNickName(user.getNickname());
+            answerVO.setNickname(user.getNickname());
             answerVO.setAvatar(user.getAvatar());
             answerVOList.add(answerVO);
         }
@@ -193,8 +193,26 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     }
 
     @Override
-    public Answer findById(Long answerId) {
-        return this.getById(answerId);
+    public AnswerVO findVOById(Long answerId) {
+        Answer answer = this.getById(answerId);
+        if (answer == null) {
+            throw GlobalException.from("回答不存在");
+        }
+        AnswerVO answerVO = new AnswerVO();
+        BeanUtils.copyProperties(answer, answerVO);
+        User user = userClient.findById(answer.getUserId());
+        if (user != null) {
+            answerVO.setNickname(user.getNickname());
+            answerVO.setAvatar(user.getAvatar());
+        }
+
+        AnswerUserUse answerUserUse = answerUserUseService.getOne(new LambdaQueryWrapper<AnswerUserUse>()
+                .eq(AnswerUserUse::getAnswerId, answerId)
+                .eq(AnswerUserUse::getUserId, answer.getUserId()));
+      if (answerUserUse != null) {
+            answerVO.setUseStatus(answerUserUse.getStatus());
+      }
+        return answerVO;
     }
 
     @Override
@@ -209,6 +227,11 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         Answer answer = this.getById(answerId);
         answer.setCommentCount(answer.getCommentCount() - 1);
         this.updateById(answer);
+    }
+
+    @Override
+    public Answer findById(Long answerId) {
+        return this.getById(answerId);
     }
 
     private Boolean decUseCount(Long id) {

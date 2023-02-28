@@ -111,5 +111,11 @@ public class AnswerController {
     public Answer findById(@Validated @RequestBody Long answerId) {
         return answerService.findById(answerId);
     }
+
+    @ApiOperation(value = "获取回答详情")
+    @PostMapping("/findVOById")
+    public AnswerVO findVOById(@Validated @RequestBody Long answerId) {
+        return answerService.findVOById(answerId);
+    }
 }
 

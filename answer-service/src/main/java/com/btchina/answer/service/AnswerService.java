@@ -30,9 +30,11 @@ public interface AnswerService extends IService<Answer> {
     Boolean use(Long id, Integer status, Long userId);
 
 
-    Answer findById(Long answerId);
+    AnswerVO findVOById(Long answerId);
 
     void increaseCommentCount(Long answerId);
 
     void decreaseCommentCount(Long answerId);
+
+    Answer findById(Long answerId);
 }

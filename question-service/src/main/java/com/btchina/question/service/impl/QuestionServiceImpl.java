@@ -11,6 +11,7 @@ import com.btchina.feign.clients.UserClient;
 import com.btchina.model.form.tag.AddTagForm;
 import com.btchina.model.form.tag.EditQuestionTagForm;
 import com.btchina.entity.User;
+import com.btchina.model.vo.answer.AnswerVO;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
 import com.btchina.question.entity.QuestionUserLike;
@@ -430,7 +431,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     }
 
                     if (searchHit.getContent().getBestAnswerId() != null) {
-                        Answer answer = answerClient.findById(searchHit.getContent().getBestAnswerId());
+                        AnswerVO answer = answerClient.findVOById(searchHit.getContent().getBestAnswerId());
                         questionVO.setBestAnswer(answer);
                     }
                     questionVO.setImages(Arrays.asList(searchHit.getContent().getImages().split(",")));

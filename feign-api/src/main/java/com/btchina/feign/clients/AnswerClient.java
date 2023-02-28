@@ -2,6 +2,7 @@ package com.btchina.feign.clients;
 
 import com.btchina.entity.Answer;
 import com.btchina.entity.User;
+import com.btchina.model.vo.answer.AnswerVO;
 import com.btchina.model.vo.user.UserVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,6 +17,9 @@ import java.util.Map;
 
 @FeignClient(name = "answer-service")
 public interface AnswerClient {
+
+    @PostMapping("/answer/findVOById")
+    AnswerVO findVOById(@RequestBody Long answerId);
 
     @PostMapping("/answer/findById")
     Answer findById(@RequestBody Long answerId);
