@@ -50,6 +50,7 @@ import org.springframework.data.elasticsearch.core.query.UpdateResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -392,6 +393,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     } else {
                         questionVO.setLikeStatus(0);
                     }
+                    questionVO.setImages(Arrays.asList(searchHit.getContent().getImages().split(",")));
+                    questionVO.setTags(Arrays.asList(searchHit.getContent().getTags().split(",")));
                     User user = userClient.findById(questionVO.getUserId());
                     questionVO.setNickname(user.getNickname());
                     questionVOList.add(questionVO);

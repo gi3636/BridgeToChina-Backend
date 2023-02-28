@@ -49,7 +49,7 @@ public class QuestionVO {
     private List<String> images;
 
     @ApiModelProperty("问题标签,多个用逗号分隔")
-    private String tags;
+    private List<String> tags;
 
     @ApiModelProperty("创建时间")
     private Date createdTime;
