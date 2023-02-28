@@ -438,6 +438,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     questionVO.setTags(Arrays.asList(searchHit.getContent().getTags().split(",")));
                     User user = userClient.findById(questionVO.getUserId());
                     questionVO.setNickname(user.getNickname());
+                    questionVO.setAvatar(user.getAvatar());
                     questionVOList.add(questionVO);
                 }
 

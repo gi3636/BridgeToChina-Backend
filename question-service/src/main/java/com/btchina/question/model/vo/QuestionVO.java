@@ -23,6 +23,9 @@ public class QuestionVO {
     @ApiModelProperty("用户昵称")
     private String nickname;
 
+    @ApiModelProperty("用户头像")
+    private String avatar;
+
     @ApiModelProperty("标题")
     private String title;
 
