@@ -38,6 +38,9 @@ public class Question implements Serializable {
     @ApiModelProperty("用户Id")
     private Long userId;
 
+    @ApiModelProperty("最佳回答Id")
+    private Long bestAnswerId;
+
     @ApiModelProperty("标题")
     private String title;
 

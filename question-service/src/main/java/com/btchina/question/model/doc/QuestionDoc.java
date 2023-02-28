@@ -28,6 +28,10 @@ public class QuestionDoc {
     @ApiModelProperty("用户Id")
     private Long userId;
 
+    @Field(type = FieldType.Integer)
+    @ApiModelProperty("最佳回答Id")
+    private Long bestAnswerId;
+
     @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     @ApiModelProperty("问题标题")
     private String title;

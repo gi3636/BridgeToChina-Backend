@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.exception.GlobalException;
+import com.btchina.entity.Answer;
+import com.btchina.feign.clients.AnswerClient;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.model.form.tag.AddTagForm;
@@ -19,6 +21,7 @@ import com.btchina.question.model.enums.QueryTypeEnum;
 import com.btchina.question.model.form.AddQuestionForm;
 import com.btchina.question.model.form.EditQuestionForm;
 import com.btchina.question.model.form.QuestionQueryForm;
+import com.btchina.question.model.form.QuestionSetAnswerForm;
 import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
 import com.btchina.question.service.QuestionUserLikeService;
@@ -76,6 +79,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Autowired
     private UserClient userClient;
+
+    @Autowired
+    private AnswerClient answerClient;
 
     @Autowired
     ElasticsearchRestTemplate elasticsearchRestTemplate;
@@ -295,6 +301,35 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         this.baseMapper.updateById(question);
     }
 
+    @Override
+    public Boolean setBestAnswer(QuestionSetAnswerForm questionSetAnswerForm, Long userId) {
+        if (userId == null) {
+            throw GlobalException.from("用户未登录");
+        }
+        QuestionDoc questionDoc = getEsDoc(questionSetAnswerForm.getQuestionId());
+        if (questionDoc == null) {
+            throw GlobalException.from("问题不存在");
+        }
+        if (!questionDoc.getUserId().equals(userId)) {
+            throw GlobalException.from("无权限设置最佳答案");
+        }
+        Answer answer = answerClient.findById(questionSetAnswerForm.getAnswerId());
+        if (answer == null) {
+            throw GlobalException.from("回答不存在");
+        }
+        // 1. 设置最佳答案
+        questionDoc.setBestAnswerId(questionSetAnswerForm.getAnswerId());
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
+
+        Boolean isSuccess = this.baseMapper.updateById(question) > 0;
+        // 2. 更新es文档
+        if (isSuccess) {
+            rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, questionDoc);
+        }
+        return isSuccess;
+    }
+
 
     @Override
     public SearchHits<QuestionDoc> queryEsQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
@@ -392,6 +427,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                         questionVO.setLikeStatus(userLike.getStatus());
                     } else {
                         questionVO.setLikeStatus(0);
+                    }
+
+                    if (searchHit.getContent().getBestAnswerId() != null) {
+                        Answer answer = answerClient.findById(searchHit.getContent().getBestAnswerId());
+                        questionVO.setBestAnswer(answer);
                     }
                     questionVO.setImages(Arrays.asList(searchHit.getContent().getImages().split(",")));
                     questionVO.setTags(Arrays.asList(searchHit.getContent().getTags().split(",")));

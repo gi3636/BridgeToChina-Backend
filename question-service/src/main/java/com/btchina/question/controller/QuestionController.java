@@ -9,10 +9,7 @@ import com.btchina.feign.clients.UserClient;
 import com.btchina.entity.User;
 import com.btchina.question.entity.Question;
 import com.btchina.question.model.doc.QuestionDoc;
-import com.btchina.question.model.form.AddQuestionForm;
-import com.btchina.question.model.form.EditQuestionForm;
-import com.btchina.question.model.form.QuestionLikeForm;
-import com.btchina.question.model.form.QuestionQueryForm;
+import com.btchina.question.model.form.*;
 import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
 import com.btchina.question.service.QuestionUserLikeService;
@@ -156,6 +153,17 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
+
+    @ApiOperation(value = "设置最佳回答")
+    @PostMapping("/setBestAnswer")
+    public CommonResult<Void> setBestAnswer(@Validated @RequestBody QuestionSetAnswerForm questionSetAnswerForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = questionService.setBestAnswer(questionSetAnswerForm, userId);
+        if (!isSuccess) {
+            return CommonResult.failed("设置最佳回答失败");
+        }
+        return CommonResult.success(null);
+    }
 
     @ApiOperation(value = "获取问题")
     @GetMapping("/findById/{id}")

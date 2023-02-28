@@ -1,5 +1,6 @@
 package com.btchina.question.model.vo;
 
+import com.btchina.entity.Answer;
 import com.btchina.question.entity.Question;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,6 +27,9 @@ public class QuestionVO {
 
     @ApiModelProperty("内容")
     private String content;
+
+    @ApiModelProperty("最佳回答")
+    private Answer bestAnswer;
 
     @ApiModelProperty("收藏数")
     private Integer favoriteCount;

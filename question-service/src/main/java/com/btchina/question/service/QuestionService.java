@@ -7,6 +7,7 @@ import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.form.AddQuestionForm;
 import com.btchina.question.model.form.EditQuestionForm;
 import com.btchina.question.model.form.QuestionQueryForm;
+import com.btchina.question.model.form.QuestionSetAnswerForm;
 import com.btchina.question.model.vo.QuestionVO;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
@@ -41,4 +42,6 @@ public interface QuestionService extends IService<Question> {
     void increaseAnswerCount(Long questionId);
 
     void decreaseAnswerCount(Long questionId);
+
+    Boolean setBestAnswer(QuestionSetAnswerForm questionSetAnswerForm, Long userId);
 }

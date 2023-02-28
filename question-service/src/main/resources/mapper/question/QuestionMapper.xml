@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.btchina.question.entity.Question">
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
+        <result column="best_answer_id" property="bestAnswerId" />
         <result column="title" property="title" />
         <result column="content" property="content" />
         <result column="favorite_count" property="favoriteCount" />
