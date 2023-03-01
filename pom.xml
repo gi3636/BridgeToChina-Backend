@@ -22,7 +22,6 @@
         <module>gateway-service</module>
         <module>feign-api</module>
         <module>tag-service</module>
-        <module>answer-service</module>
         <module>comment-service</module>
     </modules>
 
