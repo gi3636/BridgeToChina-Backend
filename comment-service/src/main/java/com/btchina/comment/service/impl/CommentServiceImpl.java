@@ -18,7 +18,7 @@ import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.entity.Answer;
-import com.btchina.feign.clients.AnswerClient;
+import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.model.vo.user.UserVO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -47,7 +47,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @Autowired
-    private AnswerClient answerClient;
+    private QuestionClient questionClient;
 
     @Autowired
     private UserClient userClient;
@@ -61,7 +61,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         if (userId == null) {
             throw new GlobalException("用户未登录");
         }
-        Answer answer = answerClient.findById(addCommentForm.getAnswerId());
+        Answer answer = questionClient.findAnswerById(addCommentForm.getAnswerId());
         if (answer == null) {
             throw new GlobalException("回答不存在");
         }

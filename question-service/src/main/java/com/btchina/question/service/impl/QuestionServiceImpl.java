@@ -5,7 +5,7 @@ import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.entity.Answer;
-import com.btchina.feign.clients.AnswerClient;
+import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.model.form.tag.AddTagForm;
@@ -82,7 +82,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private UserClient userClient;
 
     @Autowired
-    private AnswerClient answerClient;
+    private QuestionClient questionClient;
 
     @Autowired
     ElasticsearchRestTemplate elasticsearchRestTemplate;
@@ -314,7 +314,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         if (!questionDoc.getUserId().equals(userId)) {
             throw GlobalException.from("无权限设置最佳答案");
         }
-        Answer answer = answerClient.findById(questionSetAnswerForm.getAnswerId());
+        Answer answer = questionClient.findAnswerById(questionSetAnswerForm.getAnswerId());
         if (answer == null) {
             throw GlobalException.from("回答不存在");
         }
@@ -431,7 +431,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     }
 
                     if (searchHit.getContent().getBestAnswerId() != null) {
-                        AnswerVO answer = answerClient.findVOById(searchHit.getContent().getBestAnswerId());
+                        AnswerVO answer = questionClient.findAnswerVOById(searchHit.getContent().getBestAnswerId());
                         questionVO.setBestAnswer(answer);
                     }
                     questionVO.setImages(Arrays.asList(searchHit.getContent().getImages().split(",")));

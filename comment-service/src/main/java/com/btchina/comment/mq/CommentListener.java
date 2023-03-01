@@ -5,7 +5,7 @@ package com.btchina.comment.mq;
 import com.btchina.comment.constant.CommentConstant;
 import com.btchina.comment.entity.Comment;
 import com.btchina.comment.service.CommentService;
-import com.btchina.feign.clients.AnswerClient;
+import com.btchina.feign.clients.QuestionClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -23,7 +23,7 @@ public class CommentListener {
     CommentService commentService;
 
     @Autowired
-    AnswerClient answerClient;
+    QuestionClient questionClient;
 
     @RabbitListener(bindings = @QueueBinding(
             exchange = @Exchange(name = CommentConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
@@ -32,7 +32,7 @@ public class CommentListener {
     ))
     public void listenCommentInsert(Comment comment) {
         log.info("监听到新增消，评论为：{}", comment);
-        answerClient.increaseCommentCount(comment.getAnswerId());
+        questionClient.increaseCommentCount(comment.getAnswerId());
     }
 
 
@@ -43,7 +43,7 @@ public class CommentListener {
     ))
     public void listenCommentDelete(Comment comment) {
         log.info("监听到删除消息，评论id为：{}", comment);
-        answerClient.decreaseCommentCount(comment.getAnswerId());
+        questionClient.decreaseCommentCount(comment.getAnswerId());
     }
 
 }
