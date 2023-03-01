@@ -1,6 +1,6 @@
-package com.btchina.answer.mapper;
+package com.btchina.question.mapper;
 
-import com.btchina.answer.entity.AnswerUserUse;
+import com.btchina.question.entity.AnswerUserUse;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

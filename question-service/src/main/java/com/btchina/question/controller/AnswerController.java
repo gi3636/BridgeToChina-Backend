@@ -1,16 +1,16 @@
-package com.btchina.answer.controller;
+package com.btchina.question.controller;
 
 
-import com.btchina.answer.entity.Answer;
-import com.btchina.answer.model.form.AnswerUseForm;
-import com.btchina.answer.service.AnswerService;
+import com.btchina.question.entity.Answer;
+import com.btchina.question.model.form.AnswerUseForm;
+import com.btchina.question.service.AnswerService;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
-import com.btchina.answer.model.form.AddAnswerForm;
-import com.btchina.answer.model.form.QueryAnswerForm;
-import com.btchina.answer.model.form.UpdateAnswerForm;
+import com.btchina.question.model.form.AddAnswerForm;
+import com.btchina.question.model.form.QueryAnswerForm;
+import com.btchina.question.model.form.UpdateAnswerForm;
 import com.btchina.model.vo.answer.AnswerVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -1,6 +1,6 @@
-package com.btchina.answer.service;
+package com.btchina.question.service;
 
-import com.btchina.answer.entity.AnswerUserUse;
+import com.btchina.question.entity.AnswerUserUse;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

@@ -1,7 +1,7 @@
-package com.btchina.answer.mq;
+package com.btchina.question.mq;
 
 
-import com.btchina.answer.constant.AnswerConstant;
+import com.btchina.question.constant.AnswerConstant;
 import com.btchina.feign.clients.QuestionClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;

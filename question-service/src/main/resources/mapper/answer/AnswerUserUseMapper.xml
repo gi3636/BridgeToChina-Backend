@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.btchina.answer.mapper.AnswerUserUseMapper">
+<mapper namespace="com.btchina.question.mapper.AnswerUserUseMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.btchina.answer.entity.AnswerUserUse">
+    <resultMap id="BaseResultMap" type="com.btchina.question.entity.AnswerUserUse">
         <id column="id" property="id" />
         <result column="answer_id" property="answerId" />
         <result column="user_id" property="userId" />

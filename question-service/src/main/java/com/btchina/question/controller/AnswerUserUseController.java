@@ -1,4 +1,4 @@
-package com.btchina.answer.controller;
+package com.btchina.question.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;

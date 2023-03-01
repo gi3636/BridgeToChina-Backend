@@ -1,4 +1,4 @@
-package com.btchina.answer.constant;
+package com.btchina.question.constant;
 
 public class AnswerConstant {
     public static final String EXCHANGE_NAME = "Answer.topic";

@@ -39,8 +39,8 @@ spring:
           predicates:
             - Path=/tag/**
         # 回答服务
-        - id: answer-service
-          uri: lb://answer-service
+        - id: question-service
+          uri: lb://question-service
           predicates:
             - Path=/answer/**
           filters:

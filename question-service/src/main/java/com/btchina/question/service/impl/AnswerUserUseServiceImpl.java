@@ -1,8 +1,8 @@
-package com.btchina.answer.service.impl;
+package com.btchina.question.service.impl;
 
-import com.btchina.answer.entity.AnswerUserUse;
-import com.btchina.answer.mapper.AnswerUserUseMapper;
-import com.btchina.answer.service.AnswerUserUseService;
+import com.btchina.question.entity.AnswerUserUse;
+import com.btchina.question.mapper.AnswerUserUseMapper;
+import com.btchina.question.service.AnswerUserUseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
