@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "answer-service")
+@FeignClient(name = "question-service")
 public interface AnswerClient {
 
     @PostMapping("/answer/findVOById")
