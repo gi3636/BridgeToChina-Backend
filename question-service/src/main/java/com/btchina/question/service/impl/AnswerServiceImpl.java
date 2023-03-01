@@ -119,7 +119,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     }
 
     @Override
-    public PageResult<AnswerVO> queryAnswer(QueryAnswerForm queryAnswerForm) {
+    public PageResult<AnswerVO> queryAnswer(QueryAnswerForm queryAnswerForm, Long userId) {
         // 封装查询条件
         LambdaQueryWrapper<Answer> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Answer::getQuestionId, queryAnswerForm.getQuestionId());
@@ -138,6 +138,18 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
             UserVO user = userMap.get(answer.getUserId());
             AnswerVO answerVO = new AnswerVO();
             BeanUtils.copyProperties(answer, answerVO);
+
+            // 查询用户是否点击采用
+            if (userId != null) {
+                LambdaQueryWrapper<AnswerUserUse> answerUserUseWrapper = new LambdaQueryWrapper<>();
+                answerUserUseWrapper.eq(AnswerUserUse::getAnswerId, answer.getId());
+                answerUserUseWrapper.eq(AnswerUserUse::getUserId, userId);
+                AnswerUserUse answerUserUse = answerUserUseService.getOne(answerUserUseWrapper);
+                if (answerUserUse != null) {
+                    answerVO.setUseStatus(answerUserUse.getStatus());
+                }
+            }
+
             answerVO.setNickname(user.getNickname());
             answerVO.setAvatar(user.getAvatar());
             answerVOList.add(answerVO);
@@ -210,9 +222,9 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         AnswerUserUse answerUserUse = answerUserUseService.getOne(new LambdaQueryWrapper<AnswerUserUse>()
                 .eq(AnswerUserUse::getAnswerId, answerId)
                 .eq(AnswerUserUse::getUserId, answer.getUserId()));
-      if (answerUserUse != null) {
+        if (answerUserUse != null) {
             answerVO.setUseStatus(answerUserUse.getStatus());
-      }
+        }
         return answerVO;
     }
 

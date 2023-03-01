@@ -25,7 +25,7 @@ public interface AnswerService extends IService<Answer> {
 
     Boolean updateAnswer(UpdateAnswerForm updateAnswerForm, Long userId);
 
-    PageResult<AnswerVO> queryAnswer(QueryAnswerForm queryAnswerForm);
+    PageResult<AnswerVO> queryAnswer(QueryAnswerForm queryAnswerForm, Long userId);
 
     Boolean use(Long id, Integer status, Long userId);
 

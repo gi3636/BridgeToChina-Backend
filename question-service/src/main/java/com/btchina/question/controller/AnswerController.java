@@ -76,7 +76,8 @@ public class AnswerController {
     @ApiOperation(value = "查询回答")
     @PostMapping("/list")
     public CommonResult<PageResult<AnswerVO>> getAnswerList(@Validated @RequestBody QueryAnswerForm queryAnswerForm) {
-       PageResult<AnswerVO> voList = answerService.queryAnswer(queryAnswerForm);
+        Long userId = AuthHelper.getUserId();
+        PageResult<AnswerVO> voList = answerService.queryAnswer(queryAnswerForm, userId);
         return CommonResult.success(voList);
     }
 
@@ -85,7 +86,7 @@ public class AnswerController {
     @PostMapping("/use")
     public CommonResult<Void> use(@Validated @RequestBody AnswerUseForm answerUseForm) {
         Long userId = AuthHelper.getUserId();
-        Boolean isSuccess = answerService.use(answerUseForm.getId(),answerUseForm.getStatus(), userId);
+        Boolean isSuccess = answerService.use(answerUseForm.getId(), answerUseForm.getStatus(), userId);
         if (!isSuccess) {
             return CommonResult.failed();
         }

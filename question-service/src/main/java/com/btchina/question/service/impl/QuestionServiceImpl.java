@@ -1,5 +1,6 @@
 package com.btchina.question.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
@@ -329,6 +330,39 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, questionDoc);
         }
         return isSuccess;
+    }
+
+    @Override
+    public QuestionVO getVObyId(Long id, Long userId) {
+        QuestionVO questionVO = new QuestionVO();
+        QuestionDoc questionDoc = getEsDoc(id);
+        if (questionDoc == null) {
+            throw GlobalException.from("问题不存在");
+        }
+        User user = userClient.findById(questionDoc.getUserId());
+        BeanUtils.copyProperties(questionDoc, questionVO);
+        //装换标签和图片
+        if (questionDoc.getTags() != null) {
+            List<String> tags = Arrays.asList(questionDoc.getTags().split(","));
+            questionVO.setTags(tags);
+        }
+        if (questionDoc.getImages() != null) {
+            List<String> images = Arrays.asList(questionDoc.getImages().split(","));
+            questionVO.setImages(images);
+        }
+
+        LambdaQueryWrapper<QuestionUserLike> questionUserLikeWrapper = new LambdaQueryWrapper<QuestionUserLike>();
+        if (userId != null) {
+            questionUserLikeWrapper.eq(QuestionUserLike::getQuestionId, id);
+            questionUserLikeWrapper.eq(QuestionUserLike::getUserId, userId);
+            QuestionUserLike userLike = questionUserLikeService.getOne(questionUserLikeWrapper);
+            if (userLike != null) {
+                questionVO.setLikeStatus(userLike.getStatus());
+            }
+        }
+        questionVO.setAvatar(user.getAvatar());
+        questionVO.setNickname(user.getNickname());
+        return questionVO;
     }
 
 

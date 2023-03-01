@@ -44,4 +44,6 @@ public interface QuestionService extends IService<Question> {
     void decreaseAnswerCount(Long questionId);
 
     Boolean setBestAnswer(QuestionSetAnswerForm questionSetAnswerForm, Long userId);
+
+    QuestionVO getVObyId(Long id, Long userId);
 }

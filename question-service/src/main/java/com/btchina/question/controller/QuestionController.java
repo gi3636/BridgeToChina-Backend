@@ -48,18 +48,6 @@ public class QuestionController {
     @Autowired
     private QuestionUserLikeService questionUserLikeService;
 
-    @ApiOperation(value = "问答测试")
-    @GetMapping("{id}")
-    public User queryById(@PathVariable("id") Integer id) {
-        Question question = questionService.getBaseMapper().selectById(id);
-        redisService.set("test1", question);
-        Question question1 = (Question) redisService.get("test1");
-        System.out.println("test1" + question1.toString());
-        User user = userClient.findById(1L);
-        System.out.println("user " + user.toString());
-        return user;
-    }
-
 
     @ApiOperation(value = "发布问题")
     @PostMapping("/add")
@@ -113,23 +101,22 @@ public class QuestionController {
         return CommonResult.success(result);
     }
 
-    @ApiOperation(value = "获取测试列表")
-    @GetMapping("/list/test")
-    public CommonResult<List<Question>> getAllList() {
+
+    @ApiOperation(value = "获取问题详情")
+    @GetMapping("/detail/{id}")
+    public CommonResult<QuestionVO> getQuestionDetails(@PathVariable("id") Long id) {
         Long selfId = AuthHelper.getUserId();
-        List<Question> result = questionService.query().list();
+        QuestionVO result = questionService.getVObyId(id,selfId);
         return CommonResult.success(result);
     }
 
 
     @ApiOperation(value = "获取问题详情")
-    @GetMapping("/detail/{id}")
-    public CommonResult<Question> getQuestionDetails(@PathVariable("id") Long id) {
-        Long selfId = AuthHelper.getUserId();
+    @GetMapping("/seoDetail/{id}")
+    public CommonResult<Question> getSeoQuestionDetails(@PathVariable("id") Long id) {
         Question result = questionService.getById(id);
         return CommonResult.success(result);
     }
-
 
     @ApiOperation(value = "点赞")
     @PostMapping("/like")
