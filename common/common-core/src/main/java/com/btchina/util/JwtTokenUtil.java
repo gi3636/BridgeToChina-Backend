@@ -1,8 +1,9 @@
-package com.btchina.user.util;
+package com.btchina.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.btchina.user.entity.User;
+import com.btchina.core.api.ResultCode;
+import com.btchina.core.exception.GlobalException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -64,6 +65,7 @@ public class JwtTokenUtil {
                     .getBody();
         } catch (Exception e) {
             LOGGER.info("JWT格式验证失败:{}", e);
+            throw GlobalException.from(ResultCode.TOKEN_INVALID);
         }
         return claims;
     }
@@ -72,7 +74,7 @@ public class JwtTokenUtil {
      * 生成token的过期时间
      */
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
+        return new Date(System.currentTimeMillis() + 60 * 60 * 24 * 100 * 1000);
     }
 
     /**
@@ -94,13 +96,8 @@ public class JwtTokenUtil {
      */
     public Long getIdFromToken(String token) {
         Long id;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            id = Long.valueOf(claims.get(CLAIM_KEY_ID).toString());
-        } catch (Exception e) {
-            log.info("claims.getSubject: {}", e);
-            id = null;
-        }
+        Claims claims = getClaimsFromToken(token);
+        id = Long.valueOf(claims.get(CLAIM_KEY_ID).toString());
         return id;
     }
 
@@ -111,10 +108,10 @@ public class JwtTokenUtil {
      * @param token 客户端传入的token
      * @param user  从数据库中查询出来的用户信息
      */
-    public boolean validateToken(String token, User user) {
-        String username = getUserNameFromToken(token);
-        return username.equals(user.getUsername()) && !isTokenExpired(token);
-    }
+    //public boolean validateToken(String token, User user) {
+    //    String username = getUserNameFromToken(token);
+    //    return username.equals(user.getUsername()) && !isTokenExpired(token);
+    //}
 
     /**
      * 验证token是否还有效
@@ -154,16 +151,14 @@ public class JwtTokenUtil {
     /**
      * 根据用户信息生成token
      */
-    public String generateToken(User user) {
-        log.info("user:" + user);
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, user.getUsername());
-        claims.put(CLAIM_KEY_ID, user.getId());
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
-    }
-
-
+    //public String generateToken(User user) {
+    //    log.info("user:" + user);
+    //    Map<String, Object> claims = new HashMap<>();
+    //    claims.put(CLAIM_KEY_USERNAME, user.getUsername());
+    //    claims.put(CLAIM_KEY_ID, user.getId());
+    //    claims.put(CLAIM_KEY_CREATED, new Date());
+    //    return generateToken(claims);
+    //}
     public String generateToken(Long id, String username) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, username);

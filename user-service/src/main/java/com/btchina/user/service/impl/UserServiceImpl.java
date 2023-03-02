@@ -10,11 +10,10 @@ import com.btchina.user.model.form.RegisterForm;
 import com.btchina.user.model.vo.UserVO;
 import com.btchina.user.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.btchina.user.util.JwtTokenUtil;
+import com.btchina.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw GlobalException.from(ResultCode.PASSWORD_WRONG);
         }
         UserVO userVo = UserVO.convert(user);
-        userVo.setToken(jwtTokenUtil.generateToken(user));
+        userVo.setToken(jwtTokenUtil.generateToken(user.getId(),user.getUsername()));
         return userVo;
     }
 

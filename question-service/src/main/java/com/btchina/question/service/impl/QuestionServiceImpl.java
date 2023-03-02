@@ -463,13 +463,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     } else {
                         questionVO.setLikeStatus(0);
                     }
-
                     if (searchHit.getContent().getBestAnswerId() != null) {
                         AnswerVO answer = questionClient.findAnswerVOById(searchHit.getContent().getBestAnswerId());
                         questionVO.setBestAnswer(answer);
                     }
-                    questionVO.setImages(Arrays.asList(searchHit.getContent().getImages().split(",")));
-                    questionVO.setTags(Arrays.asList(searchHit.getContent().getTags().split(",")));
+                    if (searchHit.getContent().getImages() != null) {
+                        questionVO.setImages(Arrays.asList(searchHit.getContent().getImages().split(",")));
+                    }else {
+                        questionVO.setImages(new ArrayList<>());
+                    }
+                    if (searchHit.getContent().getTags() != null){
+                        questionVO.setTags(Arrays.asList(searchHit.getContent().getTags().split(",")));
+                    }else {
+                        questionVO.setTags(new ArrayList<>());
+                    }
                     User user = userClient.findById(questionVO.getUserId());
                     questionVO.setNickname(user.getNickname());
                     questionVO.setAvatar(user.getAvatar());

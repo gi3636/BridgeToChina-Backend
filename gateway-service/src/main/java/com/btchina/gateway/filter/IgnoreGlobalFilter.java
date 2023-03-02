@@ -1,10 +1,7 @@
 package com.btchina.gateway.filter;
 
-import com.btchina.core.api.ResultCode;
-import com.btchina.core.exception.GlobalException;
-import com.btchina.gateway.utils.JwtTokenUtil;
+import com.btchina.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -43,15 +40,19 @@ public class IgnoreGlobalFilter extends AbstractGatewayFilterFactory<IgnoreGloba
             return chain.filter(exchange);
         }
         System.out.println("token = " + token);
-        Long id = jwtTokenUtil.getIdFromToken(token);
-        String username = jwtTokenUtil.getUserNameFromToken(token);
-        // 将用户信息存储在request header中
-        Consumer<HttpHeaders> httpHeaders = httpHeader -> {
-            httpHeader.set("user-id", id.toString());
-            httpHeader.set("username", username);
-        };
-        ServerHttpRequest build = request.mutate().headers(httpHeaders).build();
-        exchange = exchange.mutate().request(build).build();
+        try {
+            Long id = jwtTokenUtil.getIdFromToken(token);
+            String username = jwtTokenUtil.getUserNameFromToken(token);
+            // 将用户信息存储在request header中
+            Consumer<HttpHeaders> httpHeaders = httpHeader -> {
+                httpHeader.set("user-id", id.toString());
+                httpHeader.set("username", username);
+            };
+            ServerHttpRequest build = request.mutate().headers(httpHeaders).build();
+            exchange = exchange.mutate().request(build).build();
+        } catch (Exception e) {
+            return chain.filter(exchange);
+        }
         return chain.filter(exchange);
     }
 
