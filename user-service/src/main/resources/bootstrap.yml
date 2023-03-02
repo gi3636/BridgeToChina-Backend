@@ -19,5 +19,9 @@ spring:
             refresh: true
           - data-id: jwt-config.yaml
             refresh: true
+          - data-id: es-config.yaml
+            refresh: true
+          - data-id: mq-config.yaml
+            refresh: true
 
 

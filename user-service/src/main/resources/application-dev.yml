@@ -1,11 +1,8 @@
 spring:
-  elasticsearch:
-    uris: 36.26.69.161:9200
-elasticsearch:
-  http: "36.26.69.161:9200"
-#Netty的一些配置
-netty:
-  timeout: 6000
-  port: 9000
-  #多端口绑定
-  portSalve: 9001
+  cloud:
+    nacos:
+      server-addr: 47.93.248.2:8848
+      discovery:
+        namespace: dbffaac1-1886-4687-bc8a-3d8d4fe392ed
+
+
