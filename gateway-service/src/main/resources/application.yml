@@ -1,17 +1,11 @@
 server:
   port: 9999
 spring:
-#  main:
-#    web-application-type: reactive
+  profiles:
+    active: dev
   application:
     name: gateway-service
   cloud:
-    nacos:
-      server-addr: 47.93.248.2:8848
-      discovery:
-        server-addr: 47.93.248.2:8848
-        ip: 47.93.248.2
-        port: 8848
     gateway:
       routes:
         # 注册登录服务
