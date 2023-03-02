@@ -123,7 +123,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         // 封装查询条件
         LambdaQueryWrapper<Answer> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Answer::getQuestionId, queryAnswerForm.getQuestionId());
-        wrapper.orderByDesc(Answer::getCreatedTime);
+        //wrapper.orderByDesc(Answer::getCreatedTime);
         Page<Answer> page = new Page<>(queryAnswerForm.getCurrentPage(), queryAnswerForm.getPageSize());
 
         // 查询
@@ -209,7 +209,8 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     public AnswerVO findVOById(Long answerId) {
         Answer answer = this.getById(answerId);
         if (answer == null) {
-            throw GlobalException.from("回答不存在");
+            //throw GlobalException.from("回答不存在");
+            return null;
         }
         AnswerVO answerVO = new AnswerVO();
         BeanUtils.copyProperties(answer, answerVO);

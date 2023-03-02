@@ -3,6 +3,7 @@ package com.btchina.model.vo.answer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
+@ToString
 public class AnswerVO implements Serializable {
 
 
