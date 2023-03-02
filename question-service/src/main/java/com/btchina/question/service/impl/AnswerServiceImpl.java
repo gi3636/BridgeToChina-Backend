@@ -123,7 +123,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         // 封装查询条件
         LambdaQueryWrapper<Answer> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Answer::getQuestionId, queryAnswerForm.getQuestionId());
-        wrapper.orderByDesc(Answer::getUseCount);
+        wrapper.orderByDesc(Answer::getCreatedTime);
         Page<Answer> page = new Page<>(queryAnswerForm.getCurrentPage(), queryAnswerForm.getPageSize());
 
         // 查询
