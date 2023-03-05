@@ -74,7 +74,7 @@ public class JwtTokenUtil {
      * 生成token的过期时间
      */
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + 60 * 60 * 24 * 100 * 1000);
+        return new Date(System.currentTimeMillis() + 60L * 60 * 24 * 100 * 1000);
     }
 
     /**

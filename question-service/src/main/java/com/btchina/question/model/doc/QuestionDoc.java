@@ -2,6 +2,7 @@ package com.btchina.question.model.doc;
 
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,19 +25,19 @@ public class QuestionDoc {
     @ApiModelProperty("问题Id")
     private Long id;
 
-    @Field(type = FieldType.Integer)
+    @Field(type = FieldType.Long)
     @ApiModelProperty("用户Id")
     private Long userId;
 
-    @Field(type = FieldType.Integer)
+    @Field(type = FieldType.Long)
     @ApiModelProperty("最佳回答Id")
     private Long bestAnswerId;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart", copyTo = "searchContent")
     @ApiModelProperty("问题标题")
     private String title;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart", copyTo = "searchContent")
     @ApiModelProperty("问题内容")
     private String content;
 
@@ -60,7 +61,7 @@ public class QuestionDoc {
     @ApiModelProperty("问题图片,多个图片用逗号分隔")
     private String images;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, copyTo = "searchContent")
     @ApiModelProperty("问题标签,多个用逗号分隔")
     private String tags;
 
@@ -76,5 +77,11 @@ public class QuestionDoc {
     @ApiModelProperty("更新时间;更新时间")
     private Date updatedTime;
 
+    /**
+     * 由其他属性copy而来，主要用于搜索功能，并非该实体类中的成员
+     */
+    @JsonIgnore
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", ignoreFields = "searchContent", excludeFromSource = true)
+    String searchContent;
 
 }

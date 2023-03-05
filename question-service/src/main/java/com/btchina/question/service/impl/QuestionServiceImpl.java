@@ -20,10 +20,7 @@ import com.btchina.question.mapper.QuestionMapper;
 import com.btchina.question.mapper.es.QuestionRepository;
 import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.enums.QueryTypeEnum;
-import com.btchina.question.model.form.AddQuestionForm;
-import com.btchina.question.model.form.EditQuestionForm;
-import com.btchina.question.model.form.QuestionQueryForm;
-import com.btchina.question.model.form.QuestionSetAnswerForm;
+import com.btchina.question.model.form.*;
 import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
 import com.btchina.question.service.QuestionUserLikeService;
@@ -365,13 +362,35 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return questionVO;
     }
 
+    @Override
+    public PageResult<QuestionVO> searchQuestion(QuestionSearchForm questionSearchForm, Long selfId) {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery(questionSearchForm.getKeyword(), "searchContent","title", "content"));
+        Pageable page = PageRequest.of(questionSearchForm.getCurrentPage() - 1, questionSearchForm.getPageSize());
+        //指定多个field
+        NativeSearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(boolQueryBuilder)
+                .withPageable(page)
+                .withSort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
+                .build();
+        //3.执行查询
+        SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
+        List<QuestionVO> questionVOList = convertSearchHits(result, selfId);
+        PageResult<QuestionVO> pageResult = new PageResult<>();
+        pageResult.setTotal(result.getTotalHits());
+        pageResult.setList(questionVOList);
+        pageResult.setCurrentPage(questionSearchForm.getCurrentPage());
+        pageResult.setPageSize(questionSearchForm.getPageSize());
+        pageResult.setTotalPage((int) Math.ceil((double) result.getTotalHits() / questionSearchForm.getPageSize()));
+        return pageResult;
+    }
+
 
     @Override
     public SearchHits<QuestionDoc> queryEsQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
         QueryTypeEnum queryTypeEnum = QueryTypeEnum.getQueryTypeEnum(questionQueryForm.getType());
         switch (queryTypeEnum) {
             case HOT:
-
                 //QueryBuilder queryBuilder = QueryBuilders.matchAllQuery();
                 //FunctionScoreQueryBuilder.FilterFunctionBuilder[] filterFunctionBuilders = new FunctionScoreQueryBuilder.FilterFunctionBuilder[]{
                 //        new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.termQuery("type", 3), ScoreFunctionBuilders.weightFactorFunction(100)),
@@ -453,36 +472,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
                 // 3.执行查询
                 SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
-                List<QuestionVO> questionVOList = new ArrayList<>();
-                for (SearchHit<QuestionDoc> searchHit : result.getSearchHits()) {
-                    QuestionVO questionVO = new QuestionVO();
-                    BeanUtils.copyProperties(searchHit.getContent(), questionVO);
-                    QuestionUserLike userLike = questionUserLikeService.getQuestionUserLike(questionVO.getId(), selfId);
-                    if (userLike != null) {
-                        questionVO.setLikeStatus(userLike.getStatus());
-                    } else {
-                        questionVO.setLikeStatus(0);
-                    }
-                    if (searchHit.getContent().getBestAnswerId() != null) {
-                        AnswerVO answer = questionClient.findAnswerVOById(searchHit.getContent().getBestAnswerId());
-                        questionVO.setBestAnswer(answer);
-                    }
-                    if (searchHit.getContent().getImages() != null) {
-                        questionVO.setImages(Arrays.asList(searchHit.getContent().getImages().split(",")));
-                    }else {
-                        questionVO.setImages(new ArrayList<>());
-                    }
-                    if (searchHit.getContent().getTags() != null){
-                        questionVO.setTags(Arrays.asList(searchHit.getContent().getTags().split(",")));
-                    }else {
-                        questionVO.setTags(new ArrayList<>());
-                    }
-                    User user = userClient.findById(questionVO.getUserId());
-                    questionVO.setNickname(user.getNickname());
-                    questionVO.setAvatar(user.getAvatar());
-                    questionVOList.add(questionVO);
-                }
-
+                List<QuestionVO> questionVOList = convertSearchHits(result, selfId);
                 //封装分页结果
                 PageResult<QuestionVO> pageResult = new PageResult<>();
                 pageResult.setTotal(result.getTotalHits());
@@ -496,6 +486,43 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 break;
         }
         return null;
+    }
 
+
+    public List<QuestionVO> convertSearchHits(SearchHits<QuestionDoc> result, Long selfId) {
+        List<QuestionVO> questionVOList = new ArrayList<>();
+        for (SearchHit<QuestionDoc> searchHit : result.getSearchHits()) {
+            QuestionVO questionVO = new QuestionVO();
+            BeanUtils.copyProperties(searchHit.getContent(), questionVO);
+            QuestionUserLike userLike = null;
+            //查询用户是否点赞,没有selfId则因为没有登录
+            if (selfId != null) {
+                userLike = questionUserLikeService.getQuestionUserLike(questionVO.getId(), selfId);
+            }
+            if (userLike != null) {
+                questionVO.setLikeStatus(userLike.getStatus());
+            } else {
+                questionVO.setLikeStatus(0);
+            }
+            if (searchHit.getContent().getBestAnswerId() != null) {
+                AnswerVO answer = questionClient.findAnswerVOById(searchHit.getContent().getBestAnswerId());
+                questionVO.setBestAnswer(answer);
+            }
+            if (searchHit.getContent().getImages() != null) {
+                questionVO.setImages(Arrays.asList(searchHit.getContent().getImages().split(",")));
+            } else {
+                questionVO.setImages(new ArrayList<>());
+            }
+            if (searchHit.getContent().getTags() != null) {
+                questionVO.setTags(Arrays.asList(searchHit.getContent().getTags().split(",")));
+            } else {
+                questionVO.setTags(new ArrayList<>());
+            }
+            User user = userClient.findById(questionVO.getUserId());
+            questionVO.setNickname(user.getNickname());
+            questionVO.setAvatar(user.getAvatar());
+            questionVOList.add(questionVO);
+        }
+        return questionVOList;
     }
 }

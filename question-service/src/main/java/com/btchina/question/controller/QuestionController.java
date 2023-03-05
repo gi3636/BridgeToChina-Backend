@@ -37,12 +37,6 @@ import java.util.List;
 public class QuestionController {
 
     @Autowired
-    private UserClient userClient;
-
-
-    @Autowired
-    private RedisService redisService;
-    @Autowired
     private QuestionService questionService;
 
     @Autowired
@@ -89,6 +83,15 @@ public class QuestionController {
     public CommonResult<PageResult<QuestionVO>> getList(@Validated @RequestBody QuestionQueryForm questionQueryForm) {
         Long selfId = AuthHelper.getUserId();
         PageResult<QuestionVO> result = questionService.queryQuestion(questionQueryForm, selfId);
+        return CommonResult.success(result);
+    }
+
+
+    @ApiOperation(value = "搜索问题列表")
+    @PostMapping("/search")
+    public CommonResult<PageResult<QuestionVO>> search(@Validated @RequestBody QuestionSearchForm questionSearchForm) {
+        Long selfId = AuthHelper.getUserId();
+        PageResult<QuestionVO> result = questionService.searchQuestion(questionSearchForm, selfId);
         return CommonResult.success(result);
     }
 

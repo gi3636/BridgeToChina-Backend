@@ -54,7 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setMobile(registerForm.getUsername());
         user.setPassword(encodePassword);
         user.setAvatar("https://avatars1.githubusercontent.com/u/" + (int) (Math.random() * 1000));
-        user.setNickname("吃饱没事干");
+        user.setNickname(registerForm.getUsername());
         //保存用户信息
         int result = baseMapper.insert(user);
         return result > 0;

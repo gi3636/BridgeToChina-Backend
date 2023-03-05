@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.core.api.PageResult;
 import com.btchina.question.entity.Question;
 import com.btchina.question.model.doc.QuestionDoc;
-import com.btchina.question.model.form.AddQuestionForm;
-import com.btchina.question.model.form.EditQuestionForm;
-import com.btchina.question.model.form.QuestionQueryForm;
-import com.btchina.question.model.form.QuestionSetAnswerForm;
+import com.btchina.question.model.form.*;
 import com.btchina.question.model.vo.QuestionVO;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
@@ -46,4 +43,6 @@ public interface QuestionService extends IService<Question> {
     Boolean setBestAnswer(QuestionSetAnswerForm questionSetAnswerForm, Long userId);
 
     QuestionVO getVObyId(Long id, Long userId);
+
+    PageResult<QuestionVO> searchQuestion(QuestionSearchForm questionSearchForm, Long userId);
 }
