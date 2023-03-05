@@ -2,7 +2,10 @@ package com.btchina.tag.controller;
 
 
 import com.btchina.core.api.CommonResult;
+import com.btchina.core.api.PageResult;
+import com.btchina.tag.entity.Tag;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.QueryTagForm;
 import com.btchina.tag.service.TagService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +42,15 @@ public class TagController {
         }
         return CommonResult.success(null);
     }
+
+
+    @ApiOperation(value ="获取标签列表")
+    @PostMapping("/list")
+    public CommonResult<PageResult<Tag>> list(@Validated @RequestBody QueryTagForm queryTagForm) {
+        PageResult<Tag> tags  = tagService.queryTags(queryTagForm);
+        return CommonResult.success(tags);
+    }
+
 
 }
 

@@ -1,16 +1,18 @@
 package com.btchina.tag.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.btchina.core.api.PageResult;
 import com.btchina.tag.entity.Tag;
+import com.btchina.tag.enums.TagQueryType;
 import com.btchina.tag.manager.TagManager;
 import com.btchina.tag.mapper.TagMapper;
 import com.btchina.tag.mapper.es.TagRepository;
 import com.btchina.tag.model.doc.TagDoc;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.QueryTagForm;
 import com.btchina.tag.service.TagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.search.similarities.Lambda;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
     /**
      * 单纯的添加标签，没有关联
+     *
      * @param addTagForm
      * @return
      */
@@ -49,7 +52,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
 
     @Override
-    public Tag selectOne(String  name) {
+    public Tag selectOne(String name) {
         LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Tag::getName, name);
         return getOne(queryWrapper);
@@ -73,5 +76,17 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         } catch (Exception e) {
             log.error("更新es文档失败: {} ", e.getMessage(), e);
         }
+    }
+
+    @Override
+    public PageResult<Tag> queryTags(QueryTagForm queryTagForm) {
+        TagQueryType tagQueryType = TagQueryType.getType(queryTagForm.getType());
+        switch (tagQueryType) {
+            case RECOMMEND:
+                return tagManager.queryRecommendTags(queryTagForm);
+            case SEARCH:
+                return tagManager.querySearchTags(queryTagForm);
+        }
+        return null;
     }
 }

@@ -1,9 +1,11 @@
 package com.btchina.tag.service;
 
+import com.btchina.core.api.PageResult;
 import com.btchina.tag.entity.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.tag.model.doc.TagDoc;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.QueryTagForm;
 
 /**
  * <p>
@@ -22,4 +24,6 @@ public interface TagService extends IService<Tag> {
     void addEsDoc(TagDoc tagDoc);
 
     void updateEsDoc(TagDoc tagDoc);
+
+    PageResult<Tag> queryTags(QueryTagForm queryTagForm);
 }
