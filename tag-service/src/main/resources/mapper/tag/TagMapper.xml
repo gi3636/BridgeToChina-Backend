@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.btchina.tag.entity.Tag">
         <id column="id" property="id" />
         <result column="name" property="name" />
+        <result column="count" property="count" />
         <result column="created_time" property="createdTime" />
         <result column="updated_time" property="updatedTime" />
         <result column="deleted" property="deleted" />

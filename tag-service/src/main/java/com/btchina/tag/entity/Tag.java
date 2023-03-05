@@ -36,6 +36,9 @@ public class Tag implements Serializable {
     @ApiModelProperty("标签内容")
     private String name;
 
+    @ApiModelProperty("标签引用次数")
+    private Integer count;
+
     @ApiModelProperty("创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;

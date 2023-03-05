@@ -2,6 +2,7 @@ package com.btchina.tag.service;
 
 import com.btchina.tag.entity.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.btchina.tag.model.doc.TagDoc;
 import com.btchina.tag.model.form.AddTagForm;
 
 /**
@@ -17,4 +18,8 @@ public interface TagService extends IService<Tag> {
     Boolean addTag(AddTagForm addTagForm);
 
     Tag selectOne(String name);
+
+    void addEsDoc(TagDoc tagDoc);
+
+    void updateEsDoc(TagDoc tagDoc);
 }
