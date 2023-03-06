@@ -11,9 +11,9 @@ import javax.validation.constraints.NotNull;
 public class QuestionSetAnswerForm {
 
     @NotNull(message = "问题id不能为空")
-    @ApiModelProperty("问题id")
+    @ApiModelProperty(required = true ,value = "问题id")
     private Long questionId;
     @NotNull(message = "回答id不能为空")
-    @ApiModelProperty("回答id")
+    @ApiModelProperty(required = true,value = "回答id")
     private Long answerId;
 }

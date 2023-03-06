@@ -458,6 +458,30 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return true;
     }
 
+    @Override
+    public Boolean cancelBestAnswer(QuestionSetAnswerForm questionSetAnswerForm, Long userId) {
+        if (userId == null) {
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
+        }
+        QuestionDoc questionDoc = getEsDoc(questionSetAnswerForm.getQuestionId());
+        if (questionDoc == null) {
+            throw GlobalException.from(ResultCode.QUESTION_NOT_EXIST);
+        }
+        if (!questionDoc.getUserId().equals(userId)) {
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
+        }
+        Answer answer = answerService.getById(questionDoc.getBestAnswerId());
+        if (answer == null) {
+            throw GlobalException.from(ResultCode.ANSWER_NOT_EXIST);
+        }
+        answer.setIsBest(0);
+        answerService.updateById(answer);
+        questionDoc.setBestAnswerId(null);
+        updateEsDoc(questionDoc);
+        updateQuestion(questionDoc);
+        return true;
+    }
+
     public void updateQuestion(QuestionDoc questionDoc) {
         Question question = new Question();
         BeanUtils.copyProperties(questionDoc, question);

@@ -180,6 +180,17 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
+    @ApiOperation(value = "取消最佳回答")
+    @PostMapping("/cancelBestAnswer")
+    public CommonResult<Void> cancelBestAnswer(@Validated @RequestBody QuestionSetAnswerForm questionSetAnswerForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = questionService.cancelBestAnswer(questionSetAnswerForm, userId);
+        if (!isSuccess) {
+            return CommonResult.failed("取消最佳回答失败");
+        }
+        return CommonResult.success(null);
+    }
+
     @ApiOperation(value = "获取问题")
     @GetMapping("/findById/{id}")
     public Question findById(@PathVariable("id") Long id) {

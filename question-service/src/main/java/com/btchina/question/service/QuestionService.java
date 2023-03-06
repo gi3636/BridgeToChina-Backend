@@ -51,4 +51,6 @@ public interface QuestionService extends IService<Question> {
     void decreaseFavouriteCount(Long questionId);
 
     Boolean addView(Long id);
+
+    Boolean cancelBestAnswer(QuestionSetAnswerForm questionSetAnswerForm, Long userId);
 }
