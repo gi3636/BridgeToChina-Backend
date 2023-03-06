@@ -6,7 +6,6 @@ import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
-import com.btchina.entity.Answer;
 import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.clients.UserClient;
@@ -15,6 +14,7 @@ import com.btchina.model.form.tag.EditQuestionTagForm;
 import com.btchina.entity.User;
 import com.btchina.model.vo.answer.AnswerVO;
 import com.btchina.question.constant.QuestionConstant;
+import com.btchina.question.entity.Answer;
 import com.btchina.question.entity.Question;
 import com.btchina.question.entity.QuestionUserFavorite;
 import com.btchina.question.entity.QuestionUserLike;
@@ -24,6 +24,7 @@ import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.enums.QueryTypeEnum;
 import com.btchina.question.model.form.*;
 import com.btchina.question.model.vo.QuestionVO;
+import com.btchina.question.service.AnswerService;
 import com.btchina.question.service.QuestionService;
 import com.btchina.question.service.QuestionUserFavoriteService;
 import com.btchina.question.service.QuestionUserLikeService;
@@ -96,6 +97,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Lazy
     private QuestionUserFavoriteService questionUserFavoriteService;
 
+    @Autowired
+    private AnswerService answerService;
 
     @Override
     public Boolean addQuestion(AddQuestionForm addQuestionForm, Long userId) {
@@ -319,10 +322,22 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         if (!questionDoc.getUserId().equals(userId)) {
             throw GlobalException.from("无权限设置最佳答案");
         }
-        Answer answer = questionClient.findAnswerById(questionSetAnswerForm.getAnswerId());
+        Answer answer = answerService.getById(questionSetAnswerForm.getAnswerId());
         if (answer == null) {
             throw GlobalException.from("回答不存在");
         }
+        //有设置过答案就把之前的答案设置为空
+        if (questionDoc.getBestAnswerId() != null) {
+            Answer oldAnswer = answerService.getById(questionDoc.getBestAnswerId());
+            if (oldAnswer != null) {
+                oldAnswer.setIsBest(0);
+                answerService.updateById(oldAnswer);
+            }
+        }
+        //设置新的答案
+        answer.setIsBest(1);
+        answerService.updateById(answer);
+
         // 1. 设置最佳答案
         questionDoc.setBestAnswerId(questionSetAnswerForm.getAnswerId());
         Question question = new Question();
@@ -333,6 +348,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         if (isSuccess) {
             rabbitTemplate.convertAndSend(QuestionConstant.EXCHANGE_NAME, QuestionConstant.UPDATE_KEY, questionDoc);
         }
+
+
         return isSuccess;
     }
 
