@@ -7,12 +7,10 @@
         <id column="id" property="id" />
         <result column="username" property="username" />
         <result column="password" property="password" />
-        <result column="major" property="major" />
         <result column="mobile" property="mobile" />
         <result column="nickname" property="nickname" />
         <result column="avatar" property="avatar" />
         <result column="sex" property="sex" />
-        <result column="birthday" property="birthday" />
         <result column="country" property="country" />
         <result column="city" property="city" />
         <result column="description" property="description" />

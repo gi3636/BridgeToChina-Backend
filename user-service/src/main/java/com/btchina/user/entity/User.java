@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -39,8 +41,14 @@ public class User implements Serializable {
     @ApiModelProperty("密码")
     private String password;
 
-    @ApiModelProperty("专业")
-    private String major;
+    @ApiModelProperty("标签")
+    private String tags;
+
+    @ApiModelProperty("关注数")
+    private Integer followCount;
+
+    @ApiModelProperty("粉丝数")
+    private Integer fansCount;
 
     @ApiModelProperty("手机号")
     private String mobile;
@@ -53,9 +61,6 @@ public class User implements Serializable {
 
     @ApiModelProperty("性别 0是保密 1是男 2是女")
     private Integer sex;
-
-    @ApiModelProperty("生日")
-    private Date birthday;
 
     @ApiModelProperty("国家")
     private String country;

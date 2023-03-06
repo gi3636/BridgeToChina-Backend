@@ -1,10 +1,12 @@
 package com.btchina.user.controller;
 
 
+import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.redis.service.RedisService;
 import com.btchina.user.entity.User;
+import com.btchina.user.model.form.GetUserForm;
 import com.btchina.user.model.vo.UserVO;
 import com.btchina.user.service.UserService;
 import com.btchina.core.util.AuthHelper;
@@ -57,6 +59,13 @@ public class UserController {
             throw new GlobalException(ResultCode.COMMENT_NOT_EXIST);
         }
         return user;
+    }
+
+    @ApiOperation(value = "根据id查询用户信息")
+    @PostMapping("/getDetail")
+    public CommonResult<UserVO> getDetail(@RequestBody GetUserForm getUserForm) {
+       UserVO userVO = userService.getDetail(getUserForm.getId());
+         return CommonResult.success(userVO);
     }
 
 

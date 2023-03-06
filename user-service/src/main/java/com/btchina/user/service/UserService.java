@@ -23,4 +23,6 @@ public interface UserService extends IService<User> {
     UserVO login(String username, String password);
 
     Map<Long, UserVO> findByIds(List<Long> ids);
+
+    UserVO getDetail(Long id);
 }

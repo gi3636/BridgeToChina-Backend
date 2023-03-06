@@ -25,8 +25,6 @@ public class User implements Serializable {
 
     private String password;
 
-    private String major;
-
     private String mobile;
 
     private String nickname;
@@ -34,8 +32,6 @@ public class User implements Serializable {
     private String avatar;
 
     private Integer sex;
-
-    private Date birthday;
 
     private String country;
 

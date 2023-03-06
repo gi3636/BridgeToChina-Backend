@@ -11,6 +11,7 @@ import com.btchina.user.model.vo.UserVO;
 import com.btchina.user.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.util.JwtTokenUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,9 +84,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<User> userList = this.baseMapper.selectBatchIds(ids);
         Map<Long, UserVO> userVOMap = new HashMap<>();
         for (User user : userList) {
-            UserVO userVO = UserVO.convert(user);
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
             userVOMap.put(user.getId(), userVO);
         }
         return userVOMap;
+    }
+
+    @Override
+    public UserVO getDetail(Long id) {
+        User user = this.baseMapper.selectById(id);
+        UserVO userVO = new UserVO();
+        if (user != null) {
+            BeanUtils.copyProperties(user, userVO);
+        }
+        return userVO;
     }
 }

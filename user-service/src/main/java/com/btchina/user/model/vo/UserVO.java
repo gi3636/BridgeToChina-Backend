@@ -25,7 +25,7 @@ public class UserVO {
     @ApiModelProperty("手机号")
     private String mobile;
 
-    @ApiModelProperty("昵称;媒体号")
+    @ApiModelProperty("昵称")
     private String nickname;
 
     @ApiModelProperty("头像")
@@ -34,9 +34,6 @@ public class UserVO {
     @Size(max = 2, message = "性别只能是0,1或2")
     @ApiModelProperty("性别 0是保密 1是男 2是女")
     private Integer sex;
-
-    @ApiModelProperty("生日")
-    private Date birthday;
 
     @ApiModelProperty("国家")
     private String country;
@@ -53,8 +50,7 @@ public class UserVO {
     @ApiModelProperty("JwtToken")
     private String token;
 
-    @ApiModelProperty("专业")
-    private String major;
+
 
     public static UserVO convert(User user) {
         UserVO userVO = new UserVO();
@@ -64,12 +60,10 @@ public class UserVO {
         userVO.setNickname(user.getNickname());
         userVO.setAvatar(user.getAvatar());
         userVO.setSex(user.getSex());
-        userVO.setBirthday(user.getBirthday());
         userVO.setCountry(user.getCountry());
         userVO.setCity(user.getCity());
         userVO.setDescription(user.getDescription());
         userVO.setCover(user.getCover());
-        userVO.setMajor(user.getMajor());
         return userVO;
     }
 }
