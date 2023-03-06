@@ -548,47 +548,77 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         QueryTypeEnum queryTypeEnum = QueryTypeEnum.getQueryTypeEnum(questionQueryForm.getType());
         switch (queryTypeEnum) {
             case HOT:
-                BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-                FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder("likeCount")
-                        .modifier(FieldValueFactorFunction.Modifier.LOG1P)
-                        .factor(0.1f);
-
-                // 最终分数=_score+额外分数
-                FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders
-                        .functionScoreQuery(boolQueryBuilder, fieldQuery)
-                        .boostMode(CombineFunction.SUM);
-
-                if (questionQueryForm.getDate() != null) {
-                    RangeQueryBuilder timeRangeQuery = QueryBuilders.rangeQuery("createdTime")
-                            //.gte(LocalDateTime.now(ZoneOffset.UTC).minusDays(3))
-                            //.lte(LocalDateTime.now(ZoneOffset.UTC));
-                            .gte(questionQueryForm.getDate());
-                    boolQueryBuilder.filter(timeRangeQuery);
-                }
-
-                Pageable page = PageRequest.of(questionQueryForm.getCurrentPage() - 1, questionQueryForm.getPageSize());
-                NativeSearchQuery query = new NativeSearchQueryBuilder()
-                        .withQuery(functionScoreQueryBuilder)
-                        .withSort(SortBuilders.scoreSort().order(SortOrder.DESC))
-                        .withPageable(page)
-                        .build();
-
-                // 3.执行查询
-                SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
-                List<QuestionVO> questionVOList = convertSearchHits(result, selfId);
-                //封装分页结果
-                PageResult<QuestionVO> pageResult = new PageResult<>();
-                pageResult.setTotal(result.getTotalHits());
-                pageResult.setList(questionVOList);
-                pageResult.setCurrentPage(questionQueryForm.getCurrentPage());
-                pageResult.setPageSize(questionQueryForm.getPageSize());
-                pageResult.setTotalPage((int) Math.ceil((double) result.getTotalHits() / questionQueryForm.getPageSize()));
-                return pageResult;
-            case MY:
-                log.info("查询我的问题");
-                break;
+                log.info("查询热门问题");
+                return queryHotQuestion(questionQueryForm, selfId);
+            case NEW:
+                log.info("查询最新问题");
+                return queryNewQuestion(questionQueryForm, selfId);
         }
         return null;
+    }
+
+    public  PageResult<QuestionVO> queryHotQuestion( QuestionQueryForm questionQueryForm, Long selfId) {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder("likeCount")
+                .modifier(FieldValueFactorFunction.Modifier.LOG1P)
+                .factor(0.1f);
+
+        // 最终分数=_score+额外分数
+        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders
+                .functionScoreQuery(boolQueryBuilder, fieldQuery)
+                .boostMode(CombineFunction.SUM);
+
+        if (questionQueryForm.getDate() != null) {
+            RangeQueryBuilder timeRangeQuery = QueryBuilders.rangeQuery("createdTime")
+                    //.gte(LocalDateTime.now(ZoneOffset.UTC).minusDays(3))
+                    //.lte(LocalDateTime.now(ZoneOffset.UTC));
+                    .gte(questionQueryForm.getDate());
+            boolQueryBuilder.filter(timeRangeQuery);
+        }
+
+        Pageable page = PageRequest.of(questionQueryForm.getCurrentPage() - 1, questionQueryForm.getPageSize());
+        NativeSearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(functionScoreQueryBuilder)
+                .withSort(SortBuilders.scoreSort().order(SortOrder.DESC))
+                .withPageable(page)
+                .build();
+
+        // 3.执行查询
+        SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
+        List<QuestionVO> questionVOList = convertSearchHits(result, selfId);
+        //封装分页结果
+        return convertToPageResult(result, questionVOList, questionQueryForm);
+    }
+
+    /**
+     * 查询最新问题
+     * @param questionQueryForm
+     * @param selfId
+     * @return
+     */
+    public PageResult<QuestionVO> queryNewQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        Pageable page = PageRequest.of(questionQueryForm.getCurrentPage() - 1, questionQueryForm.getPageSize());
+        NativeSearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(queryBuilder)
+                .withSort(SortBuilders.fieldSort("createdTime").order(SortOrder.DESC))
+                .withPageable(page)
+                .build();
+        // 3.执行查询
+        SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
+        List<QuestionVO> questionVOList = convertSearchHits(result, selfId);
+        //封装分页结果
+        return convertToPageResult(result, questionVOList, questionQueryForm);
+    }
+
+    public PageResult<QuestionVO> convertToPageResult(SearchHits<QuestionDoc> result, List<QuestionVO> questionVOList, QuestionQueryForm questionQueryForm) {
+        PageResult<QuestionVO> pageResult = new PageResult<>();
+        pageResult.setTotal(result.getTotalHits());
+        pageResult.setList(questionVOList);
+        pageResult.setCurrentPage(questionQueryForm.getCurrentPage());
+        pageResult.setPageSize(questionQueryForm.getPageSize());
+        pageResult.setTotalPage((int) Math.ceil((double) result.getTotalHits() / questionQueryForm.getPageSize()));
+        return pageResult;
     }
 
 

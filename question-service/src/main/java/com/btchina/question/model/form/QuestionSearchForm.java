@@ -10,6 +10,6 @@ import lombok.ToString;
 @ToString
 @ApiModel(description = "问题搜索")
 public class QuestionSearchForm extends PageQueryParam {
-    @ApiModelProperty("关键字")
+    @ApiModelProperty(required = true ,value = "关键字",example = "测试")
     public String keyword;
 }
