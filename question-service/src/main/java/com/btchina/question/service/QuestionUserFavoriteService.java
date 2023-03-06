@@ -2,6 +2,7 @@ package com.btchina.question.service;
 
 import com.btchina.question.entity.QuestionUserFavorite;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.btchina.question.model.form.QuestionFavouriteForm;
 
 /**
  * <p>
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface QuestionUserFavoriteService extends IService<QuestionUserFavorite> {
 
+    Boolean favourite(QuestionFavouriteForm questionFavouriteForm, Long userId);
+
+    QuestionUserFavorite getQuestionUserFavorite(Long id, Long selfId);
 }

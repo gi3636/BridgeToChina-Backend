@@ -2,6 +2,7 @@ package com.btchina.question.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.btchina.core.api.ResultCode;
 import com.btchina.question.constant.AnswerConstant;
 import com.btchina.question.entity.Answer;
 import com.btchina.question.entity.AnswerUserUse;
@@ -57,7 +58,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     @Override
     public Boolean addAnswer(AddAnswerForm addAnswerForm, Long userId) {
         if (userId == null) {
-            throw GlobalException.from("用户未登录");
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
         Question question = questionClient.findById(addAnswerForm.getQuestionId());
         if (question == null) {
@@ -81,7 +82,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     @Override
     public Boolean delAnswer(DeleteForm deleteForm, Long userId) {
         if (userId == null) {
-            throw GlobalException.from("用户未登录");
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
         Answer answer = this.getById(deleteForm.getId());
 
@@ -104,7 +105,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     @Override
     public Boolean updateAnswer(UpdateAnswerForm updateAnswerForm, Long userId) {
         if (userId == null) {
-            throw GlobalException.from("用户未登录");
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
         Answer answer = this.getById(updateAnswerForm.getId());
         if (answer == null) {
@@ -168,7 +169,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     @Override
     public Boolean use(Long id, Integer status, Long userId) {
         if (userId == null) {
-            throw GlobalException.from("用户未登录");
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
         Answer answer = this.getById(id);
         if (answer == null) {

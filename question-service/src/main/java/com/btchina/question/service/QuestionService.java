@@ -45,4 +45,8 @@ public interface QuestionService extends IService<Question> {
     QuestionVO getVObyId(Long id, Long userId);
 
     PageResult<QuestionVO> searchQuestion(QuestionSearchForm questionSearchForm, Long userId);
+
+    void increaseFavouriteCount(Long questionId);
+
+    void decreaseFavouriteCount(Long questionId);
 }

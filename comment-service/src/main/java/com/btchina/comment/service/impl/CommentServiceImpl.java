@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.comment.service.CommentUserLikeService;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
+import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.entity.Answer;
 import com.btchina.feign.clients.QuestionClient;
@@ -59,7 +60,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Boolean addComment(AddCommentForm addCommentForm, Long userId) {
         if (userId == null) {
-            throw new GlobalException("用户未登录");
+            throw new GlobalException(ResultCode.UNAUTHORIZED);
         }
         Answer answer = questionClient.findAnswerById(addCommentForm.getAnswerId());
         if (answer == null) {
@@ -82,7 +83,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Boolean delComment(DeleteForm deleteForm, Long userId) {
         if (userId == null) {
-            throw new GlobalException("用户未登录");
+            throw new GlobalException(ResultCode.UNAUTHORIZED);
         }
         Comment comment = this.getById(deleteForm.getId());
         if (comment == null) {
@@ -101,7 +102,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Boolean updateComment(UpdateCommentForm updateCommentForm, Long userId) {
         if (userId == null) {
-            throw new GlobalException("用户未登录");
+            throw new GlobalException(ResultCode.UNAUTHORIZED);
         }
         Comment comment = this.getById(updateCommentForm.getId());
         if (comment == null) {
@@ -163,7 +164,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Boolean like(CommentLikeForm commentLikeForm, Long userId) {
         if (userId == null) {
-            throw new GlobalException("用户未登录");
+            throw new GlobalException(ResultCode.UNAUTHORIZED);
         }
         Comment comment = this.getById(commentLikeForm.getId());
         if (comment == null) {

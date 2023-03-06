@@ -13,4 +13,9 @@ public class QuestionConstant {
     public static final String USER_question_LIKE_COUNT_KEY = "user::question.like.count";
     public static final String USER_question_FAVORITE_KEY = "user::question.favorite";
     public static final String USER_question_FAVORITE_COUNT_KEY = "user::question.favorite.count";
+
+    public static final String DECREASE_FAVOURITE_COUNT_QUEUE_NAME = "question.decrease.favourite.count.queue";
+    public static final String DECREASE_FAVOURITE_COUNT_ROUTING_KEY = "question.decrease.favourite.count";
+    public static final String INCREASE_FAVOURITE_COUNT_QUEUE_NAME = "question.increase.favourite.count.queue";
+    public static final String INCREASE_FAVOURITE_COUNT_ROUTING_KEY = "question.increase.favourite.count.increase";
 }

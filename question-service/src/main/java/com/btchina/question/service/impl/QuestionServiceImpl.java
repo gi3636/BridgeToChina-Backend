@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
+import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.entity.Answer;
 import com.btchina.feign.clients.QuestionClient;
@@ -15,6 +16,7 @@ import com.btchina.entity.User;
 import com.btchina.model.vo.answer.AnswerVO;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Question;
+import com.btchina.question.entity.QuestionUserFavorite;
 import com.btchina.question.entity.QuestionUserLike;
 import com.btchina.question.mapper.QuestionMapper;
 import com.btchina.question.mapper.es.QuestionRepository;
@@ -23,6 +25,7 @@ import com.btchina.question.model.enums.QueryTypeEnum;
 import com.btchina.question.model.form.*;
 import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
+import com.btchina.question.service.QuestionUserFavoriteService;
 import com.btchina.question.service.QuestionUserLikeService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
@@ -89,11 +92,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Lazy
     private QuestionUserLikeService questionUserLikeService;
 
+    @Autowired
+    @Lazy
+    private QuestionUserFavoriteService questionUserFavoriteService;
+
 
     @Override
     public Boolean addQuestion(AddQuestionForm addQuestionForm, Long userId) {
         if (userId == null) {
-            throw GlobalException.from("用户未登录");
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
         // 1. 添加问题
         Random r = new Random();
@@ -166,7 +173,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public Boolean deleteQuestion(Long questionId, Long selfId) {
         if (selfId == null) {
-            throw GlobalException.from("用户未登录");
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
         Question question = this.baseMapper.selectById(questionId);
 
@@ -221,7 +228,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public Boolean editQuestion(EditQuestionForm editQuestionForm, Long selfId) {
         if (selfId == null) {
-            throw GlobalException.from("用户未登录");
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
         QuestionDoc questionDoc = questionRepository.findById(editQuestionForm.getId().toString());
         if (questionDoc == null) {
@@ -303,7 +310,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public Boolean setBestAnswer(QuestionSetAnswerForm questionSetAnswerForm, Long userId) {
         if (userId == null) {
-            throw GlobalException.from("用户未登录");
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
         QuestionDoc questionDoc = getEsDoc(questionSetAnswerForm.getQuestionId());
         if (questionDoc == null) {
@@ -385,6 +392,38 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return pageResult;
     }
 
+    @Override
+    public void increaseFavouriteCount(Long questionId) {
+        QuestionDoc questionDoc = getEsDoc(questionId);
+        if (questionDoc == null) {
+            return;
+        }
+        if (questionDoc.getFavoriteCount() == null) {
+            questionDoc.setFavoriteCount(0);
+        } else {
+            questionDoc.setFavoriteCount(questionDoc.getFavoriteCount() + 1);
+        }
+        updateEsDoc(questionDoc);
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
+        this.baseMapper.updateById(question);
+    }
+
+    public void decreaseFavouriteCount(Long questionId) {
+        QuestionDoc questionDoc = getEsDoc(questionId);
+        if (questionDoc == null) {
+            return;
+        }
+        if (questionDoc.getFavoriteCount() == null) {
+            questionDoc.setFavoriteCount(0);
+        } else {
+            questionDoc.setFavoriteCount(questionDoc.getFavoriteCount() - 1);
+        }
+        updateEsDoc(questionDoc);
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
+        this.baseMapper.updateById(question);
+    }
 
     @Override
     public SearchHits<QuestionDoc> queryEsQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
@@ -504,6 +543,18 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             } else {
                 questionVO.setLikeStatus(0);
             }
+
+            //查询用户是否收藏
+            QuestionUserFavorite userFavorite = null;
+            if (selfId != null) {
+                userFavorite = questionUserFavoriteService.getQuestionUserFavorite(questionVO.getId(), selfId);
+            }
+            if (userFavorite != null) {
+                questionVO.setFavoriteStatus(userFavorite.getStatus());
+            } else {
+                questionVO.setFavoriteStatus(0);
+            }
+
             if (searchHit.getContent().getBestAnswerId() != null) {
                 AnswerVO answer = questionClient.findAnswerVOById(searchHit.getContent().getBestAnswerId());
                 questionVO.setBestAnswer(answer);

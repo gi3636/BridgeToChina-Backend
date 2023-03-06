@@ -12,6 +12,7 @@ import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.form.*;
 import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
+import com.btchina.question.service.QuestionUserFavoriteService;
 import com.btchina.question.service.QuestionUserLikeService;
 import com.btchina.redis.service.RedisService;
 import io.swagger.annotations.Api;
@@ -42,6 +43,8 @@ public class QuestionController {
     @Autowired
     private QuestionUserLikeService questionUserLikeService;
 
+    @Autowired
+    private QuestionUserFavoriteService questionUserFavoriteService;
 
     @ApiOperation(value = "发布问题")
     @PostMapping("/add")
@@ -143,6 +146,18 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
+
+
+    @ApiOperation(value = "收藏问题")
+    @PostMapping("/favourite")
+    public CommonResult<Void> favourite(@Validated @RequestBody QuestionFavouriteForm questionFavouriteForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess = questionUserFavoriteService.favourite(questionFavouriteForm, userId);
+        if (!isSuccess) {
+            return CommonResult.failed("收藏失败");
+        }
+        return CommonResult.success(null);
+    }
 
     @ApiOperation(value = "设置最佳回答")
     @PostMapping("/setBestAnswer")

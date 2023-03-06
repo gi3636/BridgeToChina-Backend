@@ -45,11 +45,6 @@ public class QuestionListener {
         //questionService.deleteById(id);
     }
 
-    /**
-     * 监听问题更新消息
-     *
-     * @param questionDoc
-     */
     @RabbitListener(bindings = @QueueBinding(
             exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
             value = @Queue(name = QuestionConstant.UPDATE_QUEUE_NAME),
@@ -60,5 +55,26 @@ public class QuestionListener {
         if (questionDoc != null) {
             questionService.updateEsDoc(questionDoc);
         }
+    }
+
+
+    @RabbitListener(bindings = @QueueBinding(
+            exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
+            value = @Queue(name = QuestionConstant.INCREASE_FAVOURITE_COUNT_QUEUE_NAME),
+            key = QuestionConstant.INCREASE_FAVOURITE_COUNT_ROUTING_KEY
+    ))
+    public void listenQuestionIncreaseFavouriteCount(Long questionId) {
+        log.info("监听到收藏增加，问题为：{}", questionId);
+        questionService.increaseFavouriteCount(questionId);
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
+            exchange = @Exchange(name = QuestionConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
+            value = @Queue(name = QuestionConstant.DECREASE_FAVOURITE_COUNT_QUEUE_NAME),
+            key = QuestionConstant.DECREASE_FAVOURITE_COUNT_ROUTING_KEY
+    ))
+    public void listenQuestionDecreaseFavouriteCount(Long questionId) {
+        log.info("监听到收藏减少，问题为：{}", questionId);
+        questionService.decreaseFavouriteCount(questionId);
     }
 }
