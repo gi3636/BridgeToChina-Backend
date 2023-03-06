@@ -49,4 +49,6 @@ public interface QuestionService extends IService<Question> {
     void increaseFavouriteCount(Long questionId);
 
     void decreaseFavouriteCount(Long questionId);
+
+    Boolean addView(Long id);
 }

@@ -124,6 +124,16 @@ public class QuestionController {
         return CommonResult.success(result);
     }
 
+    @ApiOperation(value = "增加浏览量")
+    @GetMapping("/addView/{id}")
+    public CommonResult<Void> addView(@PathVariable("id") Long id) {
+        Boolean isSuccess = questionService.addView(id);
+        if (!isSuccess) {
+            return CommonResult.failed();
+        }
+        return CommonResult.success(null);
+    }
+
     @ApiOperation(value = "点赞")
     @PostMapping("/like")
     public CommonResult<Void> like(@Validated @RequestBody QuestionLikeForm questionLikeForm) {

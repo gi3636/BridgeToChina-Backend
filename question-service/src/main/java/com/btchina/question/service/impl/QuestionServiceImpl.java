@@ -372,7 +372,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public PageResult<QuestionVO> searchQuestion(QuestionSearchForm questionSearchForm, Long selfId) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery(questionSearchForm.getKeyword(), "searchContent","title", "content"));
+        boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery(questionSearchForm.getKeyword(), "searchContent", "title", "content"));
         Pageable page = PageRequest.of(questionSearchForm.getCurrentPage() - 1, questionSearchForm.getPageSize());
         //指定多个field
         NativeSearchQuery query = new NativeSearchQueryBuilder()
@@ -424,6 +424,29 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         BeanUtils.copyProperties(questionDoc, question);
         this.baseMapper.updateById(question);
     }
+
+    @Override
+    public Boolean addView(Long id) {
+        QuestionDoc questionDoc = getEsDoc(id);
+        if (questionDoc == null) {
+            throw GlobalException.from(ResultCode.QUESTION_NOT_EXIST);
+        }
+        if (questionDoc.getViewCount() == null) {
+            questionDoc.setViewCount(0);
+        } else {
+            questionDoc.setViewCount(questionDoc.getViewCount() + 1);
+        }
+        updateEsDoc(questionDoc);
+        updateQuestion(questionDoc);
+        return true;
+    }
+
+    public void updateQuestion(QuestionDoc questionDoc) {
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDoc, question);
+        this.baseMapper.updateById(question);
+    }
+
 
     @Override
     public SearchHits<QuestionDoc> queryEsQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
