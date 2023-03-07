@@ -5,6 +5,7 @@ import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.PageResult;
 import com.btchina.tag.entity.Tag;
 import com.btchina.tag.model.form.AddTagForm;
+import com.btchina.tag.model.form.AutoCompleteForm;
 import com.btchina.tag.model.form.QueryTagForm;
 import com.btchina.tag.service.TagService;
 import io.swagger.annotations.Api;
@@ -51,6 +52,12 @@ public class TagController {
         return CommonResult.success(tags);
     }
 
+    @ApiOperation("自动补全标签")
+    @PostMapping("/autoComplete")
+    public CommonResult<String> autoComplete(@Validated @RequestBody AutoCompleteForm autoCompleteForm) {
+       String result = tagService.autoComplete(autoCompleteForm.getKeyword());
+        return CommonResult.success(result);
+    }
 
 }
 

@@ -26,4 +26,6 @@ public interface TagService extends IService<Tag> {
     void updateEsDoc(TagDoc tagDoc);
 
     PageResult<Tag> queryTags(QueryTagForm queryTagForm);
+
+    String autoComplete(String keyword);
 }

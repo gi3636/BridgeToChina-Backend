@@ -12,11 +12,16 @@ import com.btchina.tag.model.form.AddTagForm;
 import com.btchina.tag.model.form.QueryTagForm;
 import com.btchina.tag.service.TagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -29,6 +34,10 @@ import java.util.List;
 @Service
 @Slf4j
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
+
+    private static final OkHttpClient client = new OkHttpClient();
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
 
     @Autowired
     TagManager tagManager;
@@ -88,5 +97,33 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
                 return tagManager.querySearchTags(queryTagForm);
         }
         return null;
+    }
+
+    @Override
+    public String autoComplete(String text) {
+        String API_KEY = "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";
+        String prompt = "请根据以下句子给出5个相关标签,答案用逗号分割,不要有其他字符:\n" + text;
+        String model = "text-davinci-003";
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("model", model);
+        requestBody.put("prompt", prompt);
+        requestBody.put("max_tokens", 100);
+        requestBody.put("n", 1);
+        requestBody.put("temperature", 0.5);
+        RequestBody body = RequestBody.create(JSON, new Gson().toJson(requestBody));
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/completions")
+                .post(body)
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Content-Type", "application/json")
+                .build();
+        String responseStr = "";
+        try {
+            Response response = client.newCall(request).execute();
+            responseStr = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return responseStr;
     }
 }
