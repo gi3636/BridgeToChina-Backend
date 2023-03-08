@@ -13,9 +13,6 @@ import javax.validation.constraints.NotNull;
 @ApiModel(description = "问题查询参数对象")
 public class QueryTagForm extends PageQueryParam {
 
-    @NotNull(message = "查询类型不能为空")
-    @ApiModelProperty(value = "查询类型 1:推荐 2:搜索",required = true)
-    private Integer type;
 
     @ApiModelProperty("keyword")
     private String keyword;

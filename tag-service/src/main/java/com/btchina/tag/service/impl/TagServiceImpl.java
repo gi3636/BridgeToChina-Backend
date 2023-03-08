@@ -93,20 +93,17 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
     @Override
     public PageResult<Tag> queryTags(QueryTagForm queryTagForm) {
-        TagQueryType tagQueryType = TagQueryType.getType(queryTagForm.getType());
-        switch (tagQueryType) {
-            case RECOMMEND:
-                return tagManager.queryRecommendTags(queryTagForm);
-            case SEARCH:
-                return tagManager.querySearchTags(queryTagForm);
+        if (queryTagForm.getKeyword().isEmpty()){
+            return tagManager.queryRecommendTags(queryTagForm);
+        }else {
+            return tagManager.querySearchTags(queryTagForm);
         }
-        return null;
     }
 
     @Override
     public String autoComplete(String text) {
         String API_KEY = openAiSecret;
-        String prompt = "请根据以下句子给出5个相关标签,返回结果用逗号分割,并以 #返回结果# 这样的形式返回数据:\n" + text;
+        String prompt = "请根据以下句子给出5个相关标签,返回结果用逗号分割:\n" + text;
         String model = "text-davinci-003";
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", model);

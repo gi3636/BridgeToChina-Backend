@@ -32,6 +32,8 @@ spring:
           uri: lb://tag-service
           predicates:
             - Path=/tag/**
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
         # 回答服务
         - id: question-service
           uri: lb://question-service
