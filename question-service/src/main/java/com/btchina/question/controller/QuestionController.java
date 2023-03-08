@@ -5,8 +5,7 @@ import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
-import com.btchina.feign.clients.UserClient;
-import com.btchina.entity.User;
+import com.btchina.model.form.AutoCompleteForm;
 import com.btchina.question.entity.Question;
 import com.btchina.question.model.doc.QuestionDoc;
 import com.btchina.question.model.form.*;
@@ -14,15 +13,12 @@ import com.btchina.question.model.vo.QuestionVO;
 import com.btchina.question.service.QuestionService;
 import com.btchina.question.service.QuestionUserFavoriteService;
 import com.btchina.question.service.QuestionUserLikeService;
-import com.btchina.redis.service.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * <p>
@@ -190,6 +186,15 @@ public class QuestionController {
         }
         return CommonResult.success(null);
     }
+
+
+    @ApiOperation(value = "自动生成问题标题")
+    @PostMapping("/generateTitle")
+    public CommonResult<String> generateTitle(@Validated @RequestBody AutoCompleteForm autoCompleteForm) {
+        String result = questionService.generateTitle(autoCompleteForm.getKeyword());
+        return CommonResult.success(result);
+    }
+
 
     @ApiOperation(value = "获取问题")
     @GetMapping("/findById/{id}")

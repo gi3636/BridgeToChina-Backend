@@ -6,12 +6,12 @@ import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
+import com.btchina.entity.User;
 import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.model.form.tag.AddTagForm;
 import com.btchina.model.form.tag.EditQuestionTagForm;
-import com.btchina.entity.User;
 import com.btchina.model.vo.answer.AnswerVO;
 import com.btchina.question.constant.QuestionConstant;
 import com.btchina.question.entity.Answer;
@@ -28,7 +28,9 @@ import com.btchina.question.service.AnswerService;
 import com.btchina.question.service.QuestionService;
 import com.btchina.question.service.QuestionUserFavoriteService;
 import com.btchina.question.service.QuestionUserLikeService;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -41,6 +43,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,10 +58,8 @@ import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateResponse;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * <p>
@@ -99,6 +100,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Autowired
     private AnswerService answerService;
+
+    @Value("${secret.openai}")
+    private String openAiSecret;
+    private static final OkHttpClient client = new OkHttpClient();
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Override
     public Boolean addQuestion(AddQuestionForm addQuestionForm, Long userId) {
@@ -481,6 +487,35 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         updateQuestion(questionDoc);
         return true;
     }
+
+    @Override
+    public String generateTitle(String text) {
+        String API_KEY = openAiSecret;
+        String prompt = "根据以下内容生成一个问题标题，#问题标题# 以这样的形式返回结果:\n" + text;
+        String model = "text-davinci-003";
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("model", model);
+        requestBody.put("prompt", prompt);
+        requestBody.put("max_tokens", 100);
+        requestBody.put("n", 1);
+        requestBody.put("temperature", 0.5);
+        RequestBody body = RequestBody.create(JSON, new Gson().toJson(requestBody));
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/completions")
+                .post(body)
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Content-Type", "application/json")
+                .build();
+        String responseStr = "";
+        try {
+            Response response = client.newCall(request).execute();
+            responseStr = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return responseStr;
+    }
+
 
     public void updateQuestion(QuestionDoc questionDoc) {
         Question question = new Question();

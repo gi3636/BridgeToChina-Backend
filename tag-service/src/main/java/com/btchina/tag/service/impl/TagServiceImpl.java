@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -38,6 +39,9 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     private static final OkHttpClient client = new OkHttpClient();
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+
+    @Value("${secret.openai}")
+    private String openAiSecret;
 
     @Autowired
     TagManager tagManager;
@@ -101,8 +105,8 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
     @Override
     public String autoComplete(String text) {
-        String API_KEY = "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";
-        String prompt = "请根据以下句子给出5个相关标签,答案用逗号分割,不要有其他字符:\n" + text;
+        String API_KEY = openAiSecret;
+        String prompt = "请根据以下句子给出5个相关标签,返回结果用逗号分割,并以 #返回结果# 这样的形式返回数据:\n" + text;
         String model = "text-davinci-003";
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", model);

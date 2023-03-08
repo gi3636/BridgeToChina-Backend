@@ -23,5 +23,6 @@ spring:
             refresh: true
           - data-id: mq-config.yaml
             refresh: true
-
+          - data-id: secret.yaml
+            refresh: true
 
