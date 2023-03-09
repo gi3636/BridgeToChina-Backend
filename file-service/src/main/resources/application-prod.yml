@@ -1,0 +1,8 @@
+server:
+  port: 8080
+spring:
+  cloud:
+    nacos:
+      server-addr: 47.93.248.2:8848
+      discovery:
+        namespace: 900783d3-45a7-45ae-9c52-64ee98b18142

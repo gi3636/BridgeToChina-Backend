@@ -23,6 +23,7 @@
         <module>feign-api</module>
         <module>tag-service</module>
         <module>comment-service</module>
+        <module>file-service</module>
     </modules>
 
     <properties>
@@ -45,7 +46,7 @@
         <configuration.version>1.10</configuration.version>
         <jasypt.version>2.1.0</jasypt.version>
         <minio.version>8.3.8</minio.version>
-        <okhttp3.version>4.8.1</okhttp3.version>
+        <okhttp3.version>4.9.0</okhttp3.version>
         <druid.version>1.2.9</druid.version>
         <jetcache.version>2.6.4</jetcache.version>
         <hystrix.version>2.2.10.RELEASE</hystrix.version>

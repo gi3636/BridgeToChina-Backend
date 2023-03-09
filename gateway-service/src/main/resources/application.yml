@@ -48,6 +48,13 @@ spring:
             - Path=/comment/**
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
+        # 评论服务
+        - id: file-service
+          uri: lb://file-service
+          predicates:
+            - Path=/file/**
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
       globalcors:
         add-to-simple-url-handler-mapping: true # 放行options请求
         cors-configurations:
