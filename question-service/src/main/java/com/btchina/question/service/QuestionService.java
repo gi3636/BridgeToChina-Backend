@@ -19,7 +19,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 public interface QuestionService extends IService<Question> {
 
     Boolean addQuestion(AddQuestionForm addQuestionForm, Long userId);
-    PageResult<QuestionVO> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId);
+    PageResult<QuestionVO> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId,Boolean isSeo);
 
     SearchHits<QuestionDoc> queryEsQuestion(QuestionQueryForm questionQueryForm, Long selfId);
     Boolean deleteQuestion(Long questionId, Long selfId);

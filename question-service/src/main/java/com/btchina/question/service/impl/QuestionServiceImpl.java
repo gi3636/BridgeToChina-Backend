@@ -405,7 +405,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 .build();
         //3.执行查询
         SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
-        List<QuestionVO> questionVOList = convertSearchHits(result, selfId);
+        List<QuestionVO> questionVOList = convertSearchHits(result, selfId,false);
         PageResult<QuestionVO> pageResult = new PageResult<>();
         pageResult.setTotal(result.getTotalHits());
         pageResult.setList(questionVOList);
@@ -579,20 +579,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
-    public PageResult<QuestionVO> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
+    public PageResult<QuestionVO> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId,Boolean isSeo) {
         QueryTypeEnum queryTypeEnum = QueryTypeEnum.getQueryTypeEnum(questionQueryForm.getType());
         switch (queryTypeEnum) {
             case HOT:
                 log.info("查询热门问题");
-                return queryHotQuestion(questionQueryForm, selfId);
+                return queryHotQuestion(questionQueryForm, selfId,isSeo);
             case NEW:
                 log.info("查询最新问题");
-                return queryNewQuestion(questionQueryForm, selfId);
+                return queryNewQuestion(questionQueryForm, selfId,isSeo);
         }
         return null;
     }
 
-    public  PageResult<QuestionVO> queryHotQuestion( QuestionQueryForm questionQueryForm, Long selfId) {
+    public  PageResult<QuestionVO> queryHotQuestion( QuestionQueryForm questionQueryForm, Long selfId,Boolean isSeo) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder("likeCount")
                 .modifier(FieldValueFactorFunction.Modifier.LOG1P)
@@ -620,7 +620,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
         // 3.执行查询
         SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
-        List<QuestionVO> questionVOList = convertSearchHits(result, selfId);
+        List<QuestionVO> questionVOList = convertSearchHits(result, selfId, isSeo);
         //封装分页结果
         return convertToPageResult(result, questionVOList, questionQueryForm);
     }
@@ -631,7 +631,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
      * @param selfId
      * @return
      */
-    public PageResult<QuestionVO> queryNewQuestion(QuestionQueryForm questionQueryForm, Long selfId) {
+    public PageResult<QuestionVO> queryNewQuestion(QuestionQueryForm questionQueryForm, Long selfId,Boolean isSeo) {
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         Pageable page = PageRequest.of(questionQueryForm.getCurrentPage() - 1, questionQueryForm.getPageSize());
         NativeSearchQuery query = new NativeSearchQueryBuilder()
@@ -641,7 +641,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 .build();
         // 3.执行查询
         SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
-        List<QuestionVO> questionVOList = convertSearchHits(result, selfId);
+        List<QuestionVO> questionVOList = convertSearchHits(result, selfId, isSeo);
         //封装分页结果
         return convertToPageResult(result, questionVOList, questionQueryForm);
     }
@@ -657,14 +657,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
 
-    public List<QuestionVO> convertSearchHits(SearchHits<QuestionDoc> result, Long selfId) {
+    public List<QuestionVO> convertSearchHits(SearchHits<QuestionDoc> result, Long selfId,Boolean isSeo) {
         List<QuestionVO> questionVOList = new ArrayList<>();
         for (SearchHit<QuestionDoc> searchHit : result.getSearchHits()) {
             QuestionVO questionVO = new QuestionVO();
             BeanUtils.copyProperties(searchHit.getContent(), questionVO);
             QuestionUserLike userLike = null;
             //查询用户是否点赞,没有selfId则因为没有登录
-            if (selfId != null) {
+            if (selfId != null && !isSeo) {
                 userLike = questionUserLikeService.getQuestionUserLike(questionVO.getId(), selfId);
             }
             if (userLike != null) {
@@ -675,7 +675,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
             //查询用户是否收藏
             QuestionUserFavorite userFavorite = null;
-            if (selfId != null) {
+            if (selfId != null && !isSeo) {
                 userFavorite = questionUserFavoriteService.getQuestionUserFavorite(questionVO.getId(), selfId);
             }
             if (userFavorite != null) {
@@ -698,9 +698,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             } else {
                 questionVO.setTags(new ArrayList<>());
             }
-            User user = userClient.findById(questionVO.getUserId());
-            questionVO.setNickname(user.getNickname());
-            questionVO.setAvatar(user.getAvatar());
+            if (!isSeo){
+                User user = userClient.findById(questionVO.getUserId());
+                questionVO.setNickname(user.getNickname());
+                questionVO.setAvatar(user.getAvatar());
+            }
             questionVOList.add(questionVO);
         }
         return questionVOList;

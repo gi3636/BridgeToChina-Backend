@@ -81,7 +81,15 @@ public class QuestionController {
     @PostMapping("/list")
     public CommonResult<PageResult<QuestionVO>> getList(@Validated @RequestBody QuestionQueryForm questionQueryForm) {
         Long selfId = AuthHelper.getUserId();
-        PageResult<QuestionVO> result = questionService.queryQuestion(questionQueryForm, selfId);
+        PageResult<QuestionVO> result = questionService.queryQuestion(questionQueryForm, selfId,false);
+        return CommonResult.success(result);
+    }
+
+    @ApiOperation(value = "获取问题列表")
+    @PostMapping("/seoList")
+    public CommonResult<PageResult<QuestionVO>> getSeoList(@Validated @RequestBody QuestionQueryForm questionQueryForm) {
+        Long selfId = AuthHelper.getUserId();
+        PageResult<QuestionVO> result = questionService.queryQuestion(questionQueryForm, selfId,true);
         return CommonResult.success(result);
     }
 
