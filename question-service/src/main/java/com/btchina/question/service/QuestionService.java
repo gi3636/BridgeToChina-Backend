@@ -56,4 +56,5 @@ public interface QuestionService extends IService<Question> {
 
     String generateTitle(String text);
 
+    PageResult<QuestionVO> relatedQuestion(QuestionRelatedForm questionRelatedForm);
 }

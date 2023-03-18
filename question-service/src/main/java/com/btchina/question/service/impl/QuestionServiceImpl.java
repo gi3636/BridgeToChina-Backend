@@ -40,6 +40,7 @@ import org.elasticsearch.index.query.functionscore.FieldValueFactorFunctionBuild
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -394,9 +395,36 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Override
     public PageResult<QuestionVO> searchQuestion(QuestionSearchForm questionSearchForm, Long selfId) {
+        SearchHits<QuestionDoc> result =searchByEs(questionSearchForm.getKeyword(), questionSearchForm.getCurrentPage(), questionSearchForm.getPageSize());
+        List<QuestionVO> questionVOList = convertSearchHits(result, selfId,false);
+        return getQuestionVOPageResult(result, questionVOList, questionSearchForm.getCurrentPage(), questionSearchForm.getPageSize());
+    }
+
+    @Override
+    public PageResult<QuestionVO> relatedQuestion(QuestionRelatedForm questionRelatedForm) {
+        SearchHits<QuestionDoc> result =searchByEs(questionRelatedForm.getKeyword(), questionRelatedForm.getCurrentPage(), questionRelatedForm.getPageSize());
+        List<QuestionVO> questionVOList = convertSearchHits(result, null,true);
+        return getQuestionVOPageResult(result, questionVOList, questionRelatedForm.getCurrentPage(), questionRelatedForm.getPageSize());
+    }
+
+
+
+    @NotNull
+    private PageResult<QuestionVO> getQuestionVOPageResult(SearchHits<QuestionDoc> result, List<QuestionVO> questionVOList, Integer currentPage, Integer pageSize) {
+        PageResult<QuestionVO> pageResult = new PageResult<>();
+        pageResult.setTotal(result.getTotalHits());
+        pageResult.setList(questionVOList);
+        pageResult.setCurrentPage(currentPage);
+        pageResult.setPageSize(pageSize);
+        pageResult.setTotalPage((int) Math.ceil((double) result.getTotalHits() / pageSize));
+        return pageResult;
+    }
+
+
+    public SearchHits<QuestionDoc> searchByEs(String keyword, Integer currentPage, Integer pageSize) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery(questionSearchForm.getKeyword(), "searchContent", "title", "content"));
-        Pageable page = PageRequest.of(questionSearchForm.getCurrentPage() - 1, questionSearchForm.getPageSize());
+        boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery(keyword, "searchContent", "title", "content"));
+        Pageable page = PageRequest.of(currentPage - 1, pageSize);
         //指定多个field
         NativeSearchQuery query = new NativeSearchQueryBuilder()
                 .withQuery(boolQueryBuilder)
@@ -404,15 +432,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 .withSort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
                 .build();
         //3.执行查询
-        SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
-        List<QuestionVO> questionVOList = convertSearchHits(result, selfId,false);
-        PageResult<QuestionVO> pageResult = new PageResult<>();
-        pageResult.setTotal(result.getTotalHits());
-        pageResult.setList(questionVOList);
-        pageResult.setCurrentPage(questionSearchForm.getCurrentPage());
-        pageResult.setPageSize(questionSearchForm.getPageSize());
-        pageResult.setTotalPage((int) Math.ceil((double) result.getTotalHits() / questionSearchForm.getPageSize()));
-        return pageResult;
+        return elasticsearchRestTemplate.search(query, QuestionDoc.class);
     }
 
     @Override
@@ -647,13 +667,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     public PageResult<QuestionVO> convertToPageResult(SearchHits<QuestionDoc> result, List<QuestionVO> questionVOList, QuestionQueryForm questionQueryForm) {
-        PageResult<QuestionVO> pageResult = new PageResult<>();
-        pageResult.setTotal(result.getTotalHits());
-        pageResult.setList(questionVOList);
-        pageResult.setCurrentPage(questionQueryForm.getCurrentPage());
-        pageResult.setPageSize(questionQueryForm.getPageSize());
-        pageResult.setTotalPage((int) Math.ceil((double) result.getTotalHits() / questionQueryForm.getPageSize()));
-        return pageResult;
+        return getQuestionVOPageResult(result, questionVOList, questionQueryForm.getCurrentPage(), questionQueryForm.getPageSize());
     }
 
 
@@ -684,7 +698,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 questionVO.setFavoriteStatus(0);
             }
 
-            if (searchHit.getContent().getBestAnswerId() != null) {
+            if (searchHit.getContent().getBestAnswerId() != null && !isSeo) {
                 AnswerVO answer = questionClient.findAnswerVOById(searchHit.getContent().getBestAnswerId());
                 questionVO.setBestAnswer(answer);
             }

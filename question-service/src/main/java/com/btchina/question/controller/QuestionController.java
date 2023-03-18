@@ -102,6 +102,13 @@ public class QuestionController {
         return CommonResult.success(result);
     }
 
+    @ApiOperation(value = "相关问题列表")
+    @PostMapping("/related")
+    public CommonResult<PageResult<QuestionVO>> related(@Validated @RequestBody QuestionRelatedForm questionRelatedForm) {
+        PageResult<QuestionVO> result = questionService.relatedQuestion(questionRelatedForm);
+        return CommonResult.success(result);
+    }
+
 
     @ApiOperation(value = "获取es问题列表")
     @PostMapping("/list/es")
