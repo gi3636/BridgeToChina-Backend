@@ -24,6 +24,7 @@
         <module>tag-service</module>
         <module>comment-service</module>
         <module>file-service</module>
+        <module>message-service</module>
     </modules>
 
     <properties>
