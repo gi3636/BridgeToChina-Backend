@@ -38,14 +38,13 @@ public class FileController {
         String objectName = minioUtil.getDatePath() + file.getOriginalFilename();
         bucketName = StringUtils.hasLength(bucketName) ? bucketName : minioConfig.getDefaultBucketName();
         minioUtil.upload(bucketName, objectName, file);
-        String viewPath = minioUtil.getPresignedObjectUrl(bucketName, objectName, 60, TimeUnit.SECONDS);
+        String viewPath = minioUtil.getPresignedObjectUrl(bucketName, objectName, 60 * 100, TimeUnit.SECONDS);
         HashMap<String, String> objectInfo = new HashMap<>();
         objectInfo.put("objectName", objectName);
         //只能预览图片、txt等部分文件
         objectInfo.put("viewPath", viewPath);
         return ResponseEntity.ok(objectInfo);
     }
-
 
 
     @ApiOperation(value = "删除文件")
@@ -60,6 +59,6 @@ public class FileController {
     @GetMapping("/download")
     public void downLoad(@RequestParam(required = false) String bucketName, String objectName, HttpServletResponse response) {
         // 获取文件
-        minioUtil.downResponse(bucketName,objectName,response);
+        minioUtil.downResponse(bucketName, objectName, response);
     }
 }

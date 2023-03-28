@@ -2,6 +2,7 @@ package com.btchina.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.user.entity.User;
+import com.btchina.user.model.form.EditUserForm;
 import com.btchina.user.model.form.RegisterForm;
 import com.btchina.user.model.vo.UserVO;
 
@@ -25,4 +26,6 @@ public interface UserService extends IService<User> {
     Map<Long, UserVO> findByIds(List<Long> ids);
 
     UserVO getDetail(Long id);
+
+    Boolean edit(Long id, EditUserForm editUserForm);
 }

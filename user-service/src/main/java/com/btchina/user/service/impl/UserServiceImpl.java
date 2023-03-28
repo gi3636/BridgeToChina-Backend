@@ -6,6 +6,7 @@ import com.btchina.core.exception.GlobalException;
 import com.btchina.user.entity.User;
 import com.btchina.user.manager.UserManager;
 import com.btchina.user.mapper.UserMapper;
+import com.btchina.user.model.form.EditUserForm;
 import com.btchina.user.model.form.RegisterForm;
 import com.btchina.user.model.vo.UserVO;
 import com.btchina.user.service.UserService;
@@ -72,7 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw GlobalException.from(ResultCode.PASSWORD_WRONG);
         }
         UserVO userVo = UserVO.convert(user);
-        userVo.setToken(jwtTokenUtil.generateToken(user.getId(),user.getUsername()));
+        userVo.setToken(jwtTokenUtil.generateToken(user.getId(), user.getUsername()));
         return userVo;
     }
 
@@ -99,5 +100,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             BeanUtils.copyProperties(user, userVO);
         }
         return userVO;
+    }
+
+    @Override
+    public Boolean edit(Long id, EditUserForm editUserForm) {
+        User user = this.baseMapper.selectById(id);
+        if (user == null) {
+            throw GlobalException.from(ResultCode.USER_NOT_FOUND);
+        }
+        BeanUtils.copyProperties(editUserForm, user);
+        int result = this.baseMapper.updateById(user);
+        return result > 0;
     }
 }
