@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.btchina.message.mapper.NotifyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.btchina.message.entity.Notify">
+        <id column="id" property="id" />
+        <result column="sender_id" property="senderId" />
+        <result column="receiver_id" property="receiverId" />
+        <result column="object_id" property="objectId" />
+        <result column="action_type" property="actionType" />
+        <result column="template_id" property="templateId" />
+        <result column="channel_type" property="channelType" />
+        <result column="object_type" property="objectType" />
+        <result column="is_read" property="isRead" />
+        <result column="read_time" property="readTime" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+</mapper>
