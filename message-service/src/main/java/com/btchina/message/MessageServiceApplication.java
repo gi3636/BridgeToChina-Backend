@@ -6,11 +6,13 @@ import com.btchina.common.swagger.config.EnableSwagger;
 import com.btchina.core.config.EnableLongToStringConfig;
 import com.btchina.core.exception.EnableDefaultExceptionAdvice;
 import com.btchina.feign.config.DefaultFeignConfiguration;
+import com.btchina.message.netty.annotation.EnableNettyServer;
 import com.btchina.redis.config.EnableRedisSerialize;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@EnableNettyServer
 @EnableMybatisPlus
 @EnableSwagger
 @EnableRedisSerialize
