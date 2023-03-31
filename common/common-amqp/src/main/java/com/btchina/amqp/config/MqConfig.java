@@ -27,6 +27,7 @@ public class MqConfig {
 	public RabbitTemplate rabbitTemplate(RabbitTemplateConfigurer configurer, ConnectionFactory connectionFactory) {
 		RabbitTemplate template = new RabbitTemplate();
 		configurer.configure(template, connectionFactory);
+		//
 		return template;
 	}
 }

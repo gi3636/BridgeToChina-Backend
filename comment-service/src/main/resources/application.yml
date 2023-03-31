@@ -1,9 +1,0 @@
-springdoc:
-  swagger-ui:
-    path: "comment-service"
-server:
-  port: 8300
-  address: 0.0.0.0
-spring:
-  profiles:
-    active: dev

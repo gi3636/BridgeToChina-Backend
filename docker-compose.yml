@@ -8,32 +8,25 @@ services:
       - "8000:8080"
     depends_on:
       - gateway-service
-  question-service:
-    image: question-service:1.0
-    container_name: question-service
+  content-service:
+    image: content-service:1.0
+    container_name: content-service
     ports:
       - "8100:8080"
     depends_on:
       - gateway-service
-  tag-service:
-    image: tag-service:1.0
-    container_name: tag-service
+  message-service:
+    image: message-service:1.0
+    container_name: message-service
     ports:
       - "8200:8080"
     depends_on:
       - gateway-service
-  comment-service:
-    image: comment-service:1.0
-    container_name: comment-service
+  file-service:
+    image: file-service:1.0
+    container_name: file-service
     ports:
-      - "8300:8080"
-    depends_on:
-      - gateway-service
-  answer-service:
-    image: answer-service:1.0
-    container_name: answer-service
-    ports:
-      - "8400:8080"
+      - "8888:8080"
     depends_on:
       - gateway-service
   gateway-service:

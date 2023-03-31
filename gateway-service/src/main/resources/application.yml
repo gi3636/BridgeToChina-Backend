@@ -21,34 +21,34 @@ spring:
           predicates: #路由断言，判断请求是否符合规则
             - Path=/user/**  # 判断请求路径
         # 问题服务
-        - id: question-service
-          uri: lb://question-service
+        - id: content-service
+          uri: lb://content-service
           predicates:
             - Path=/question/**
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
         # 标签服务
-        - id: tag-service
-          uri: lb://tag-service
+        - id: content-service
+          uri: lb://content-service
           predicates:
             - Path=/tag/**
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
         # 回答服务
-        - id: question-service
-          uri: lb://question-service
+        - id: content-service
+          uri: lb://content-service
           predicates:
             - Path=/answer/**
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
         # 评论服务
-        - id: comment-service
-          uri: lb://comment-service
+        - id: content-service
+          uri: lb://content-service
           predicates:
             - Path=/comment/**
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 评论服务
+        # 文件服务
         - id: file-service
           uri: lb://file-service
           predicates:

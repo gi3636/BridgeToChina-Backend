@@ -17,13 +17,11 @@
 
     <modules>
         <module>common</module>
-        <module>user-service</module>
-        <module>question-service</module>
         <module>gateway-service</module>
+        <module>user-service</module>
         <module>feign-api</module>
-        <module>tag-service</module>
-        <module>comment-service</module>
         <module>file-service</module>
+        <module>content-service</module>
         <module>message-service</module>
     </modules>
 

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "question-service")
+@FeignClient(name = "content-service")
 public interface QuestionClient {
 
 
