@@ -6,12 +6,15 @@ import com.btchina.message.enums.MessageActionEnum;
 import com.btchina.message.netty.UserConnectPool;
 import com.btchina.message.netty.bean.ChatMsg;
 import com.btchina.message.netty.bean.DataContent;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.AttributeKey;
+import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +25,7 @@ import java.util.Objects;
 @Component
 @ChannelHandler.Sharable
 public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
-
+    private static final ByteBuf HEARTBEAT_SEQUENCE = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("pong", CharsetUtil.UTF_8));
     /**
      * 当建立链接时将Channel放置在Group当中
      */
@@ -31,7 +34,6 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
         log.info("有新的客户端链接：[{}]", ctx.channel().id().asLongText());
         // 添加到channelGroup 通道组
         UserConnectPool.getChannelGroup().add(ctx.channel());
-        ctx.channel().writeAndFlush(new TextWebSocketFrame("连接成功111\n"));
     }
 
     /**
@@ -60,6 +62,7 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
                 // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
                 AttributeKey<String> key = AttributeKey.valueOf("userId");
                 ctx.channel().attr(key).setIfAbsent(senderId);
+                ctx.writeAndFlush(new TextWebSocketFrame("连接成功"));
                 break;
             case CHAT:
                 // 2.聊天消息，把聊天记录保存到数据库，同时标记消息的签收状态[未签收]
@@ -92,6 +95,7 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
             case KEEPALIVE:
                 // 4.心跳类型的消息
                 log.info("收到来自channel为[{}]的心跳包...", ctx.channel().id());
+                ctx.writeAndFlush(new TextWebSocketFrame(HEARTBEAT_SEQUENCE.duplicate()));
                 break;
 
             case PULL_FRIEND:

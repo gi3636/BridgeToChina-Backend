@@ -1,10 +1,15 @@
 package com.btchina.message.netty.handler;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.CharsetUtil;
 
 
 /**
@@ -12,7 +17,6 @@ import io.netty.handler.timeout.IdleStateEvent;
  * 继承ChannelInboundHandlerAdapter，目的是不需要实现ChannelRead0 这个方法
  */
 public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
-
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;//强制类型转化
