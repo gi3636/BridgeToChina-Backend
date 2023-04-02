@@ -2,10 +2,13 @@ package com.btchina.message.netty.handler;
 
 
 import com.btchina.core.util.JsonUtils;
+import com.btchina.message.constant.MessageConstant;
 import com.btchina.message.enums.MessageActionEnum;
+import com.btchina.message.model.send.ChatMessage;
 import com.btchina.message.netty.UserConnectPool;
 import com.btchina.message.netty.bean.ChatMsg;
 import com.btchina.message.netty.bean.DataContent;
+import com.btchina.message.service.MessageService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -16,6 +19,9 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -26,6 +32,12 @@ import java.util.Objects;
 @ChannelHandler.Sharable
 public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     private static final ByteBuf HEARTBEAT_SEQUENCE = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("pong", CharsetUtil.UTF_8));
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private MessageService messageService;
     /**
      * 当建立链接时将Channel放置在Group当中
      */
@@ -69,27 +81,28 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
                 ChatMsg chatMsg = dataContent.getChatMsg();
                 String receiverId = chatMsg.getReceiverId();
                 Channel receiverChannel = UserConnectPool.getChannelMap().get(receiverId);
+                ChatMessage sendMsg = new ChatMessage();
+                BeanUtils.copyProperties(chatMsg, sendMsg);
                 if (Objects.nonNull(receiverChannel)) {
                     // 当receiverChannel不为空的时候，从ChannelGroup当中查找对应的channel是否存在
                     Channel findChannel = UserConnectPool.getChannelGroup().find(receiverChannel.id());
                     if (Objects.nonNull(findChannel)) {
                         // 用户在线
-                        receiverChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(dataContent)));
-                        // TODO 保存消息到数据库，并且标记为 未签收
-
-                    } else {
-                        // 用户离线 TODO 推送消息
+                        receiverChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(sendMsg)));
                     }
-                } else {
-                    // 用户离线 TODO 推送消息
+                }else {
+                    // 用户离线，推送消息
+                    // TODO 推送消息
                 }
+                // 保存消息到数据库，并且标记为 未签收
+                rabbitTemplate.convertAndSend(MessageConstant.EXCHANGE_NAME, MessageConstant.INSERT_KEY, sendMsg);
                 break;
-
             case SIGNED:
                 // 3.签收消息，针对具体的消息进行签收，修改数据库中对应消息的签收状态[已签收]
                 ChatMsg signedMsg = dataContent.getChatMsg();
                 String signedMsgId = signedMsg.getMsgId();
-                // TODO 签收消息，修改数据库中对应消息的签收状态[已签收]
+                // 签收消息，修改数据库中对应消息的签收状态[已签收]
+                messageService.signMessage(signedMsgId);
                 break;
 
             case KEEPALIVE:

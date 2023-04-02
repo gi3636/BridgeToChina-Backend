@@ -1,7 +1,12 @@
 package com.btchina.message.service;
 
+import com.btchina.core.api.PageQueryParam;
 import com.btchina.message.entity.Dialog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.btchina.message.model.form.DialogAddForm;
+import com.btchina.message.model.vo.DialogVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +18,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface DialogService extends IService<Dialog> {
 
+    Boolean add(Long userId, DialogAddForm dialogAddForm);
+
+    List<DialogVO> getList(Long userId, PageQueryParam pageQueryParam);
 }

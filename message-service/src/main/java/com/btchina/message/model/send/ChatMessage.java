@@ -1,16 +1,28 @@
-package com.btchina.message.netty.bean;
+package com.btchina.message.model.send;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
+/**
+ * <p>
+ * 消息表
+ * </p>
+ *
+ * @author franky
+ * @since 2023-03-30
+ */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ChatMsg implements Serializable {
+@ToString
+public class ChatMessage implements Serializable {
+
+    @Setter(AccessLevel.NONE)
+    @ApiModelProperty("数据类型 1是聊天消息")
+    final private Integer dataType = 2;
     @ApiModelProperty("对话ID")
     private String dialogId;
     @ApiModelProperty("发送者ID")
@@ -23,6 +35,6 @@ public class ChatMsg implements Serializable {
     private String msgId;
     @ApiModelProperty("聊天类型 1是私聊 2是群聊")
     private Integer chatType;
-    @ApiModelProperty("消息类型 1是文本 2是图片 ")
     private Integer messageType;
+
 }

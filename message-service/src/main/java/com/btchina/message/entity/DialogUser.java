@@ -36,8 +36,11 @@ public class DialogUser implements Serializable {
     @ApiModelProperty("用户ID")
     private Long userId;
 
+    @ApiModelProperty("对方用户ID")
+    private Long toUserId;
+
     @ApiModelProperty("会话ID")
-    private Integer dialogId;
+    private Long dialogId;
 
     @ApiModelProperty("未读消息数")
     private Integer unreadCount;

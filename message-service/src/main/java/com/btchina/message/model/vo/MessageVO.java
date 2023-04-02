@@ -1,36 +1,19 @@
-package com.btchina.message.entity;
+package com.btchina.message.model.vo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.ToString;
 
-/**
- * <p>
- * 消息表
- * </p>
- *
- * @author franky
- * @since 2023-03-30
- */
-@Getter
-@Setter
-@TableName("tbl_message")
-@ApiModel(value = "Message对象", description = "消息表")
-public class Message implements Serializable {
+import java.util.Date;
 
-    private static final long serialVersionUID = 1L;
-
+@Data
+@ToString
+public class MessageVO {
     @ApiModelProperty("ID")
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty("会话ID")
@@ -42,9 +25,20 @@ public class Message implements Serializable {
     @ApiModelProperty("发送者ID")
     private Long senderId;
 
+    @ApiModelProperty("发送者昵称")
+    private String senderNickname;
+
+    @ApiModelProperty("发送者头像")
+    private String senderAvatar;
+
     @ApiModelProperty("接收者ID")
     private Long receiverId;
 
+    @ApiModelProperty("接收者昵称")
+    private String receiverNickname;
+
+    @ApiModelProperty("接收者头像")
+    private String receiverAvatar;
     @ApiModelProperty("聊天类型 1是私聊 2是群聊")
     private Integer chatType;
 
@@ -64,16 +58,10 @@ public class Message implements Serializable {
     private String extend;
 
     @ApiModelProperty("创建时间")
-    @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
     @ApiModelProperty("更新时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
-
-    @ApiModelProperty("是否删除;1是删除，0是不删除")
-    @TableLogic
-    private Boolean deleted;
 
 
 }

@@ -39,15 +39,11 @@ public class Dialog implements Serializable {
     @ApiModelProperty("聊天类型 1是私聊 2是群聊")
     private Integer chatType;
 
-    @ApiModelProperty("消息类型 1是文本 2是图片 ")
+    @ApiModelProperty("消息类型 1是文本 2是图片")
     private Integer messageType;
 
     @ApiModelProperty("消息内容")
     private String content;
-
-    @ApiModelProperty("未读消息数")
-    private Integer unreadCount;
-
     @ApiModelProperty("创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
