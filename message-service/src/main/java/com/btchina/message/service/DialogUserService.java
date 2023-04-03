@@ -19,4 +19,7 @@ public interface DialogUserService extends IService<DialogUser> {
 
     List<DialogUser> getList(Long userId, PageQueryParam pageQueryParam);
 
+    Boolean addUnreadCount(String dialogId, String receiverId);
+
+    Boolean reduceUnreadCount(Long dialogId, Long userId);
 }

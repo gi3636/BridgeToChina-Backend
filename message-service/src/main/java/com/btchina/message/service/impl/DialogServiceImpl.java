@@ -1,5 +1,6 @@
 package com.btchina.message.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.btchina.core.api.PageQueryParam;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.message.entity.Dialog;
@@ -68,5 +69,18 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
             }
         }
         return dialogVOList;
+    }
+
+    @Override
+    public Boolean updateLastMessage(String dialogId, String msgId, String content) {
+        LambdaQueryWrapper<Dialog> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dialog::getId, dialogId);
+        Dialog dialog = this.getOne(queryWrapper);
+        if (dialog != null) {
+            dialog.setLastMsgId(msgId);
+            dialog.setContent(content);
+            return this.updateById(dialog);
+        }
+        return false;
     }
 }

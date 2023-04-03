@@ -31,8 +31,12 @@ public enum ResultCode implements IErrorCode {
     COMMENT_NOTE_NOT_MATCH(20206, "评论笔记不匹配"),
     LOGIN_FAILED(20207, "登录失败"),
     QUESTION_NOT_EXIST(20208, "问题不存在"),
-    ANSWER_NOT_EXIST(20209, "回答不存在");
+    ANSWER_NOT_EXIST(20209, "回答不存在"),
 
+    /**
+     * 消息相关
+     */
+    MESSAGE_NOT_EXIST(20300, "消息不存在");
 
 
     private long code;

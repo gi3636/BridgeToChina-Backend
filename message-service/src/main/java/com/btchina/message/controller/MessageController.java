@@ -4,6 +4,7 @@ package com.btchina.message.controller;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.util.AuthHelper;
 import com.btchina.message.model.form.MessageQueryForm;
+import com.btchina.message.model.form.MessageReadForm;
 import com.btchina.message.model.vo.MessageVO;
 import com.btchina.message.service.MessageService;
 import io.swagger.annotations.Api;
@@ -41,6 +42,18 @@ public class MessageController {
         List<MessageVO> messageVOList = messageService.query(userId, messageQueryForm);
         return CommonResult.success(messageVOList);
     }
+
+    @ApiOperation("已读消息")
+    @PostMapping("/read")
+    public CommonResult<Void> read(@Validated @RequestBody MessageReadForm messageReadForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean isSuccess =  messageService.read(userId, messageReadForm.getMsgId());
+        if (!isSuccess) {
+            return CommonResult.failed("消息已读");
+        }
+        return CommonResult.success(null);
+    }
+
 
 
 }

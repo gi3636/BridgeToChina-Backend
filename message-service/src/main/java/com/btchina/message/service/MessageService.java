@@ -24,4 +24,6 @@ public interface MessageService extends IService<Message> {
     List<MessageVO> query(Long userId, MessageQueryForm messageQueryForm);
 
     Boolean add(ChatMessage message);
+
+    Boolean read(Long userId, String msgId);
 }
