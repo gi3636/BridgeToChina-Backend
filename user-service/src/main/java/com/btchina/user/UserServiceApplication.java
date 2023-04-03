@@ -1,5 +1,6 @@
 package com.btchina.user;
 
+import com.btchina.amqp.config.EnableMq;
 import com.btchina.common.mybatis.config.EnableMybatisPlus;
 import com.btchina.common.swagger.config.EnableSwagger;
 import com.btchina.core.config.EnableJwt;
@@ -17,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableDefaultExceptionAdvice
 @EnableLongToStringConfig
 @EnableJwt
+@EnableMq
 public class UserServiceApplication {
 
     public static void main(String[] args) {
