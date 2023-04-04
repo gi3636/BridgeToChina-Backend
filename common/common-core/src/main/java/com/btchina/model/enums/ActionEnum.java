@@ -1,7 +1,8 @@
-package com.btchina.user.model.enums;
+package com.btchina.model.enums;
+
+import lombok.Data;
 
 import java.util.Objects;
-
 public enum ActionEnum {
 
     LIKE(1, "点赞"),
@@ -27,6 +28,13 @@ public enum ActionEnum {
             }
         }
         return null;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+    public String getContent() {
+        return content;
     }
 }
 

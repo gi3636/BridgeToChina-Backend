@@ -53,9 +53,9 @@ public class UserAction implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
-    @ApiModelProperty("是否删除;1是删除，0是不删除")
-    @TableLogic
-    private Boolean deleted;
+    //@ApiModelProperty("是否删除;1是删除，0是不删除")
+    //@TableLogic
+    //private Boolean deleted;
 
 
 }

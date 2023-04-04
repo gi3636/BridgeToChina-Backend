@@ -11,10 +11,18 @@ import com.btchina.content.model.doc.QuestionDoc;
 import com.btchina.content.service.QuestionService;
 import com.btchina.content.service.QuestionUserLikeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.btchina.feign.clients.UserClient;
+import com.btchina.model.enums.ActionEnum;
+import com.btchina.model.enums.ObjectEnum;
+import com.btchina.model.form.user.UserActionForm;
+import io.swagger.models.auth.In;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * <p>
@@ -32,6 +40,8 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private UserClient userClient;
 
     /**
      * 点赞
@@ -64,6 +74,22 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             userLike.setStatus(1);
             this.save(userLike);
         }
+        // 添加用户动态
+        StopWatch stopWatch = new StopWatch();
+        // 开始时间
+        stopWatch.start();
+
+        CompletableFuture.runAsync(() -> {
+            UserActionForm userActionForm = new UserActionForm();
+            userActionForm.setUserId(userId);
+            userActionForm.setActionType(ActionEnum.LIKE.getType());
+            userActionForm.setObjectId(questionId);
+            userActionForm.setObjectType(ObjectEnum.QUESTION.getType());
+            userClient.addUserAction(userActionForm);
+        });
+        stopWatch.stop();
+        System.out.printf("执行时长：%f 秒.%n", stopWatch.getTotalTimeSeconds()); // %n 为换行
+        // 加点赞数
         increaseLikeCount(question);
         return true;
     }
@@ -93,6 +119,22 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             userUnlike.setStatus(0);
             this.save(userUnlike);
         }
+        // 删除用户动态
+        // 添加用户动态
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        CompletableFuture.runAsync(() -> {
+            UserActionForm userActionForm = new UserActionForm();
+            userActionForm.setUserId(userId);
+            userActionForm.setActionType(ActionEnum.LIKE.getType());
+            userActionForm.setObjectId(questionId);
+            userActionForm.setObjectType(ObjectEnum.QUESTION.getType());
+            userClient.deleteUserAction(userActionForm);
+        });
+
+        stopWatch.stop();
+        System.out.printf("执行时长：%f 秒.%n", stopWatch.getTotalTimeSeconds()); // %n 为换行
+        // 减点赞数
         decreaseLikeCount(question);
         return true;
     }
