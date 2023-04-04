@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * <p>
@@ -78,7 +80,7 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
         StopWatch stopWatch = new StopWatch();
         // 开始时间
         stopWatch.start();
-
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
         CompletableFuture.runAsync(() -> {
             UserActionForm userActionForm = new UserActionForm();
             userActionForm.setUserId(userId);
@@ -86,7 +88,7 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             userActionForm.setObjectId(questionId);
             userActionForm.setObjectType(ObjectEnum.QUESTION.getType());
             userClient.addUserAction(userActionForm);
-        });
+        }, executorService);
         stopWatch.stop();
         System.out.printf("执行时长：%f 秒.%n", stopWatch.getTotalTimeSeconds()); // %n 为换行
         // 加点赞数
@@ -123,6 +125,7 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
         // 添加用户动态
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
         CompletableFuture.runAsync(() -> {
             UserActionForm userActionForm = new UserActionForm();
             userActionForm.setUserId(userId);
@@ -130,7 +133,7 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             userActionForm.setObjectId(questionId);
             userActionForm.setObjectType(ObjectEnum.QUESTION.getType());
             userClient.deleteUserAction(userActionForm);
-        });
+        },executorService);
 
         stopWatch.stop();
         System.out.printf("执行时长：%f 秒.%n", stopWatch.getTotalTimeSeconds()); // %n 为换行
