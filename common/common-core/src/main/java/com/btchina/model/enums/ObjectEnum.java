@@ -1,11 +1,14 @@
 package com.btchina.model.enums;
 
+import com.btchina.entity.Answer;
+
 import java.util.Objects;
 
 public enum ObjectEnum {
 
     QUESTION(1, "问题"),
-    USER(2, "用户");
+    USER(2, "用户"),
+    Answer(3, "回答");
 
 
     public final Integer type;
@@ -16,10 +19,10 @@ public enum ObjectEnum {
         this.content = content;
     }
 
-    public static ObjectEnum getMessageActionEnum(Integer type) {
-        for (ObjectEnum actionEnum : ObjectEnum.values()) {
-            if (Objects.equals(actionEnum.type, type)) {
-                return actionEnum;
+    public static ObjectEnum geObjectEnum(Integer type) {
+        for (ObjectEnum objectEnum : ObjectEnum.values()) {
+            if (Objects.equals(objectEnum.type, type)) {
+                return objectEnum;
             }
         }
         return null;

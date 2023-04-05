@@ -36,7 +36,7 @@ public class MessageController {
     private MessageService messageService;
 
     @ApiOperation("获取消息列表")
-    @PostMapping("/list")
+    @PostMapping("list")
     public CommonResult<List<MessageVO>> list(@Validated @RequestBody MessageQueryForm messageQueryForm) {
         Long userId = AuthHelper.getUserId();
         List<MessageVO> messageVOList = messageService.query(userId, messageQueryForm);
@@ -44,7 +44,7 @@ public class MessageController {
     }
 
     @ApiOperation("已读消息")
-    @PostMapping("/read")
+    @PostMapping("read")
     public CommonResult<Void> read(@Validated @RequestBody MessageReadForm messageReadForm) {
         Long userId = AuthHelper.getUserId();
         Boolean isSuccess =  messageService.read(userId, messageReadForm.getMsgId());

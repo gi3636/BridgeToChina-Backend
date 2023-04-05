@@ -29,14 +29,14 @@ import java.util.List;
  */
 @RestController
 @Api(tags = "会话模块")
-@RequestMapping("/message/dialog")
+@RequestMapping("/message/dialog/")
 public class DialogController {
 
     @Autowired
     private DialogService dialogService;
 
     @ApiOperation("添加会话")
-    @PostMapping("/add")
+    @PostMapping("add")
     public CommonResult<Void> add(@Validated @RequestBody DialogAddForm dialogAddForm) {
         Long userId = AuthHelper.getUserId();
         Boolean isSuccess= dialogService.add(userId, dialogAddForm);
@@ -47,7 +47,7 @@ public class DialogController {
     }
 
     @ApiOperation("获取会话列表")
-    @PostMapping("/list")
+    @PostMapping("list")
     public CommonResult<List<DialogVO>> list(@Validated @RequestBody PageQueryParam pageQueryParam) {
         Long userId = AuthHelper.getUserId();
         List<DialogVO> dialogVOList = dialogService.getList(userId, pageQueryParam);

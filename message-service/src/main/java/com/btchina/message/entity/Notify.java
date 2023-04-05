@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("tbl_notify")
+@ToString
 @ApiModel(value = "Notify对象", description = "消息通知表")
 public class Notify implements Serializable {
 
@@ -33,7 +35,7 @@ public class Notify implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @ApiModelProperty("操作者id, 0是系统发送")
+    @ApiModelProperty("发送者id, 0是系统发送")
     private Long senderId;
 
     @ApiModelProperty("接收者id")

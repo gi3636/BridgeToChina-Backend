@@ -55,6 +55,13 @@ spring:
             - Path=/file/**
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
+        # 消息服务
+        - id: message-service
+          uri: lb://message-service
+          predicates:
+            - Path=/message/**
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
       globalcors:
         add-to-simple-url-handler-mapping: true # 放行options请求
         cors-configurations:

@@ -1,7 +1,11 @@
 package com.btchina.message.service;
 
+import com.btchina.core.api.PageResult;
 import com.btchina.message.entity.Notify;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.btchina.message.model.form.NotifyQueryForm;
+import com.btchina.message.model.vo.NotifyVO;
+import com.btchina.model.form.message.NotifyAddForm;
 
 /**
  * <p>
@@ -13,4 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface NotifyService extends IService<Notify> {
 
+    Boolean add(NotifyAddForm notifyAddForm);
+
+    PageResult<NotifyVO> list(Long userId, NotifyQueryForm notifyQueryForm);
 }

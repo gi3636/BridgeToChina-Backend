@@ -1,7 +1,5 @@
 package com.btchina.model.enums;
 
-import lombok.Data;
-
 import java.util.Objects;
 public enum ActionEnum {
 
@@ -21,7 +19,7 @@ public enum ActionEnum {
         this.content = content;
     }
 
-    public static ActionEnum getMessageActionEnum(Integer type) {
+    public static ActionEnum getActionEnum(Integer type) {
         for (ActionEnum actionEnum : ActionEnum.values()) {
             if (Objects.equals(actionEnum.type, type)) {
                 return actionEnum;
