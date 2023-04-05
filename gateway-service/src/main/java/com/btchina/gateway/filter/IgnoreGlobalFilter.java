@@ -1,5 +1,7 @@
 package com.btchina.gateway.filter;
 
+import com.btchina.core.api.ResultCode;
+import com.btchina.core.exception.GlobalException;
 import com.btchina.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +53,7 @@ public class IgnoreGlobalFilter extends AbstractGatewayFilterFactory<IgnoreGloba
             ServerHttpRequest build = request.mutate().headers(httpHeaders).build();
             exchange = exchange.mutate().request(build).build();
         } catch (Exception e) {
-            return chain.filter(exchange);
+            throw GlobalException.from(ResultCode.TOKEN_INVALID);
         }
         return chain.filter(exchange);
     }
