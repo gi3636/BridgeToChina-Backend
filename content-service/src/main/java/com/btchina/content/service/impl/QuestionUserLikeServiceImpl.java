@@ -77,9 +77,6 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             this.save(userLike);
         }
         // 添加用户动态
-        StopWatch stopWatch = new StopWatch();
-        // 开始时间
-        stopWatch.start();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         CompletableFuture.runAsync(() -> {
             UserActionForm userActionForm = new UserActionForm();
@@ -89,8 +86,6 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             userActionForm.setObjectType(ObjectEnum.QUESTION.getType());
             userClient.addUserAction(userActionForm);
         }, executorService);
-        stopWatch.stop();
-        System.out.printf("执行时长：%f 秒.%n", stopWatch.getTotalTimeSeconds()); // %n 为换行
         // 加点赞数
         increaseLikeCount(question);
         return true;
@@ -122,9 +117,6 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             this.save(userUnlike);
         }
         // 删除用户动态
-        // 添加用户动态
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         CompletableFuture.runAsync(() -> {
             UserActionForm userActionForm = new UserActionForm();
@@ -134,9 +126,6 @@ public class QuestionUserLikeServiceImpl extends ServiceImpl<QuestionUserLikeMap
             userActionForm.setObjectType(ObjectEnum.QUESTION.getType());
             userClient.deleteUserAction(userActionForm);
         },executorService);
-
-        stopWatch.stop();
-        System.out.printf("执行时长：%f 秒.%n", stopWatch.getTotalTimeSeconds()); // %n 为换行
         // 减点赞数
         decreaseLikeCount(question);
         return true;
