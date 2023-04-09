@@ -20,6 +20,8 @@ spring:
           uri: lb://user-service
           predicates: #路由断言，判断请求是否符合规则
             - Path=/user/**  # 判断请求路径
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
         # 问题服务
         - id: content-service
           uri: lb://content-service

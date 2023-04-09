@@ -1,11 +1,8 @@
 package com.btchina.file.controller;
 
+import com.btchina.core.api.CommonResult;
 import com.btchina.file.config.MinioConfig;
 import com.btchina.file.util.MinioUtil;
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -34,16 +30,16 @@ public class FileController {
 
     @ApiOperation(value = "上传文件")
     @PostMapping(value = "/upload")
-    public ResponseEntity<HashMap<String, String>> uploadFile(MultipartFile file, @RequestParam(required = false) String bucketName) {
-        String objectName = minioUtil.getDatePath() + file.getOriginalFilename();
+    public CommonResult<HashMap<String, String>> uploadFile(MultipartFile file, @RequestParam(required = false) String bucketName) {
         bucketName = StringUtils.hasLength(bucketName) ? bucketName : minioConfig.getDefaultBucketName();
+        String objectName = minioUtil.getDatePath() + file.getOriginalFilename();
         minioUtil.upload(bucketName, objectName, file);
         String viewPath = minioUtil.getPresignedObjectUrl(bucketName, objectName, 60 * 100, TimeUnit.SECONDS);
         HashMap<String, String> objectInfo = new HashMap<>();
-        objectInfo.put("objectName", objectName);
+        objectInfo.put("path", bucketName + objectName);
         //只能预览图片、txt等部分文件
         objectInfo.put("viewPath", viewPath);
-        return ResponseEntity.ok(objectInfo);
+        return CommonResult.success(objectInfo);
     }
 
 

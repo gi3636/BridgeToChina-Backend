@@ -104,6 +104,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Boolean edit(Long id, EditUserForm editUserForm) {
+        if (id == null) {
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
+        }
         User user = this.baseMapper.selectById(id);
         if (user == null) {
             throw GlobalException.from(ResultCode.USER_NOT_FOUND);
