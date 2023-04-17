@@ -4,7 +4,9 @@ import com.btchina.entity.Answer;
 import com.btchina.entity.Question;
 import com.btchina.entity.User;
 import com.btchina.model.vo.answer.AnswerVO;
+import com.btchina.model.vo.question.QuestionVO;
 import com.btchina.model.vo.user.UserVO;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,10 @@ public interface QuestionClient {
 
     @GetMapping("/question/findById/{id}")
     Question findById(@PathVariable("id") Long id);
+
+    @PostMapping("/question/findByIds")
+    Map<Long, QuestionVO> findByIds(@RequestBody List<Long> ids);
+
     @PostMapping("/question/increase/answer/count")
     void increaseAnswerCount(@RequestBody Long questionId);
 
@@ -38,4 +44,6 @@ public interface QuestionClient {
 
     @PostMapping("/answer/increase/comment/count")
     void increaseCommentCount(@Validated @RequestBody Long answerId);
+
+
 }

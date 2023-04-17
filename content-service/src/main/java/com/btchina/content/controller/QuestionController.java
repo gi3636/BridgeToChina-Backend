@@ -9,16 +9,20 @@ import com.btchina.model.form.AutoCompleteForm;
 import com.btchina.content.entity.Question;
 import com.btchina.content.model.doc.QuestionDoc;
 import com.btchina.content.model.form.*;
-import com.btchina.content.model.vo.QuestionVO;
+import com.btchina.model.vo.question.QuestionVO;
 import com.btchina.content.service.QuestionService;
 import com.btchina.content.service.QuestionUserFavoriteService;
 import com.btchina.content.service.QuestionUserLikeService;
+import com.btchina.model.vo.user.UserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -229,5 +233,12 @@ public class QuestionController {
     public void decreaseAnswerCount(@Validated @RequestBody Long questionId) {
         questionService.decreaseAnswerCount(questionId);
     }
+
+    @ApiOperation(value = "根据id列表查询问题信息")
+    @PostMapping("/findByIds")
+    public Map<Long, QuestionVO> findByIds(@RequestBody List<Long> ids) {
+        return questionService.findByIds(ids);
+    }
+
 }
 

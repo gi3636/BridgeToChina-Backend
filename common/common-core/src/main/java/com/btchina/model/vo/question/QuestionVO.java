@@ -1,12 +1,9 @@
-package com.btchina.content.model.vo;
+package com.btchina.model.vo.question;
 
 import com.btchina.model.vo.answer.AnswerVO;
-import com.btchina.content.entity.Question;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -64,17 +61,4 @@ public class QuestionVO {
     @ApiModelProperty("更新时间")
     private Date updatedTime;
 
-    private static QuestionVO getQuestionVO(Question question) {
-        QuestionVO questionVO = new QuestionVO();
-        questionVO.setId(question.getId());
-        questionVO.setUserId(question.getUserId());
-        questionVO.setTitle(question.getTitle());
-        questionVO.setContent(question.getContent());
-        questionVO.setFavoriteCount(question.getFavoriteCount());
-        questionVO.setLikeCount(question.getLikeCount());
-        questionVO.setViewCount(question.getViewCount());
-        questionVO.setImages(question.getImages() == null ? new ArrayList<>() : Arrays.asList((question.getImages().split(","))));
-        questionVO.setCreatedTime(question.getCreatedTime());
-        return questionVO;
-    }
 }

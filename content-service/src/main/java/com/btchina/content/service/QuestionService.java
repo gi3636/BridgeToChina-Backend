@@ -5,8 +5,11 @@ import com.btchina.core.api.PageResult;
 import com.btchina.content.entity.Question;
 import com.btchina.content.model.doc.QuestionDoc;
 import com.btchina.content.model.form.*;
-import com.btchina.content.model.vo.QuestionVO;
+import com.btchina.model.vo.question.QuestionVO;
 import org.springframework.data.elasticsearch.core.SearchHits;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -57,4 +60,6 @@ public interface QuestionService extends IService<Question> {
     String generateTitle(String text);
 
     PageResult<QuestionVO> relatedQuestion(QuestionRelatedForm questionRelatedForm);
+
+    Map<Long, QuestionVO> findByIds(List<Long> ids);
 }

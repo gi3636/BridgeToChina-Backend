@@ -3,6 +3,10 @@ package com.btchina.user.service;
 import com.btchina.user.entity.UserAction;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.model.form.user.UserActionForm;
+import com.btchina.user.model.form.GetUserActionForm;
+import com.btchina.user.model.vo.UserActionVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +21,6 @@ public interface UserActionService extends IService<UserAction> {
     Boolean add(UserActionForm userActionForm);
 
     Boolean delete(UserActionForm userActionForm);
+
+    List<UserActionVO> list(GetUserActionForm getUserActionForm);
 }

@@ -23,7 +23,7 @@ import com.btchina.content.mapper.es.QuestionRepository;
 import com.btchina.content.model.doc.QuestionDoc;
 import com.btchina.content.model.enums.QueryTypeEnum;
 import com.btchina.content.model.form.*;
-import com.btchina.content.model.vo.QuestionVO;
+import com.btchina.model.vo.question.QuestionVO;
 import com.btchina.content.service.AnswerService;
 import com.btchina.content.service.QuestionService;
 import com.btchina.content.service.QuestionUserFavoriteService;
@@ -61,6 +61,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -395,18 +396,46 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Override
     public PageResult<QuestionVO> searchQuestion(QuestionSearchForm questionSearchForm, Long selfId) {
-        SearchHits<QuestionDoc> result =searchByEs(questionSearchForm.getKeyword(), questionSearchForm.getCurrentPage(), questionSearchForm.getPageSize());
-        List<QuestionVO> questionVOList = convertSearchHits(result, selfId,false);
+        SearchHits<QuestionDoc> result = searchByEs(questionSearchForm.getKeyword(), questionSearchForm.getCurrentPage(), questionSearchForm.getPageSize());
+        List<QuestionVO> questionVOList = convertSearchHits(result, selfId, false);
         return getQuestionVOPageResult(result, questionVOList, questionSearchForm.getCurrentPage(), questionSearchForm.getPageSize());
     }
 
     @Override
     public PageResult<QuestionVO> relatedQuestion(QuestionRelatedForm questionRelatedForm) {
-        SearchHits<QuestionDoc> result =searchByEs(questionRelatedForm.getKeyword(), questionRelatedForm.getCurrentPage(), questionRelatedForm.getPageSize());
-        List<QuestionVO> questionVOList = convertSearchHits(result, null,true);
+        SearchHits<QuestionDoc> result = searchByEs(questionRelatedForm.getKeyword(), questionRelatedForm.getCurrentPage(), questionRelatedForm.getPageSize());
+        List<QuestionVO> questionVOList = convertSearchHits(result, null, true);
         return getQuestionVOPageResult(result, questionVOList, questionRelatedForm.getCurrentPage(), questionRelatedForm.getPageSize());
     }
 
+    @Override
+    public Map<Long, QuestionVO> findByIds(List<Long> ids) {
+        Map<Long, QuestionVO> questionVOMap = new HashMap<>();
+        if (ids == null || ids.size() == 0) {
+            return questionVOMap;
+        }
+        List<QuestionDoc> questionDocList = getEsDocByIds(ids);
+        if (questionDocList != null && questionDocList.size() > 0) {
+            questionDocList.stream().map(questionDoc -> {
+                QuestionVO questionVO = new QuestionVO();
+                BeanUtils.copyProperties(questionDoc, questionVO);
+                questionVOMap.put(questionDoc.getId(), questionVO);
+                return questionVO;
+            }).collect(Collectors.toList());
+        }
+        return questionVOMap;
+    }
+
+    private List<QuestionDoc> getEsDocByIds(List<Long> ids) {
+        List<String> idStrList = ids.stream().map(Object::toString).collect(Collectors.toList());
+        log.info("idStrList:{}", idStrList);
+
+        NativeSearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.termsQuery("id", idStrList))
+                .build();
+        return elasticsearchRestTemplate.search(query, QuestionDoc.class).stream().map(SearchHit::getContent).collect(Collectors.toList());
+        //return questionRepository.findAllByIdIn(idStrList);
+    }
 
 
     @NotNull
@@ -599,20 +628,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
-    public PageResult<QuestionVO> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId,Boolean isSeo) {
+    public PageResult<QuestionVO> queryQuestion(QuestionQueryForm questionQueryForm, Long selfId, Boolean isSeo) {
         QueryTypeEnum queryTypeEnum = QueryTypeEnum.getQueryTypeEnum(questionQueryForm.getType());
         switch (queryTypeEnum) {
             case HOT:
                 log.info("查询热门问题");
-                return queryHotQuestion(questionQueryForm, selfId,isSeo);
+                return queryHotQuestion(questionQueryForm, selfId, isSeo);
             case NEW:
                 log.info("查询最新问题");
-                return queryNewQuestion(questionQueryForm, selfId,isSeo);
+                return queryNewQuestion(questionQueryForm, selfId, isSeo);
         }
         return null;
     }
 
-    public  PageResult<QuestionVO> queryHotQuestion( QuestionQueryForm questionQueryForm, Long selfId,Boolean isSeo) {
+    public PageResult<QuestionVO> queryHotQuestion(QuestionQueryForm questionQueryForm, Long selfId, Boolean isSeo) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder("likeCount")
                 .modifier(FieldValueFactorFunction.Modifier.LOG1P)
@@ -647,11 +676,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     /**
      * 查询最新问题
+     *
      * @param questionQueryForm
      * @param selfId
      * @return
      */
-    public PageResult<QuestionVO> queryNewQuestion(QuestionQueryForm questionQueryForm, Long selfId,Boolean isSeo) {
+    public PageResult<QuestionVO> queryNewQuestion(QuestionQueryForm questionQueryForm, Long selfId, Boolean isSeo) {
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         Pageable page = PageRequest.of(questionQueryForm.getCurrentPage() - 1, questionQueryForm.getPageSize());
         NativeSearchQuery query = new NativeSearchQueryBuilder()
@@ -671,7 +701,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
 
-    public List<QuestionVO> convertSearchHits(SearchHits<QuestionDoc> result, Long selfId,Boolean isSeo) {
+    public List<QuestionVO> convertSearchHits(SearchHits<QuestionDoc> result, Long selfId, Boolean isSeo) {
         List<QuestionVO> questionVOList = new ArrayList<>();
         for (SearchHit<QuestionDoc> searchHit : result.getSearchHits()) {
             QuestionVO questionVO = new QuestionVO();
@@ -712,7 +742,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             } else {
                 questionVO.setTags(new ArrayList<>());
             }
-            if (!isSeo){
+            if (!isSeo) {
                 User user = userClient.findById(questionVO.getUserId());
                 questionVO.setNickname(user.getNickname());
                 questionVO.setAvatar(user.getAvatar());

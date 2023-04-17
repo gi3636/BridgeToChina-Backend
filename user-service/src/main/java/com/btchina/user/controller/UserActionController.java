@@ -3,15 +3,19 @@ package com.btchina.user.controller;
 
 import com.btchina.core.api.CommonResult;
 import com.btchina.model.form.user.UserActionForm;
+import com.btchina.user.model.form.GetUserActionForm;
+import com.btchina.user.model.vo.UserActionVO;
 import com.btchina.user.service.UserActionService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-03-30
  */
 @RestController
-@Tag(name = "用户动态模块")
+@Api(tags = "用户动态模块")
 @RequestMapping("/user/userAction")
 public class UserActionController {
 
@@ -47,6 +51,14 @@ public class UserActionController {
         }
         return CommonResult.success(null);
     }
+
+    @ApiOperation(value = "获取用户动态列表")
+    @PostMapping("/list")
+    public CommonResult<List<UserActionVO>> list(@RequestBody GetUserActionForm getUserActionForm) {
+        List<UserActionVO> result = userActionService.list(getUserActionForm);
+        return CommonResult.success(result);
+    }
+
 
 }
 
