@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
+import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.message.constant.NotifyConstant;
 import com.btchina.message.entity.Notify;
@@ -16,6 +17,7 @@ import com.btchina.model.enums.ObjectEnum;
 import com.btchina.model.form.message.NotifyAddForm;
 import com.btchina.message.service.NotifyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.btchina.model.vo.question.QuestionVO;
 import com.btchina.model.vo.user.UserVO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
@@ -44,6 +46,8 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
     @Autowired
     private UserClient userClient;
 
+    @Autowired
+    private QuestionClient questionClient;
     @Override
     public Boolean add(NotifyAddForm notifyAddForm) {
         Notify notify = new Notify();
@@ -82,6 +86,7 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
             queryWrapper.eq(Notify::getChannelType, notifyQueryForm.getChannelType());
         }
 
+
         Page<Notify> page = new Page<>(notifyQueryForm.getCurrentPage(), notifyQueryForm.getPageSize());
         Page<Notify> notifyPage = this.page(page, queryWrapper);
         PageResult<NotifyVO> pageResult = new PageResult<>();
@@ -89,18 +94,25 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
         List<NotifyVO> notifyVOList = new ArrayList<>();
         //获取用户信息
         List<Long> userIds = new ArrayList<>();
+        List<Long> questionIds = new ArrayList<>();
         for (Notify notify : notifyList) {
             userIds.add(notify.getSenderId());
+            // 如果是问题通知，则需要查询问题信息
+            if (notify.getObjectType() == 1) {
+                questionIds.add(notify.getObjectId());
+            }
         }
         Map<Long, UserVO> userVOMap = userClient.findByIds(userIds);
-
+        Map<Long, QuestionVO> questionVOMap = questionClient.findByIds(questionIds);
         // 转换为VO
         for (Notify notify : notifyList) {
             NotifyVO notifyVO = new NotifyVO();
             BeanUtils.copyProperties(notify, notifyVO);
+            notifyVO.setActionName(ActionEnum.getActionEnum(notify.getActionType()).getContent());
             notifyVO.setSenderName(userVOMap.get(notify.getSenderId()).getNickname());
             notifyVO.setSenderAvatar(userVOMap.get(notify.getSenderId()).getAvatar());
             notifyVO.setContent(convertNotifyContent(notifyVO));
+            notifyVO.setQuestion(questionVOMap.get(notify.getObjectId()));
             notifyVOList.add(notifyVO);
         }
         // 设置分页信息
@@ -110,7 +122,6 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
         pageResult.setCurrentPage(notifyQueryForm.getCurrentPage());
         pageResult.setPageSize(notifyQueryForm.getPageSize());
         return pageResult;
-
     }
 
 

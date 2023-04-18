@@ -10,7 +10,7 @@ import lombok.ToString;
 public class NotifyQueryForm extends PageQueryParam {
 
     @ApiModelProperty("是否已读  1已读 0未读 ")
-    private Boolean isRead;
+    private Integer isRead;
 
     @ApiModelProperty(value = "渠道类型 1 站内信 2短信 3邮箱",required = true)
     private Integer channelType;
