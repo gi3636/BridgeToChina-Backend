@@ -37,9 +37,9 @@ public class DialogController {
 
     @ApiOperation("添加会话")
     @PostMapping("add")
-    public CommonResult<Dialog> add(@Validated @RequestBody DialogAddForm dialogAddForm) {
+    public CommonResult<DialogVO> add(@Validated @RequestBody DialogAddForm dialogAddForm) {
         Long userId = AuthHelper.getUserId();
-        Dialog result= dialogService.add(userId, dialogAddForm);
+        DialogVO result= dialogService.add(userId, dialogAddForm);
         return CommonResult.success(result);
     }
 

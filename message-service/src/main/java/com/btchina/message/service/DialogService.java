@@ -17,7 +17,7 @@ import com.btchina.message.model.vo.DialogVO;
  */
 public interface DialogService extends IService<Dialog> {
 
-    Dialog add(Long userId, DialogAddForm dialogAddForm);
+    DialogVO add(Long userId, DialogAddForm dialogAddForm);
 
     PageResult<DialogVO> getList(Long userId, PageQueryParam pageQueryParam);
 

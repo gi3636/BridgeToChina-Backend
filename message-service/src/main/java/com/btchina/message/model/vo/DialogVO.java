@@ -15,8 +15,10 @@ public class DialogVO {
 
     @ApiModelProperty("对方用户ID")
     private Long toUserId;
+
     @ApiModelProperty("对方用户昵称")
     private String toUserNickname;
+
     @ApiModelProperty("对方用户头像")
     private String toUserAvatar;
 

@@ -6,6 +6,7 @@ import com.btchina.core.api.PageQueryParam;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
+import com.btchina.entity.User;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.message.entity.Dialog;
 import com.btchina.message.entity.DialogUser;
@@ -42,7 +43,7 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
     private UserClient userClient;
 
     @Override
-    public Dialog add(Long userId, DialogAddForm dialogAddForm) {
+    public DialogVO add(Long userId, DialogAddForm dialogAddForm) {
         if (userId == null) {
             throw GlobalException.from(ResultCode.USER_NOT_LOGIN);
         }
@@ -51,11 +52,16 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
         queryWrapper.eq(DialogUser::getUserId, userId);
         queryWrapper.eq(DialogUser::getToUserId, dialogAddForm.getToUserId());
         DialogUser dialogUser = dialogUserService.getOne(queryWrapper);
+        User toUser = userClient.findById(dialogAddForm.getToUserId());
         if (dialogUser != null) {
-            Dialog dialog = this.getById(dialogUser.getDialogId());
-            if (dialog != null) {
-                return dialog;
-            }
+            DialogVO dialogVO = new DialogVO();
+            Dialog dialog = this.baseMapper.selectById(dialogUser.getDialogId());
+            BeanUtils.copyProperties(dialog, dialogVO);
+            BeanUtils.copyProperties(dialogUser, dialogVO);
+            dialogVO.setToUserAvatar(toUser.getAvatar());
+            dialogVO.setToUserNickname(toUser.getNickname());
+            dialogVO.setToUserId(toUser.getId());
+            return dialogVO;
         }
         Dialog dialog = new Dialog();
         dialog.setLastMsgId("0");
@@ -68,7 +74,14 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
             dialogUserService.add(userId, dialogAddForm.getToUserId(), dialog.getId());
             dialogUserService.add(dialogAddForm.getToUserId(), userId, dialog.getId());
         }
-        return dialog;
+        DialogUser dialogUser1 = dialogUserService.getOne(queryWrapper);
+        DialogVO dialogVO = new DialogVO();
+        BeanUtils.copyProperties(dialog, dialogVO);
+        BeanUtils.copyProperties(dialogUser1, dialogVO);
+        dialogVO.setToUserAvatar(toUser.getAvatar());
+        dialogVO.setToUserNickname(toUser.getNickname());
+        dialogVO.setToUserId(toUser.getId());
+        return dialogVO;
     }
 
     @Override
@@ -77,13 +90,16 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
         List<DialogUser> dialogUsers = dialogUserPage.getRecords();
         List<DialogVO> dialogVOList = new ArrayList<>();
         if (dialogUsers != null && dialogUsers.size() > 0) {
-            //获取回话
-            List<Long> toUserIds = dialogUsers.stream().map(DialogUser::getToUserId).collect(Collectors.toList());
+            //查询会话信息
+            List<Long> dialogIds = dialogUsers.stream().map(DialogUser::getDialogId).collect(Collectors.toList());
+            Map<Long, Dialog> dialogMap = this.baseMapper.selectBatchIds(dialogIds).stream().collect(Collectors.toMap(Dialog::getId, dialog -> dialog));
             //查询用户信息
+            List<Long> toUserIds = dialogUsers.stream().map(DialogUser::getToUserId).collect(Collectors.toList());
             Map<Long, UserVO> userVOMap = userClient.findByIds(toUserIds);
             //封装数据
             for (DialogUser dialogUser : dialogUsers) {
                 DialogVO dialogVO = new DialogVO();
+                BeanUtils.copyProperties(dialogMap.get(dialogUser.getDialogId()), dialogVO);
                 BeanUtils.copyProperties(dialogUser, dialogVO);
                 dialogVO.setToUserId(dialogUser.getToUserId());
                 dialogVO.setToUserAvatar(userVOMap.get(dialogUser.getToUserId()).getAvatar());
