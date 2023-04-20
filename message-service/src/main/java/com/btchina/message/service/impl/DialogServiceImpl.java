@@ -1,7 +1,11 @@
 package com.btchina.message.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.btchina.core.api.PageQueryParam;
+import com.btchina.core.api.PageResult;
+import com.btchina.core.api.ResultCode;
+import com.btchina.core.exception.GlobalException;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.message.entity.Dialog;
 import com.btchina.message.entity.DialogUser;
@@ -38,20 +42,39 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
     private UserClient userClient;
 
     @Override
-    public Boolean add(Long userId, DialogAddForm dialogAddForm) {
+    public Dialog add(Long userId, DialogAddForm dialogAddForm) {
+        if (userId == null) {
+            throw GlobalException.from(ResultCode.USER_NOT_LOGIN);
+        }
+        //判断是否已经存在会话
+        LambdaQueryWrapper<DialogUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DialogUser::getUserId, userId);
+        queryWrapper.eq(DialogUser::getToUserId, dialogAddForm.getToUserId());
+        DialogUser dialogUser = dialogUserService.getOne(queryWrapper);
+        if (dialogUser != null) {
+            Dialog dialog = this.getById(dialogUser.getDialogId());
+            if (dialog != null) {
+                return dialog;
+            }
+        }
         Dialog dialog = new Dialog();
+        dialog.setLastMsgId("0");
+        dialog.setChatType(1);
+        dialog.setMessageType(0);
+        dialog.setContent("");
         Boolean isSuccess = this.save(dialog);
         //绑定两个会话关系 一个是自己的 一个是对方的
         if (isSuccess) {
             dialogUserService.add(userId, dialogAddForm.getToUserId(), dialog.getId());
             dialogUserService.add(dialogAddForm.getToUserId(), userId, dialog.getId());
         }
-        return isSuccess;
+        return dialog;
     }
 
     @Override
-    public List<DialogVO> getList(Long userId, PageQueryParam pageQueryParam) {
-        List<DialogUser> dialogUsers = dialogUserService.getList(userId, pageQueryParam);
+    public PageResult<DialogVO> getList(Long userId, PageQueryParam pageQueryParam) {
+        Page<DialogUser> dialogUserPage = dialogUserService.getList(userId, pageQueryParam);
+        List<DialogUser> dialogUsers = dialogUserPage.getRecords();
         List<DialogVO> dialogVOList = new ArrayList<>();
         if (dialogUsers != null && dialogUsers.size() > 0) {
             //获取回话
@@ -68,7 +91,14 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
                 dialogVOList.add(dialogVO);
             }
         }
-        return dialogVOList;
+
+        PageResult<DialogVO> pageResult = new PageResult<>();
+        pageResult.setList(dialogVOList);
+        pageResult.setTotal(dialogUserPage.getTotal());
+        pageResult.setPageSize(pageQueryParam.getPageSize());
+        pageResult.setCurrentPage(pageQueryParam.getCurrentPage());
+        pageResult.setTotalPage((int) dialogUserPage.getPages());
+        return pageResult;
     }
 
     @Override

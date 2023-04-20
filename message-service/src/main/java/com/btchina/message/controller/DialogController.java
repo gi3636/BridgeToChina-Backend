@@ -3,7 +3,9 @@ package com.btchina.message.controller;
 
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.PageQueryParam;
+import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
+import com.btchina.message.entity.Dialog;
 import com.btchina.message.model.form.DialogAddForm;
 import com.btchina.message.model.vo.DialogVO;
 import com.btchina.message.service.DialogService;
@@ -16,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * <p>
@@ -37,20 +37,17 @@ public class DialogController {
 
     @ApiOperation("添加会话")
     @PostMapping("add")
-    public CommonResult<Void> add(@Validated @RequestBody DialogAddForm dialogAddForm) {
+    public CommonResult<Dialog> add(@Validated @RequestBody DialogAddForm dialogAddForm) {
         Long userId = AuthHelper.getUserId();
-        Boolean isSuccess= dialogService.add(userId, dialogAddForm);
-        if (!isSuccess){
-            return CommonResult.failed();
-        }
-        return CommonResult.success(null);
+        Dialog result= dialogService.add(userId, dialogAddForm);
+        return CommonResult.success(result);
     }
 
     @ApiOperation("获取会话列表")
     @PostMapping("list")
-    public CommonResult<List<DialogVO>> list(@Validated @RequestBody PageQueryParam pageQueryParam) {
+    public CommonResult<PageResult<DialogVO>> list(@Validated @RequestBody PageQueryParam pageQueryParam) {
         Long userId = AuthHelper.getUserId();
-        List<DialogVO> dialogVOList = dialogService.getList(userId, pageQueryParam);
+        PageResult<DialogVO> dialogVOList = dialogService.getList(userId, pageQueryParam);
         return CommonResult.success(dialogVOList);
     }
 

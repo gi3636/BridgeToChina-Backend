@@ -1,10 +1,9 @@
 package com.btchina.message.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.btchina.core.api.PageQueryParam;
 import com.btchina.message.entity.DialogUser;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * <p>
@@ -17,7 +16,7 @@ import java.util.List;
 public interface DialogUserService extends IService<DialogUser> {
     Boolean add(Long userId,Long toUserId, Long dialogId);
 
-    List<DialogUser> getList(Long userId, PageQueryParam pageQueryParam);
+    Page<DialogUser> getList(Long userId, PageQueryParam pageQueryParam);
 
     Boolean addUnreadCount(String dialogId, String receiverId);
 
