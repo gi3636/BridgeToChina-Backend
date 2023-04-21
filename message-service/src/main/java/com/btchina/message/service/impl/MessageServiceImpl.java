@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -64,8 +65,11 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
     public PageResult<MessageVO> query(Long userId, MessageQueryForm messageQueryForm) {
         LambdaQueryWrapper<Message> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Message::getDialogId, messageQueryForm.getDialogId());
+        queryWrapper.orderByDesc(Message::getCreatedTime);
         Page<Message> page = new Page<>(messageQueryForm.getCurrentPage(), messageQueryForm.getPageSize());
         List<Message> messageList = this.page(page, queryWrapper).getRecords();
+        //翻转顺序
+        messageList = messageList.stream().sorted(Comparator.comparing(Message::getCreatedTime)).collect(Collectors.toList());
         List<MessageVO> messageVOList = new ArrayList<>();
         if (messageList != null && messageList.size() > 0) {
             //获取用户信息

@@ -60,6 +60,13 @@ public class UserController {
         return userService.findByIds(ids);
     }
 
+    @ApiOperation(value = "获取多个用户信息")
+    @PostMapping("/getBatchUserInfo")
+    public CommonResult<Map<Long, UserVO>> getBatchUserInfo(@RequestBody List<Long> ids) {
+        Map<Long, UserVO> userVOMap = userService.findByIds(ids);
+        return CommonResult.success(userVOMap);
+    }
+
 
     @ApiOperation(value = "编辑用户信息")
     @PostMapping("/edit")
