@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -38,14 +40,15 @@ public class Message implements Serializable {
     @ApiModelProperty("会话ID")
     private Long dialogId;
 
-    @ApiModelProperty("消息ID(前端消息ID)")
-    private String msgId;
-
     @ApiModelProperty("发送者ID")
     private Long senderId;
 
     @ApiModelProperty("接收者ID")
     private Long receiverId;
+
+    @ApiModelProperty("消息ID(前端消息ID)")
+    private String msgId;
+
 
     @ApiModelProperty("聊天类型 1是私聊 2是群聊")
     private Integer chatType;

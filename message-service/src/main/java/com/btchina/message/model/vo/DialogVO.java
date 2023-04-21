@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.Date;
 
@@ -21,6 +22,9 @@ public class DialogVO {
 
     @ApiModelProperty("对方用户头像")
     private String toUserAvatar;
+
+    @ApiModelProperty("对话ID")
+    private Long dialogId;
 
     @ApiModelProperty("聊天类型 1是私聊 2是群聊")
     private Integer chatType;

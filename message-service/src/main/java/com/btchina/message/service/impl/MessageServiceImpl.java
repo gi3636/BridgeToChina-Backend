@@ -2,13 +2,12 @@ package com.btchina.message.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.feign.clients.UserClient;
 import com.btchina.message.constant.DialogConstant;
 import com.btchina.message.constant.MessageConstant;
-import com.btchina.message.entity.Dialog;
-import com.btchina.message.entity.DialogUser;
 import com.btchina.message.entity.Message;
 import com.btchina.message.mapper.MessageMapper;
 import com.btchina.message.model.form.MessageQueryForm;
@@ -62,7 +61,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
     }
 
     @Override
-    public List<MessageVO> query(Long userId, MessageQueryForm messageQueryForm) {
+    public PageResult<MessageVO> query(Long userId, MessageQueryForm messageQueryForm) {
         LambdaQueryWrapper<Message> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Message::getDialogId, messageQueryForm.getDialogId());
         Page<Message> page = new Page<>(messageQueryForm.getCurrentPage(), messageQueryForm.getPageSize());
@@ -86,19 +85,29 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
                 return messageVO;
             }).collect(Collectors.toList());
         }
-        return messageVOList;
+
+        PageResult<MessageVO> pageResult = new PageResult<>();
+        pageResult.setTotal(page.getTotal());
+        pageResult.setList(messageVOList);
+        pageResult.setPageSize(messageQueryForm.getPageSize());
+        pageResult.setCurrentPage(messageQueryForm.getCurrentPage());
+        pageResult.setTotalPage((int) page.getPages());
+        return pageResult;
     }
 
     @Override
     public Boolean add(ChatMessage chatMessage) {
         Message message = new Message();
         BeanUtils.copyProperties(chatMessage, message);
+        message.setIsRead(false);
+        message.setSigned(false);
+        message.setDialogId(chatMessage.getDialogId());
         //根据消息类型设置消息内容 例如图片消息，内容为 【图片】
         message.setContent(convertMessageContent(message));
         //调整对话未读消息数
         dialogUserService.addUnreadCount(chatMessage.getDialogId(), chatMessage.getReceiverId());
         //调整最后一条消息
-        dialogService.updateLastMessage(chatMessage.getDialogId(), chatMessage.getMsgId(), message.getContent());
+        dialogService.updateLastMessage(chatMessage.getDialogId(), chatMessage.getMsgId(), message.getContent(),message.getMessageType());
         return this.save(message);
     }
 

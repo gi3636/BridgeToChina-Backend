@@ -2,6 +2,7 @@ package com.btchina.message.netty.handler;
 
 
 import com.btchina.core.util.JsonUtils;
+import com.btchina.message.config.ApplicationContextProvider;
 import com.btchina.message.constant.MessageConstant;
 import com.btchina.message.enums.MessageActionEnum;
 import com.btchina.message.model.send.ChatMessage;
@@ -24,18 +25,20 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Objects;
 
 
 @Slf4j
-@Component
 @ChannelHandler.Sharable
+@Component
 public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     private static final ByteBuf HEARTBEAT_SEQUENCE = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("pong", CharsetUtil.UTF_8));
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    //@Autowired
+    //private RabbitTemplate rabbitTemplate;
 
+    private RabbitTemplate rabbitTemplate = ApplicationContextProvider.getApplicationContext().getBean(RabbitTemplate.class);
     @Autowired
     private MessageService messageService;
     /**
@@ -65,11 +68,12 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
         DataContent dataContent = JsonUtils.jsonToPojo(content, DataContent.class);
         assert dataContent != null;
         MessageActionEnum action = MessageActionEnum.getMessageActionEnum(dataContent.getAction());
+        log.info("接收到消息: {}", dataContent);
         // 判断消息类型，根据不同的类型来处理不同的业务
         switch (action) {
             case CONNECT:
                 // 1.第一次(或重连)初始化连接
-                String senderId = dataContent.getChatMsg().getSenderId();
+                String senderId = String.valueOf(dataContent.getChatMsg().getSenderId());
                 UserConnectPool.getChannelMap().put(senderId, channel);
                 // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
                 AttributeKey<String> key = AttributeKey.valueOf("userId");
@@ -79,11 +83,11 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
             case CHAT:
                 // 2.聊天消息，把聊天记录保存到数据库，同时标记消息的签收状态[未签收]
                 ChatMsg chatMsg = dataContent.getChatMsg();
-                String receiverId = chatMsg.getReceiverId();
+                String receiverId = String.valueOf(chatMsg.getReceiverId());
                 Channel receiverChannel = UserConnectPool.getChannelMap().get(receiverId);
                 ChatMessage sendMsg = new ChatMessage();
                 BeanUtils.copyProperties(chatMsg, sendMsg);
-                if (Objects.nonNull(receiverChannel)) {
+                if (Objects.nonNull(receiverChannel))        {
                     // 当receiverChannel不为空的时候，从ChannelGroup当中查找对应的channel是否存在
                     Channel findChannel = UserConnectPool.getChannelGroup().find(receiverChannel.id());
                     if (Objects.nonNull(findChannel)) {
@@ -113,11 +117,8 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
 
             case PULL_FRIEND:
                 // 5.拉取好友
-
                 break;
-
         }
-
     }
 
     @Override
@@ -130,6 +131,8 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.info("ctx", ctx);
+        log.info("异常：{}", cause);
         //打印异常
         log.info("异常：{}", cause.getMessage());
         // 删除通道

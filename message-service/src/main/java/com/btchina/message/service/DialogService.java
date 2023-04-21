@@ -21,5 +21,5 @@ public interface DialogService extends IService<Dialog> {
 
     PageResult<DialogVO> getList(Long userId, PageQueryParam pageQueryParam);
 
-    Boolean updateLastMessage(String dialogId, String msgId, String content);
+    Boolean updateLastMessage(Long dialogId, String msgId, String content, Integer messageType);
 }

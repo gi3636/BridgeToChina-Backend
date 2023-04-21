@@ -2,6 +2,7 @@ package com.btchina.message.controller;
 
 
 import com.btchina.core.api.CommonResult;
+import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
 import com.btchina.message.model.form.MessageQueryForm;
 import com.btchina.message.model.form.MessageReadForm;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * <p>
@@ -37,9 +36,9 @@ public class MessageController {
 
     @ApiOperation("获取消息列表")
     @PostMapping("list")
-    public CommonResult<List<MessageVO>> list(@Validated @RequestBody MessageQueryForm messageQueryForm) {
+    public CommonResult<PageResult<MessageVO>> list(@Validated @RequestBody MessageQueryForm messageQueryForm) {
         Long userId = AuthHelper.getUserId();
-        List<MessageVO> messageVOList = messageService.query(userId, messageQueryForm);
+        PageResult<MessageVO> messageVOList = messageService.query(userId, messageQueryForm);
         return CommonResult.success(messageVOList);
     }
 
@@ -53,8 +52,6 @@ public class MessageController {
         }
         return CommonResult.success(null);
     }
-
-
 
 }
 

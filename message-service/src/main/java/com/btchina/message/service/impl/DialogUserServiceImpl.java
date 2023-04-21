@@ -27,6 +27,7 @@ public class DialogUserServiceImpl extends ServiceImpl<DialogUserMapper, DialogU
         dialogUser.setDialogId(dialogId);
         dialogUser.setUserId(userId);
         dialogUser.setToUserId(toUserId);
+        dialogUser.setUnreadCount(0);
         return this.save(dialogUser);
     }
 
@@ -40,7 +41,7 @@ public class DialogUserServiceImpl extends ServiceImpl<DialogUserMapper, DialogU
     }
 
     @Override
-    public Boolean addUnreadCount(String dialogId, String receiverId) {
+    public Boolean addUnreadCount(Long dialogId, Long receiverId) {
         LambdaQueryWrapper<DialogUser> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(DialogUser::getDialogId, dialogId);
         queryWrapper.eq(DialogUser::getUserId, receiverId);

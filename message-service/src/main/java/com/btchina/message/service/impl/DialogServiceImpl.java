@@ -118,13 +118,14 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
     }
 
     @Override
-    public Boolean updateLastMessage(String dialogId, String msgId, String content) {
+    public Boolean updateLastMessage(Long dialogId, String msgId, String content, Integer messageType) {
         LambdaQueryWrapper<Dialog> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Dialog::getId, dialogId);
         Dialog dialog = this.getOne(queryWrapper);
         if (dialog != null) {
             dialog.setLastMsgId(msgId);
             dialog.setContent(content);
+            dialog.setMessageType(messageType);
             return this.updateById(dialog);
         }
         return false;

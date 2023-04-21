@@ -9,10 +9,13 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.checkerframework.checker.units.qual.C;
+import org.springframework.stereotype.Component;
 
 /**
  * 定义worker端的处理器
  */
+@Component
 public class ServerHandler extends ChannelInitializer<SocketChannel> {
 
     /**

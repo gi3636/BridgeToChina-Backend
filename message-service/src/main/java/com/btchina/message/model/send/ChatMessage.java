@@ -24,11 +24,11 @@ public class ChatMessage implements Serializable {
     @ApiModelProperty("数据类型 1是聊天消息")
     final private Integer dataType = 2;
     @ApiModelProperty("对话ID")
-    private String dialogId;
+    private Long dialogId;
     @ApiModelProperty("发送者ID")
-    private String senderId;
+    private Long senderId;
     @ApiModelProperty("接收者ID")
-    private String receiverId;
+    private Long receiverId;
     @ApiModelProperty("消息内容")
     private String content;
     @ApiModelProperty("消息ID(前端消息ID)")

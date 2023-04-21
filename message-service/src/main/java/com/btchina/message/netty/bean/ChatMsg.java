@@ -12,11 +12,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ChatMsg implements Serializable {
     @ApiModelProperty("对话ID")
-    private String dialogId;
+    private Long dialogId;
     @ApiModelProperty("发送者ID")
-    private String senderId;
+    private Long senderId;
     @ApiModelProperty("接收者ID")
-    private String receiverId;
+    private Long receiverId;
     @ApiModelProperty("消息内容")
     private String content;
     @ApiModelProperty("消息ID(前端消息ID)")
