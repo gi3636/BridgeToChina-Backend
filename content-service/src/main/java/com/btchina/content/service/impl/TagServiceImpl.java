@@ -102,7 +102,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public String autoComplete(String text) {
         String API_KEY = openAiSecret;
-        String prompt = "请根据以下句子给出5个相关标签,返回结果用逗号分割:\n" + text;
+        String prompt = "请根据以下句子给出5个相关标签，用逗号分隔返回结果:\n" + text;
         String model = "text-davinci-003";
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", model);

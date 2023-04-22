@@ -2,6 +2,7 @@ package com.btchina.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.btchina.content.service.*;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
@@ -10,7 +11,6 @@ import com.btchina.entity.User;
 import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.TagClient;
 import com.btchina.feign.clients.UserClient;
-import com.btchina.model.form.tag.AddTagForm;
 import com.btchina.model.form.tag.EditQuestionTagForm;
 import com.btchina.model.vo.answer.AnswerVO;
 import com.btchina.content.constant.QuestionConstant;
@@ -24,10 +24,6 @@ import com.btchina.content.model.doc.QuestionDoc;
 import com.btchina.content.model.enums.QueryTypeEnum;
 import com.btchina.content.model.form.*;
 import com.btchina.model.vo.question.QuestionVO;
-import com.btchina.content.service.AnswerService;
-import com.btchina.content.service.QuestionService;
-import com.btchina.content.service.QuestionUserFavoriteService;
-import com.btchina.content.service.QuestionUserLikeService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -103,6 +99,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Autowired
     private AnswerService answerService;
 
+    @Autowired
+    private TagService tagService;
+
     @Value("${secret.openai}")
     private String openAiSecret;
     private static final OkHttpClient client = new OkHttpClient();
@@ -134,7 +133,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         AddTagForm addTagForm = new AddTagForm();
         addTagForm.setId(question.getId());
         addTagForm.setTags(addQuestionForm.getTags());
-        tagClient.addTag(addTagForm);
+        tagService.addTag(addTagForm);
 
         // 3. 添加es文档
         QuestionDoc questionDoc = new QuestionDoc();
@@ -540,7 +539,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public String generateTitle(String text) {
         String API_KEY = openAiSecret;
-        String prompt = "根据以下内容生成一个问题标题，#问题标题# 以这样的形式返回结果:\n" + text;
+        String prompt = "请根据以下内容生成一个问题标题：\n" + text + "\n标题格式：#问题标题#";
         String model = "text-davinci-003";
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", model);
