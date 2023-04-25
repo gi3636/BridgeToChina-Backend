@@ -50,6 +50,20 @@ spring:
             - Path=/comment/**
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
+        # 类别服务
+        - id: content-service
+          uri: lb://content-service
+          predicates:
+            - Path=/category/**
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
+        # 资讯服务
+        - id: content-service
+          uri: lb://content-service
+          predicates:
+            - Path=/news/**
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
         # 文件服务
         - id: file-service
           uri: lb://file-service
