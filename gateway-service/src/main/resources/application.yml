@@ -8,70 +8,26 @@ spring:
   cloud:
     gateway:
       routes:
-        # 注册登录服务
         - id: auth-service
           uri: lb://user-service
-          predicates: #路由断言，判断请求是否符合规则
-            - Path=/auth/**  # 判断请求路径
-          filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 用户服务
+          predicates:
+            - Path=/auth/**
         - id: user-service
           uri: lb://user-service
-          predicates: #路由断言，判断请求是否符合规则
-            - Path=/user/**  # 判断请求路径
-          filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 问题服务
+          predicates:
+            - Path=/user/**
         - id: content-service
           uri: lb://content-service
           predicates:
-            - Path=/question/**
+            - Path=/question/**,/tag/**,/answer/**,/comment/**,/category/**,/news/**
           filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 标签服务
-        - id: content-service
-          uri: lb://content-service
-          predicates:
-            - Path=/tag/**
-          filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 回答服务
-        - id: content-service
-          uri: lb://content-service
-          predicates:
-            - Path=/answer/**
-          filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 评论服务
-        - id: content-service
-          uri: lb://content-service
-          predicates:
-            - Path=/comment/**
-          filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 类别服务
-        - id: content-service
-          uri: lb://content-service
-          predicates:
-            - Path=/category/**
-          filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 资讯服务
-        - id: content-service
-          uri: lb://content-service
-          predicates:
-            - Path=/news/**
-          filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 文件服务
+            - name: IgnoreGlobalFilter
         - id: file-service
           uri: lb://file-service
           predicates:
             - Path=/file/**
           filters:
-            - name: IgnoreGlobalFilter  # 忽略全局过滤器
-        # 消息服务
+            - name: IgnoreGlobalFilter
         - id: message-service
           uri: lb://message-service
           predicates:

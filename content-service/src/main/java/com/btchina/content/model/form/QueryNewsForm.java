@@ -13,6 +13,6 @@ public class QueryNewsForm extends PageQueryParam {
     @ApiModelProperty(value = "分类ID")
     private Long categoryId;
 
-    @ApiModelProperty(value = "查询类型 1:热门 2:最新 ", required = true, example = "1")
+    @ApiModelProperty(value = "查询类型 1:热门 2:最新 3:置顶 ", required = true, example = "1")
     private Integer type;
 }

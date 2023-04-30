@@ -47,7 +47,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
                 queryWrapper.orderByDesc(News::getCreatedTime);
                 break;
             case 3:
-                queryWrapper.orderByDesc(News::getLikeCount);
+                queryWrapper.eq(News::getIsTop,1);
                 break;
         }
         Page<News> page = new Page<>(queryNewsForm.getCurrentPage(), queryNewsForm.getPageSize());
@@ -59,5 +59,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         pageResult.setTotal(newsPage.getTotal());
         pageResult.setTotalPage((int) newsPage.getPages());
         return pageResult;
+    }
+
+    @Override
+    public News getNewsDetail(Long id) {
+        return baseMapper.selectById(id);
     }
 }

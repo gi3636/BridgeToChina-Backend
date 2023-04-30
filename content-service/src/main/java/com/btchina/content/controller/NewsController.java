@@ -11,11 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -49,6 +45,13 @@ public class NewsController {
     @PostMapping("/list")
     public CommonResult<PageResult<News>> list(@Validated @RequestBody QueryNewsForm queryNewsForm) {
         PageResult<News> result = newsService.query(queryNewsForm);
+        return CommonResult.success(result);
+    }
+
+    @ApiOperation(value = "获取资讯详情")
+    @GetMapping("/detail/{id}")
+    public CommonResult<News> detail(@PathVariable("id") Long id) {
+        News result = newsService.getNewsDetail(id);
         return CommonResult.success(result);
     }
 

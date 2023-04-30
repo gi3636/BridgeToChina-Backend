@@ -19,4 +19,6 @@ public interface NewsService extends IService<News> {
     Boolean add(AddNewsForm addNewsForm);
 
     PageResult<News> query(QueryNewsForm queryNewsForm);
+
+    News getNewsDetail(Long id);
 }

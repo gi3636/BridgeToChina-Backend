@@ -25,4 +25,6 @@ spring:
             refresh: true
           - data-id: secret.yaml
             refresh: true
+          - data-id: datasource.yaml
+            refresh: true
 
