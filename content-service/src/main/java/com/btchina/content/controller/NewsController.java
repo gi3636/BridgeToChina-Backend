@@ -30,15 +30,7 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @ApiOperation(value = "发布资讯")
-    @PostMapping("/add")
-    public CommonResult<Void> add(@Validated @RequestBody AddNewsForm addNewsForm) {
-        Boolean isSuccess = newsService.add(addNewsForm);
-        if (!isSuccess) {
-            return CommonResult.failed();
-        }
-        return CommonResult.success(null);
-    }
+
 
 
     @ApiOperation(value = "获取资讯列表")

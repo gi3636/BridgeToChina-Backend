@@ -34,6 +34,12 @@ spring:
             - Path=/message/**
           filters:
             - name: IgnoreGlobalFilter  # 忽略全局过滤器
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin/**
+          filters:
+            - name: IgnoreGlobalFilter  # 忽略全局过滤器
       globalcors:
         add-to-simple-url-handler-mapping: true # 放行options请求
         cors-configurations:
