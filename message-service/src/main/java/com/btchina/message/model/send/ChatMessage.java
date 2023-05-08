@@ -1,5 +1,6 @@
 package com.btchina.message.model.send;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -21,7 +22,7 @@ import java.io.Serializable;
 public class ChatMessage implements Serializable {
 
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty("数据类型 1是聊天消息")
+    @ApiModelProperty("数据类型 1是回执消息，2是聊天消息 3是pong消息")
     final private Integer dataType = 2;
     @ApiModelProperty("对话ID")
     private Long dialogId;
@@ -35,6 +36,7 @@ public class ChatMessage implements Serializable {
     private String msgId;
     @ApiModelProperty("聊天类型 1是私聊 2是群聊")
     private Integer chatType;
+    @ApiModelProperty("消息类型 1是文本 2是图片 ")
     private Integer messageType;
 
 }

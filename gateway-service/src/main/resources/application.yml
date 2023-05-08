@@ -12,6 +12,8 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/auth/**
+          filters:
+            - name: IgnoreGlobalFilter
         - id: user-service
           uri: lb://user-service
           predicates:

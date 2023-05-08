@@ -6,6 +6,7 @@ import com.btchina.message.config.ApplicationContextProvider;
 import com.btchina.message.constant.MessageConstant;
 import com.btchina.message.enums.MessageActionEnum;
 import com.btchina.message.model.send.ChatMessage;
+import com.btchina.message.model.send.PongMessage;
 import com.btchina.message.netty.UserConnectPool;
 import com.btchina.message.netty.bean.ChatMsg;
 import com.btchina.message.netty.bean.DataContent;
@@ -78,7 +79,9 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
                 // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
                 AttributeKey<String> key = AttributeKey.valueOf("userId");
                 ctx.channel().attr(key).setIfAbsent(senderId);
-                ctx.writeAndFlush(new TextWebSocketFrame("连接成功"));
+                PongMessage pongMessage = new PongMessage();
+                pongMessage.setContent("连接成功");
+                ctx.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(pongMessage)));
                 break;
             case CHAT:
                 // 2.聊天消息，把聊天记录保存到数据库，同时标记消息的签收状态[未签收]
@@ -112,7 +115,9 @@ public class ServerListenerHandler extends SimpleChannelInboundHandler<TextWebSo
             case KEEPALIVE:
                 // 4.心跳类型的消息
                 log.info("收到来自channel为[{}]的心跳包...", ctx.channel().id());
-                ctx.writeAndFlush(new TextWebSocketFrame(HEARTBEAT_SEQUENCE.duplicate()));
+                PongMessage pong = new PongMessage();
+                pong.setContent("pong");
+                ctx.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(pong)));
                 break;
 
             case PULL_FRIEND:
