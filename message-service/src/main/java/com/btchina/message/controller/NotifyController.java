@@ -5,6 +5,8 @@ import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
 import com.btchina.message.model.form.NotifyQueryForm;
+import com.btchina.message.model.form.NotifyReadAllForm;
+import com.btchina.message.model.form.NotifyReadForm;
 import com.btchina.message.model.vo.NotifyVO;
 import com.btchina.model.form.message.NotifyAddForm;
 import com.btchina.message.service.NotifyService;
@@ -49,6 +51,29 @@ public class NotifyController {
         Long userId = AuthHelper.getUserId();
         PageResult<NotifyVO> result = notifyService.list(userId, notifyQueryForm);
         return CommonResult.success(result);
+    }
+
+    @ApiOperation("已读通知")
+    @PostMapping("/read")
+    public CommonResult<Void> read(@Validated @RequestBody NotifyReadForm notifyReadForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean result = notifyService.read(userId, notifyReadForm);
+        if (!result) {
+            return CommonResult.failed("已读失败");
+        }
+        return CommonResult.success(null);
+    }
+
+
+    @ApiOperation("已读全部通知")
+    @PostMapping("/readAll")
+    public CommonResult<Void> read(@Validated @RequestBody NotifyReadAllForm notifyReadAllForm) {
+        Long userId = AuthHelper.getUserId();
+        Boolean result = notifyService.readAll(userId, notifyReadAllForm);
+        if (!result) {
+            return CommonResult.failed("已读失败");
+        }
+        return CommonResult.success(null);
     }
 }
 

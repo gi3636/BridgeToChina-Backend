@@ -1,6 +1,7 @@
 package com.btchina.message.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
@@ -11,6 +12,8 @@ import com.btchina.message.constant.NotifyConstant;
 import com.btchina.message.entity.Notify;
 import com.btchina.message.mapper.NotifyMapper;
 import com.btchina.message.model.form.NotifyQueryForm;
+import com.btchina.message.model.form.NotifyReadAllForm;
+import com.btchina.message.model.form.NotifyReadForm;
 import com.btchina.message.model.vo.NotifyVO;
 import com.btchina.model.enums.ActionEnum;
 import com.btchina.model.enums.ObjectEnum;
@@ -25,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +52,7 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
 
     @Autowired
     private QuestionClient questionClient;
+
     @Override
     public Boolean add(NotifyAddForm notifyAddForm) {
         Notify notify = new Notify();
@@ -122,6 +127,46 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
         pageResult.setCurrentPage(notifyQueryForm.getCurrentPage());
         pageResult.setPageSize(notifyQueryForm.getPageSize());
         return pageResult;
+    }
+
+    @Override
+    public Boolean read(Long userId, NotifyReadForm notifyReadForm) {
+        if (userId == null) {
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
+        }
+        LambdaQueryWrapper<Notify> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Notify::getId, notifyReadForm.getId());
+        Notify notify = this.baseMapper.selectOne(queryWrapper);
+        if (notify == null) {
+            throw GlobalException.from(ResultCode.NOTIFY_NOT_EXIST);
+        }
+        //判断是否有权限修改
+        if (!notify.getReceiverId().equals(userId)) {
+            throw GlobalException.from(ResultCode.FORBIDDEN);
+        }
+        notify.setIsRead(true);
+        notify.setReadTime(new Date());
+        this.baseMapper.updateById(notify);
+        return true;
+    }
+
+    @Override
+    public Boolean readAll(Long userId, NotifyReadAllForm notifyReadAllForm) {
+        if (userId == null) {
+            throw GlobalException.from(ResultCode.UNAUTHORIZED);
+        }
+        LambdaQueryWrapper<Notify> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Notify::getReceiverId, userId);
+        List<Notify> notifies = this.baseMapper.selectList(queryWrapper);
+        if (!notifies.get(0).getReceiverId().equals(userId)) {
+            throw GlobalException.from(ResultCode.FORBIDDEN);
+        }
+        for (Notify notify : notifies) {
+            notify.setIsRead(true);
+            notify.setReadTime(new Date());
+        }
+        this.baseMapper.batchUpdate(notifies,true,new Date());
+        return true;
     }
 
 

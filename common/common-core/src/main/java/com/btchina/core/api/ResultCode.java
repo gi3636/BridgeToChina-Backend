@@ -36,7 +36,8 @@ public enum ResultCode implements IErrorCode {
     /**
      * 消息相关
      */
-    MESSAGE_NOT_EXIST(20300, "消息不存在");
+    MESSAGE_NOT_EXIST(20300, "消息不存在"),
+    NOTIFY_NOT_EXIST(20400, "通知不存在");
 
 
     private long code;
