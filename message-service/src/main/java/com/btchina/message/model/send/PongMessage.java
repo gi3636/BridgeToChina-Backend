@@ -21,7 +21,7 @@ import java.io.Serializable;
 public class PongMessage implements Serializable {
 
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty("数据类型 1是回执消息，2是聊天消息 3是pong消息")
+    @ApiModelProperty(" 1是回执消息，2是聊天消息 3是pong消息 4是通知消息")
     final private Integer dataType = 3;
     @ApiModelProperty("消息内容")
     private String content;

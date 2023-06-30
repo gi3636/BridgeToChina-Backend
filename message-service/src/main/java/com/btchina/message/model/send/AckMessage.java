@@ -18,7 +18,7 @@ import lombok.*;
 public class AckMessage implements Serializable {
 
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty("数据类型 1是回执消息，2是聊天消息 3是pong消息")
+    @ApiModelProperty(" 1是回执消息，2是聊天消息 3是pong消息 4是通知消息")
     final private Integer dataType = 1;
 
     @ApiModelProperty("消息ID(前端消息ID)")

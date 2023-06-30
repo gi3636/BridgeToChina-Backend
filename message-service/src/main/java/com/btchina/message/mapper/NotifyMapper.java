@@ -17,5 +17,5 @@ import java.util.List;
  */
 public interface NotifyMapper extends BaseMapper<Notify> {
 
-    void batchUpdate(List<Notify> notifies, @Param("isRead")Boolean isRead,@Param("readTime") Date readTime);
+    void batchUpdate(List<Notify> notifies, @Param("isRead") Boolean isRead, @Param("readTime") Date readTime);
 }

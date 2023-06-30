@@ -22,6 +22,7 @@ import com.btchina.message.service.NotifyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.model.vo.question.QuestionVO;
 import com.btchina.model.vo.user.UserVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ import java.util.Map;
  * @since 2023-03-30
  */
 @Service
+@Slf4j
 public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> implements NotifyService {
 
 
@@ -63,14 +65,15 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
         queryWrapper.eq(Notify::getObjectType, notifyAddForm.getObjectType());
         queryWrapper.eq(Notify::getObjectId, notifyAddForm.getObjectId());
         Notify notifyDb = this.getOne(queryWrapper);
+        log.info("notifyDb:{}", notifyDb);
         // 如果存在则不保存
-        if (notifyDb == null) {
+        if (notifyDb != null) {
             return false;
         }
         // 保存到数据库
         Boolean isSuccess = this.save(notify);
+        // 发送消息通知
         if (isSuccess) {
-            // 发送到消息队列
             rabbitTemplate.convertAndSend(NotifyConstant.EXCHANGE_NAME, NotifyConstant.PUSH_KEY, notify);
         }
 

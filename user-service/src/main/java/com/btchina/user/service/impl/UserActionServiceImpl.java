@@ -52,6 +52,16 @@ public class UserActionServiceImpl extends ServiceImpl<UserActionMapper, UserAct
     public Boolean add(UserActionForm userActionForm) {
         UserAction userAction = new UserAction();
         BeanUtils.copyProperties(userActionForm, userAction);
+        //查询是否已经存在
+        LambdaQueryWrapper<UserAction> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserAction::getUserId, userActionForm.getUserId());
+        queryWrapper.eq(UserAction::getObjectId, userActionForm.getObjectId());
+        queryWrapper.eq(UserAction::getObjectType, userActionForm.getObjectType());
+        queryWrapper.eq(UserAction::getActionType, userActionForm.getActionType());
+        UserAction userActionDb= this.getOne(queryWrapper);
+        if (userActionDb != null) {
+            return true;
+        }
         Boolean isSuccess = this.save(userAction);
         if (isSuccess) {
             //对象类型是问题

@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class ChatMessage implements Serializable {
 
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty("数据类型 1是回执消息，2是聊天消息 3是pong消息")
+    @ApiModelProperty(" 1是回执消息，2是聊天消息 3是pong消息 4是通知消息")
     final private Integer dataType = 2;
     @ApiModelProperty("对话ID")
     private Long dialogId;
