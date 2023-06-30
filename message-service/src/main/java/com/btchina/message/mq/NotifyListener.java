@@ -5,7 +5,9 @@ import com.btchina.core.util.JsonUtils;
 import com.btchina.message.constant.NotifyConstant;
 import com.btchina.message.entity.Notify;
 import com.btchina.message.model.send.NotificationMessage;
+import com.btchina.message.model.vo.NotifyVO;
 import com.btchina.message.netty.UserConnectPool;
+import com.btchina.message.service.NotifyService;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +17,19 @@ import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
 @Component
 public class NotifyListener {
 
+    @Autowired
+    private NotifyService notifyService;
 
     @RabbitListener(bindings = @QueueBinding(
             exchange = @Exchange(name = NotifyConstant.EXCHANGE_NAME, type = ExchangeTypes.TOPIC),
@@ -37,7 +44,10 @@ public class NotifyListener {
             Channel findChannel = UserConnectPool.getChannelGroup().find(receiverChannel.id());
             if (Objects.nonNull(findChannel)) {
                 NotificationMessage notificationMessage = new NotificationMessage();
-                BeanUtils.copyProperties(notify, notificationMessage);
+                List<Notify> notifyList = new ArrayList<>();
+                notifyList.add(notify);
+                List<NotifyVO> notifyVOS =  notifyService.convertToNotifyVOList(notifyList);
+                notificationMessage.setNotifyVO(notifyVOS.get(0));
                 // 用户在线
                 receiverChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(notificationMessage)));
             }

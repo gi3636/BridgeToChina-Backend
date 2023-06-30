@@ -94,11 +94,28 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
             queryWrapper.eq(Notify::getChannelType, notifyQueryForm.getChannelType());
         }
 
-
         Page<Notify> page = new Page<>(notifyQueryForm.getCurrentPage(), notifyQueryForm.getPageSize());
         Page<Notify> notifyPage = this.page(page, queryWrapper);
         PageResult<NotifyVO> pageResult = new PageResult<>();
         List<Notify> notifyList = notifyPage.getRecords();
+
+        // 转换为NotifyVO列表
+        List<NotifyVO> notifyVOList = convertToNotifyVOList(notifyList);
+
+        // 设置分页信息
+        pageResult.setTotal(notifyPage.getTotal());
+        pageResult.setList(notifyVOList);
+        pageResult.setTotalPage((int) notifyPage.getPages());
+        pageResult.setCurrentPage(notifyQueryForm.getCurrentPage());
+        pageResult.setPageSize(notifyQueryForm.getPageSize());
+        return pageResult;
+    }
+
+    /**
+     * 转换通知内容
+     */
+    @Override
+    public List<NotifyVO> convertToNotifyVOList(List<Notify> notifyList) {
         List<NotifyVO> notifyVOList = new ArrayList<>();
         //获取用户信息
         List<Long> userIds = new ArrayList<>();
@@ -123,14 +140,40 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
             notifyVO.setQuestion(questionVOMap.get(notify.getObjectId()));
             notifyVOList.add(notifyVO);
         }
-        // 设置分页信息
-        pageResult.setTotal(notifyPage.getTotal());
-        pageResult.setList(notifyVOList);
-        pageResult.setTotalPage((int) notifyPage.getPages());
-        pageResult.setCurrentPage(notifyQueryForm.getCurrentPage());
-        pageResult.setPageSize(notifyQueryForm.getPageSize());
-        return pageResult;
+        return notifyVOList;
     }
+
+    public String convertNotifyContent(NotifyVO notify) {
+        String content = "";
+        switch (ObjectEnum.geObjectEnum(notify.getObjectType())) {
+            case QUESTION:
+                switch (ActionEnum.getActionEnum(notify.getActionType())) {
+                    case ANSWER:
+                        content = notify.getSenderName() + "回答了你的问题";
+                        break;
+                    case FAVORITE:
+                        content = notify.getSenderName() + "收藏了你的问题";
+                        break;
+                    case LIKE:
+                        content = notify.getSenderName() + "赞了你的问题";
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case USER:
+                switch (ActionEnum.getActionEnum(notify.getActionType())) {
+                    case FOLLOW:
+                        content = notify.getSenderName() + "关注了你";
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
+        return content;
+    }
+
 
     @Override
     public Boolean read(Long userId, NotifyReadForm notifyReadForm) {
@@ -173,34 +216,6 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
     }
 
 
-    public String convertNotifyContent(NotifyVO notify) {
-        String content = "";
-        switch (ObjectEnum.geObjectEnum(notify.getObjectType())) {
-            case QUESTION:
-                switch (ActionEnum.getActionEnum(notify.getActionType())) {
-                    case ANSWER:
-                        content = notify.getSenderName() + "回答了你的问题";
-                        break;
-                    case FAVORITE:
-                        content = notify.getSenderName() + "收藏了你的问题";
-                        break;
-                    case LIKE:
-                        content = notify.getSenderName() + "赞了你的问题";
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case USER:
-                switch (ActionEnum.getActionEnum(notify.getActionType())) {
-                    case FOLLOW:
-                        content = notify.getSenderName() + "关注了你";
-                        break;
-                    default:
-                        break;
-                }
-                break;
-        }
-        return content;
-    }
+
+
 }

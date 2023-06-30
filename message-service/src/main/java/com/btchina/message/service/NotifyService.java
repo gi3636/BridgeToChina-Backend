@@ -9,6 +9,8 @@ import com.btchina.message.model.form.NotifyReadForm;
 import com.btchina.message.model.vo.NotifyVO;
 import com.btchina.model.form.message.NotifyAddForm;
 
+import java.util.List;
+
 /**
  * <p>
  * 消息通知表 服务类
@@ -26,4 +28,6 @@ public interface NotifyService extends IService<Notify> {
     Boolean read(Long userId, NotifyReadForm notifyReadForm);
 
     Boolean readAll(Long userId, NotifyReadAllForm notifyReadAllForm);
+
+    List<NotifyVO> convertToNotifyVOList(List<Notify> notifyList);
 }
