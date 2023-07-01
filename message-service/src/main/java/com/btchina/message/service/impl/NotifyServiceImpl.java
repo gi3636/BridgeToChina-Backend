@@ -28,10 +28,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -93,6 +90,8 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
         if (notifyQueryForm.getChannelType() != null) {
             queryWrapper.eq(Notify::getChannelType, notifyQueryForm.getChannelType());
         }
+        // 按照时间倒序
+        queryWrapper.orderByDesc(Notify::getCreatedTime);
 
         Page<Notify> page = new Page<>(notifyQueryForm.getCurrentPage(), notifyQueryForm.getPageSize());
         Page<Notify> notifyPage = this.page(page, queryWrapper);
@@ -201,9 +200,12 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> impleme
         if (userId == null) {
             throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
-        LambdaQueryWrapper<Notify> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Notify::getReceiverId, userId);
-        List<Notify> notifies = this.baseMapper.selectList(queryWrapper);
+
+        List<Notify> notifies = this.baseMapper.selectBatchIds(Arrays.asList(notifyReadAllForm.getIds()));
+        if (notifies == null) {
+            throw GlobalException.from(ResultCode.NOTIFY_NOT_EXIST);
+        }
+        //判断是否有权限修改
         if (!notifies.get(0).getReceiverId().equals(userId)) {
             throw GlobalException.from(ResultCode.FORBIDDEN);
         }

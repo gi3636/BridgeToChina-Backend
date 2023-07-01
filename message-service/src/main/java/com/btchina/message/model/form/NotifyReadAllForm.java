@@ -7,6 +7,6 @@ import lombok.ToString;
 @Data
 @ToString
 public class NotifyReadAllForm {
-    @ApiModelProperty(value = "用户ID",required = true)
-    Long userId;
+    @ApiModelProperty(value = "多个通知的id",required = true)
+    private Long[] ids;
 }

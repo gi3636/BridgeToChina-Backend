@@ -45,7 +45,7 @@ public class NotifyVO {
     private Integer objectType;
 
     @ApiModelProperty("是否已读  1已读 0未读 ")
-    private Integer isRead;
+    private Boolean isRead;
 
     @ApiModelProperty("问题信息")
     private QuestionVO question;
