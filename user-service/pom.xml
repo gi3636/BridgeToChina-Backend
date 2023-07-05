@@ -146,7 +146,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.btchina.user.AdminServiceApplication</mainClass>
+                    <mainClass>com.btchina.user.UserServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
