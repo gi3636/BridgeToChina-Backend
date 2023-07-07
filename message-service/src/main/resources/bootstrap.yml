@@ -4,8 +4,8 @@ spring:
   profiles:
     active: dev
   cloud:
-    nacos:
-      server-addr: 13.230.242.138:8848
+     nacos:
+      server-addr: localhost:8848
       discovery:
         namespace: dev
       config:

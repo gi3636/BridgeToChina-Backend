@@ -13,9 +13,9 @@ public class NettyProperties {
     private Integer timeout = 30000;
 
     // 服务器主端口 默认9000
-    private Integer port = 9000;
+    private Integer port = 9500;
 
     // 服务器备用端口
-    private Integer portSalve = 9001;
+    private Integer portSalve = 9501;
 
 }

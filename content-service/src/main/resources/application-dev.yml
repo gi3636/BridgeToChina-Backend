@@ -5,7 +5,7 @@ spring:
     nacos:
       server-addr: localhost:8848
       config:
-        namespace: prod
+        namespace: dev
         file-extension: yaml
       discovery:
-         namespace: prod
+         namespace: dev

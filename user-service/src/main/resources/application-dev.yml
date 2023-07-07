@@ -1,7 +1,10 @@
 spring:
   cloud:
-    nacos:
-      server-addr: 13.230.242.138:8848
+     nacos:
+      server-addr: localhost:8848
+      config:
+        namespace: dev
+        file-extension: yaml
       discovery:
         namespace: dev
 
