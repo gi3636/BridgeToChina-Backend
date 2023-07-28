@@ -3,7 +3,7 @@ server:
 spring:
   cloud:
     nacos:
-      server-addr: localhost:8848
+      server-addr: 122.51.230.111:8848
       config:
         namespace: prod
         file-extension: yaml
