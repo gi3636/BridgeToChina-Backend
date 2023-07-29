@@ -3,9 +3,6 @@ spring:
     name: user-service
   cloud:
      nacos:
-      server-addr: localhost:8848
-      discovery:
-        namespace: dev
       config:
         file-extension: yaml #文件后缀名
         shared-configs:
