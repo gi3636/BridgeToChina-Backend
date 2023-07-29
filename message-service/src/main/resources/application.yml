@@ -1,9 +1,10 @@
+spring:
+  profiles:
+    active: #spring.profiles.active#
 server:
   port: 8200
   address: 0.0.0.0
-spring:
-  profiles:
-    active: dev
+
 
 #Netty的一些配置
 netty:
