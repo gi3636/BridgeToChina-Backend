@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 
 @EnableMybatisPlus
@@ -28,7 +29,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class UserServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserServiceApplication.class, args);
+        //获取当前配置yml文件的环境变量
+        ConfigurableEnvironment env = SpringApplication.run(UserServiceApplication.class).getEnvironment();
+        log.info("获取当前配置yml文件的环境变量: " + env.getProperty("spring.datasource.url"));
+        //SpringApplication.run(UserServiceApplication.class, args);
     }
 
 }
