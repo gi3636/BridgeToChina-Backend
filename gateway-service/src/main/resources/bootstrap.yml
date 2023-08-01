@@ -3,6 +3,7 @@ spring:
     name: gateway-service
   cloud:
     nacos:
+      server-addr: 122.51.230.111:8848
       config:
         namespace: #spring.profiles.active#
         file-extension: yaml
