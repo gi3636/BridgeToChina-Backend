@@ -59,3 +59,8 @@ spring:
             allowedHeaders: "*" # 允许在请求中携带的头信息
             allowCredentials: true # 是否允许携带cookie
             maxAge: 360000 # 本次跨域检查的有效期
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: bridge-to-china-secret #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  tokenHead: 'Bearer '  #JWT负载中拿到开头

@@ -1,9 +1,11 @@
 spring:
   application:
     name: user-service
+  profiles:
+   active: #spring.profiles.active#
   cloud:
     nacos:
-      server-addr: localhost:8848
+#      server-addr: 122.51.230.111:8848
       config:
         namespace: #spring.profiles.active#
         file-extension: yaml #文件后缀名
