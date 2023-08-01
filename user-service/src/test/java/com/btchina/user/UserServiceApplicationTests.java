@@ -10,9 +10,6 @@ class UserServiceApplicationTests {
 
     @Test
     void contextLoads() {
-        //获取当前配置yml文件的环境变量
-        ConfigurableEnvironment env = SpringApplication.run(UserServiceApplication.class).getEnvironment();
-        System.out.println("获取当前配置yml文件的环境变量: " + env.getProperty("spring.datasource.url"));
     }
 
 

@@ -3,8 +3,8 @@ spring:
     name: gateway-service
   cloud:
     nacos:
-      server-addr: localhost:8848
       config:
+        namespace: #spring.profiles.active#
         file-extension: yaml
         shared-configs:
           - data-id: jwt-config.yaml

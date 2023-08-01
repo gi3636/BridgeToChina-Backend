@@ -3,10 +3,8 @@ spring:
     name: message-service
   cloud:
      nacos:
-      server-addr: localhost:8848
-      discovery:
-        namespace: dev
       config:
+        namespace: #spring.profiles.active#
         file-extension: yaml #文件后缀名
         shared-configs:
           - data-id: spring-config.yaml
