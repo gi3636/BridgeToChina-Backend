@@ -146,6 +146,9 @@
             <properties>
                 <spring.profiles.active>dev</spring.profiles.active>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
         <!--测试环境-->
         <profile>
