@@ -4,6 +4,7 @@ spring:
   cloud:
     nacos:
       config:
+        server-addr: 122.51.230.111:8848
         namespace: #spring.profiles.active#
         file-extension: yaml #文件后缀名
         shared-configs:
