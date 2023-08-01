@@ -9,6 +9,6 @@ server:
 #Netty的一些配置
 netty:
   timeout: 6000
-  port: 9500
+  port: 9677
   #多端口绑定
-  portSalve: 9501
+  portSalve: 9678
