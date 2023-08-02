@@ -1,10 +1,6 @@
 server:
   port: 9999
 spring:
-  profiles:
-    active: #spring.profiles.active#
-  application:
-    name: gateway-service
   cloud:
     gateway:
       routes:
