@@ -1,5 +1,5 @@
 # 设置JAVA版本
-FROM openjdk:8
+FROM adoptopenjdk/openjdk11-openj9
 WORKDIR /root
 # 将当前目录下的jar包复制到docker容器的/目录下
 ADD app.jar /root/app.jar
