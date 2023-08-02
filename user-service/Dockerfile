@@ -6,8 +6,9 @@ ADD app.jar /root/app.jar
 # 设置JVM运行参数，限定内存大小，并设置时区为东八区
 ENV JAVA_OPTS="\
 -server \
--Xms256m \
--Xmx512m \
+-Xms128m \
+-Xmx128m \
+-Xss256k \
 -XX:MetaspaceSize=256m \
 -XX:MaxMetaspaceSize=512m \
 -Duser.timezone=GMT+08 "
