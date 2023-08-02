@@ -20,6 +20,8 @@ services:
     container_name: message-service
     ports:
       - "8200:8080"
+      - "9500:9500"
+      - "9501:9501"
     depends_on:
       - gateway-service
   file-service:

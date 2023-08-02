@@ -14,5 +14,7 @@ ENV JAVA_OPTS="\
 -Duser.timezone=GMT+08 "
 
 EXPOSE 8080
+EXPOSE 9500
+EXPOSE 9501
 # 入口点， 执行JAVA运行命令
 ENTRYPOINT ["java","-jar","/root/app.jar","--spring.profiles.active=prod"]
