@@ -9,8 +9,8 @@ ENV JAVA_OPTS="\
 -Xms128m \
 -Xmx128m \
 -Xss256k \
--XX:MetaspaceSize=256m \
--XX:MaxMetaspaceSize=512m \
+-XX:MetaspaceSize=128m \
+-XX:MaxMetaspaceSize=256m \
 -Duser.timezone=GMT+08 "
 
 EXPOSE 8080
