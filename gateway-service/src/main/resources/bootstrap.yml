@@ -1,8 +1,6 @@
 spring:
   profiles:
     active: @spring.profiles.active@
-  application:
-    name: gateway-service
   cloud:
     nacos:
       server-addr: @nacos.addr@
