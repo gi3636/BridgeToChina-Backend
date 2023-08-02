@@ -743,8 +743,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             }
             if (!isSeo) {
                 User user = userClient.findById(questionVO.getUserId());
-                questionVO.setNickname(user.getNickname());
-                questionVO.setAvatar(user.getAvatar());
+                if (user != null) {
+                    questionVO.setNickname(user.getNickname());
+                    questionVO.setAvatar(user.getAvatar());
+                }
             }
             questionVOList.add(questionVO);
         }

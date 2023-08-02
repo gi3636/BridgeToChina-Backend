@@ -42,7 +42,9 @@ public class UserController {
     @GetMapping("{id}")
     public User findById(@PathVariable("id") Long id) {
         User user = userService.getBaseMapper().selectById(id);
-        user.setPassword(null);
+        if (user != null) {
+            user.setPassword(null);
+        }
         return user;
     }
 
