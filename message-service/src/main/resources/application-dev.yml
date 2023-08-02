@@ -1,9 +1,0 @@
-spring:
-  cloud:
-     nacos:
-      server-addr: localhost:8848
-      config:
-        namespace: dev
-        file-extension: yaml
-      discovery:
-        namespace: dev

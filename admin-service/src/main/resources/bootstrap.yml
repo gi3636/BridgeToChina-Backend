@@ -1,13 +1,16 @@
 spring:
+  profiles:
+    active: @spring.profiles.active@
   application:
     name: admin-service
   cloud:
      nacos:
-      config:
-        server-addr: 122.51.230.111:8848
-        namespace: #spring.profiles.active#
-        file-extension: yaml #文件后缀名
-        shared-configs:
+       server-addr: @nacos.addr@
+       discovery:
+         namespace: @spring.profiles.active@
+       config:
+         namespace: @spring.profiles.active@
+         shared-configs:
           - data-id: spring-config.yaml
             refresh: true
           - data-id: redis-config.yaml
@@ -22,4 +25,3 @@ spring:
             refresh: true
           - data-id: datasource.yaml
             refresh: true
-

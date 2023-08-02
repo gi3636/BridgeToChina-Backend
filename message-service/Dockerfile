@@ -13,7 +13,7 @@ ENV JAVA_OPTS="\
 -XX:MaxMetaspaceSize=256m \
 -Duser.timezone=GMT+08 "
 
-EXPOSE 8080
+EXPOSE 8200
 EXPOSE 9500
 EXPOSE 9501
 # 入口点， 执行JAVA运行命令

@@ -13,6 +13,6 @@ ENV JAVA_OPTS="\
 -XX:MaxMetaspaceSize=256m \
 -Duser.timezone=GMT+08 "
 
-EXPOSE 8080
+EXPOSE 9999
 # 入口点， 执行JAVA运行命令
 ENTRYPOINT ["java","-jar","/root/app.jar","--spring.profiles.active=prod"]

@@ -5,21 +5,21 @@ services:
     image: user-service:1.0
     container_name: user-service
     ports:
-      - "8000:8080"
+      - "8000:8000"
     depends_on:
       - gateway-service
   content-service:
     image: content-service:1.0
     container_name: content-service
     ports:
-      - "8100:8080"
+      - "8100:8100"
     depends_on:
       - gateway-service
   message-service:
     image: message-service:1.0
     container_name: message-service
     ports:
-      - "8200:8080"
+      - "8200:8200"
       - "9500:9500"
       - "9501:9501"
     depends_on:
@@ -28,11 +28,11 @@ services:
     image: file-service:1.0
     container_name: file-service
     ports:
-      - "8888:8080"
+      - "8888:8888"
     depends_on:
       - gateway-service
   gateway-service:
     image: gateway-service:1.0
     container_name: gateway-service
     ports:
-      - "9999:8080"
+      - "9999:9999"
