@@ -25,7 +25,7 @@ exit
 docker restart bridge-to-china-elasticsearch
 ```
 #### 2.2 RabbitMQ 安装管理插件
-
+#### http://localhost:15672 有界面代表运行成功
 ```shell
 # 进入到rabbitmq容器
 docker exec -it bridge-to-china-rabbitmq /bin/bash
@@ -37,6 +37,7 @@ exit
 docker restart bridge-to-china-rabbitmq
 ```
 #### 2.3 Minio 添加存储桶
+#### http://localhost:9000
 #### 因为需要设置了一个存储桶，所以需要登录到minio的管理页面，进行设置
 账号：admin
 密码：12345678
@@ -48,6 +49,7 @@ docker restart bridge-to-china-rabbitmq
 ![img.png](image/img3.png)
 
 #### 2.4 Nacos 添加配置
+#### http://localhost:8848/nacos
 #### 因为需要设置了一个配置，所以需要登录到nacos的管理页面，进行设置
 账号：nacos
 密码：nacos
