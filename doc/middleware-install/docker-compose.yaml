@@ -1,0 +1,102 @@
+version: "3.5"
+# 运行指令
+# cd /doc/middleware-install
+# docker-compose up -d // 启动容器
+# docker-compose down // 停止和移除容器
+services:
+  # mysql 数据库
+#  bridge-to-china-mysql:
+#    image: mysql:8.0
+#    container_name: bridge-to-china-mysql
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=123456  # 设置 MySQL root 用户的密码为 "123456"
+#    ports:
+#      - 3306:3306
+
+  # minio 文件存储
+  bridge-to-china-minio:
+    image: minio/minio:RELEASE.2022-02-12T00-51-25Z
+    container_name: bridge-to-china-minio
+    restart: always
+    command: server /data --console-address ":9001"  # 添加参数到命令中
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=12345678
+
+  # redis 缓存
+  bridge-to-china-redis:
+    image: redis:latest
+    container_name: bridge-to-china-redis
+    restart: always
+    #//设置密码
+    command: redis-server --requirepass "123456"
+    ports:
+      - 6379:6379
+
+  # nacos 注册中心
+  bridge-to-china-nacos:
+    image: zhusaidong/nacos-server-m1:2.0.3  #这个是m1版本的 nacos,电脑是m1芯片的可以用这个
+#    image: nacos/nacos-server:latest
+    container_name: bridge-to-china-nacos
+    restart: always
+    depends_on:
+      - bridge-to-china-mysql
+    ports:
+      - 8848:8848
+      - 9848:9848
+      - 9849:9849
+    environment:
+      - JVM_XMS=256m
+      - JVM_XMX=256m
+      - MODE=standalone
+
+  # elasticsearch 搜索引擎
+  bridge-to-china-elasticsearch:
+    image: elasticsearch:7.17.3
+    container_name: bridge-to-china-elasticsearch
+    restart: always
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    networks:
+      - bridge-to-china-elasticsearch-net
+
+  # kibana 可视化工具
+  bridge-to-china-kibana:
+    image: kibana:7.17.3
+    container_name: bridge-to-china-kibana
+    restart: always
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://bridge-to-china-elasticsearch:9200  # 更新 ELASTICSEARCH_HOSTS
+    networks:
+      - bridge-to-china-elasticsearch-net  # 连接到外部网络
+    depends_on:
+      - bridge-to-china-elasticsearch
+
+
+  # rabbitmq 消息队列
+  bridge-to-china-rabbitmq:
+    image: rabbitmq:management
+    container_name: bridge-to-china-rabbitmq
+    restart: always
+    ports:
+      - 5672:5672  # AMQP 端口
+      - 15672:15672  # 管理界面端口
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=123456
+#    command:  rabbitmq-plugins enable rabbitmq_management  # 安装并启用管理界面插件
+
+networks:
+  bridge-to-china-elasticsearch-net:
+    driver: bridge
+
