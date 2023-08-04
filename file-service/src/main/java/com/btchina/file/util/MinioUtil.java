@@ -65,6 +65,7 @@ public class MinioUtil {
                 log.info("Bucket asiatrip already exists.");
                 return false;
             } else {
+                //设置权限公开读
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
                 return true;
             }

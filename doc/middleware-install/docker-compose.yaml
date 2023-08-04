@@ -43,8 +43,6 @@ services:
 #    image: nacos/nacos-server:latest
     container_name: bridge-to-china-nacos
     restart: always
-    depends_on:
-      - bridge-to-china-mysql
     ports:
       - 8848:8848
       - 9848:9848

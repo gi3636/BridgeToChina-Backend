@@ -5,6 +5,7 @@ import com.btchina.file.config.MinioConfig;
 import com.btchina.file.util.MinioUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @Api(tags = "文件管理")
 @RequestMapping("/file")
+@Slf4j
 public class FileController {
 
     @Resource
@@ -30,9 +32,15 @@ public class FileController {
 
     @ApiOperation(value = "上传文件")
     @PostMapping(value = "/upload")
-    public CommonResult<HashMap<String, String>> uploadFile(MultipartFile file, @RequestParam(required = false) String bucketName) {
+    public CommonResult<HashMap<String, String>> uploadFile(MultipartFile file, @RequestParam(required = false) String bucketName) throws Exception {
         bucketName = StringUtils.hasLength(bucketName) ? bucketName : minioConfig.getDefaultBucketName();
+        log.info("minioConfig:{}", minioConfig);
+        log.info("上传文件到桶：{}，文件名：{}", bucketName, file.getOriginalFilename());
         String objectName = minioUtil.getDatePath() + file.getOriginalFilename();
+        //判断是否有桶，没有则创建
+        if (!minioUtil.bucketExists(bucketName)) {
+            minioUtil.createBucket(bucketName);
+        }
         minioUtil.upload(bucketName, objectName, file);
         String viewPath = minioUtil.getPresignedObjectUrl(bucketName, objectName, 60 * 100, TimeUnit.SECONDS);
         HashMap<String, String> objectInfo = new HashMap<>();
