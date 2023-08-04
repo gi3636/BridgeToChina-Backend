@@ -39,8 +39,8 @@ services:
 
   # nacos 注册中心
   bridge-to-china-nacos:
-    image: zhusaidong/nacos-server-m1:2.0.3  #这个是m1版本的 nacos,电脑是m1芯片的可以用这个
-#    image: nacos/nacos-server:latest
+#    image: zhusaidong/nacos-server-m1:2.0.3  #这个是m1版本的 nacos,电脑是m1芯片的可以用这个
+    image: nacos/nacos-server:latest
     container_name: bridge-to-china-nacos
     restart: always
     ports:
