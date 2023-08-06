@@ -45,7 +45,7 @@
         <velocity.tool.version>3.1</velocity.tool.version>
         <configuration.version>1.10</configuration.version>
         <jasypt.version>2.1.0</jasypt.version>
-        <minio.version>8.3.8</minio.version>
+        <minio.version>8.3.4</minio.version>
         <okhttp3.version>4.9.0</okhttp3.version>
         <druid.version>1.2.9</druid.version>
         <jetcache.version>2.6.4</jetcache.version>
