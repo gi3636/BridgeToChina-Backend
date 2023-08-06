@@ -43,6 +43,7 @@
 ```
 ├─config：全局配置文件目录
 ├─doc：项目文档目录
+├─db：数据库文件目录
 ├─common：公用模块
 │  ├─common-amqp：公用AMQP模块
 │  ├─common-core：核心模块
