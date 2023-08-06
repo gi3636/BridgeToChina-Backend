@@ -13,7 +13,9 @@ cd doc/middleware-install
 docker-compose up -d 
 ```
 #### 2.1 Elasticsearch 安装ik分词器
+http://localhost:9200/ 有内容代表运行成功
 
+http://localhost:9200/_cat/indices?v 查看索引
 ```shell
 # 进入到elasticsearch容器
 docker exec -it bridge-to-china-elasticsearch /bin/bash
@@ -60,7 +62,9 @@ docker restart bridge-to-china-rabbitmq
 然后我们需要导入配置文件，点击配置列表，选择dev的namespace，然后点击导入配置
 ![img.png](image/img6.png)
 在弹出的窗口中，选择导入文件，选择doc/nacos/nacos-config.zip
+
 ![img.png](image/img7.png)
+
 导入成功后，我们就可以看到配置文件了
 
 
@@ -76,8 +80,11 @@ docker restart bridge-to-china-rabbitmq
 
 ### 项目环境配置
 可以更改项目环境来启动项目
+
 ![img.png](image/img10.png)
+
 在最外层的pom.xml文件中，可以更改项目的环境，目前有dev和prod两种环境，如果需要更多环境，可以自行添加
+
 ![img.png](image/img11.png)
 
 

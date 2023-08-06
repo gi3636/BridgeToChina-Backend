@@ -88,7 +88,15 @@
 |     Minio      |  本地对象存储服务  |                  https://min.io/                  |
 | Docker Compose | Docker容器编排 |         https://docs.docker.com/compose/          |
 
+
+### 项目启动
+请查看项目的doc文件夹下的[README](./doc/README.md)
+
 ### 前端技术
 
 前端使用的是React+Nextjs框架，使用Ant Design作为UI框架，使用TypeScript进行开发, 项目地址：[BridgeToChina-Frontend](https://github.com/gi3636/brige-to-china)
 
+### 联系方式
+微信: gi3636
+
+Discord社区：[留华桥](https://discord.gg/bqqqv584)
