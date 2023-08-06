@@ -26,6 +26,10 @@
   <img src="https://img.shields.io/badge/Elasticsearch-7.17.3-orange" alt=""/>
 </a></p>
 
+## 系统架构图
+
+![img-structure.png](doc%2Fimage%2Fimg-structure.png)
+
 ## 项目特点
 
 - 微服务架构开发,前后端分离
