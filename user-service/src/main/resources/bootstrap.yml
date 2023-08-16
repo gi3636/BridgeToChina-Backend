@@ -8,6 +8,7 @@ spring:
       server-addr: @nacos.addr@
       discovery:
         namespace: @spring.profiles.active@
+        ip: @nacos.ip@
       config:
         namespace: @spring.profiles.active@
         enabled: true

@@ -8,6 +8,7 @@ spring:
        server-addr: @nacos.addr@
        discovery:
          namespace: @spring.profiles.active@
+         ip: @nacos.ip@
        config:
         namespace: @spring.profiles.active@
         file-extension: yaml #文件后缀名
