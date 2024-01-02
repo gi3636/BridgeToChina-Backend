@@ -1,3 +1,6 @@
+logging:
+  home: /data
+
 spring:
   profiles:
     active: @spring.profiles.active@
@@ -28,4 +31,5 @@ spring:
             refresh: true
           - data-id: datasource.yaml
             refresh: true
+
 

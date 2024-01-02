@@ -1,3 +1,5 @@
+logging:
+  home: /data
 spring:
   profiles:
     active: @spring.profiles.active@

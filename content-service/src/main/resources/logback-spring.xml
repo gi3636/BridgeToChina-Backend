@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}" />
+
+
+    <springProperty scope="context" name="project.artifactId" source="spring.application.name"/>
+    <springProperty scope="context" name="LOG_HOME" source="logging.home" />
+
+
+    <appender name="all" class="ch.qos.logback.core.ConsoleAppender">
+        <!--展示格式 layout-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!--controller的特殊打印-->
+    <!-- <appender name="controller" class="ch.qos.logback.core.ConsoleAppender"> -->
+    <!--     &lt;!&ndash; 在日滚动文件中，强制只保存错误INFO级别以上的信息 &ndash;&gt; -->
+    <!--     <filter class="ch.qos.logback.core.filter.EvaluatorFilter"> -->
+    <!--         <evaluator class="com.example.chatroom.config.MyEventEvaluator"> -->
+    <!--             <page>com.example.chatroom.controller.*</page> -->
+    <!--         </evaluator> -->
+    <!--         <onMatch>ACCEPT</onMatch> -->
+    <!--         <onMismatch>DENY</onMismatch> -->
+    <!--     </filter> -->
+    <!--     &lt;!&ndash;展示格式 layout&ndash;&gt; -->
+    <!--     <layout class="ch.qos.logback.classic.PatternLayout"> -->
+    <!--         <pattern>[controller] - %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern> -->
+    <!--     </layout> -->
+    <!-- </appender> -->
+
+    <!--service的特殊打印-->
+    <!-- <appender name="service" class="ch.qos.logback.core.ConsoleAppender"> -->
+    <!--     &lt;!&ndash; 在日滚动文件中，强制只保存错误INFO级别以上的信息 &ndash;&gt; -->
+    <!--     <filter class="ch.qos.logback.core.filter.EvaluatorFilter"> -->
+    <!--         <evaluator class="com.example.chatroom.config.MyEventEvaluator"> -->
+    <!--             <page>com.example.chatroom.service.*</page> -->
+    <!--         </evaluator> -->
+    <!--         <onMatch>ACCEPT</onMatch> -->
+    <!--         <onMismatch>DENY</onMismatch> -->
+    <!--     </filter> -->
+    <!--     &lt;!&ndash;展示格式 layout&ndash;&gt; -->
+    <!--     <layout class="ch.qos.logback.classic.PatternLayout"> -->
+    <!--         <pattern>[service] - %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern> -->
+    <!--     </layout> -->
+    <!-- </appender> -->
+
+
+
+    <!-- 定义一个日滚动（每天生成一份）的日志文件 -->
+    <appender name="debug_out" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${LOG_HOME}/${project.artifactId}/log/debug/debug-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符,编码为UTF-8-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--只保留固定配置级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>debug</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <!-- 定义一个日滚动（每天生成一份）的日志文件 -->
+    <appender name="info_out" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${LOG_HOME}/${project.artifactId}/log/info/info-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符,编码为UTF-8-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--只保留固定配置级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <!-- 定义一个日滚动（每天生成一份）的日志文件 -->
+    <appender name="warn_out" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${LOG_HOME}/${project.artifactId}/log/warn/warn-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符,编码为UTF-8-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--只保留固定配置级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>warn</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <!-- 定义一个日滚动（每天生成一份）的日志文件 -->
+    <appender name="error_out" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${LOG_HOME}/${project.artifactId}/log/error/error-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符,编码为UTF-8-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--只保留固定配置级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <!-- 日志级别排序为： TRACE < DEBUG < INFO < WARN < ERROR -->
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <!--添加到这个log的appender-->
+        <appender-ref ref="all"/>
+        <!--添加到这个log的appender-->
+        <!-- <appender-ref ref="controller"/> -->
+        <!--添加到这个log的appender-->
+        <!-- <appender-ref ref="service"/> -->
+        <!--添加到这个log的appender-->
+        <appender-ref ref="error_out"/>
+        <!--添加到这个log的appender-->
+        <appender-ref ref="info_out"/>
+        <!--添加到这个log的appender-->
+        <appender-ref ref="warn_out"/>
+        <!--添加到这个log的appender-->
+        <appender-ref ref="debug_out"/>
+    </root>
+</configuration>
