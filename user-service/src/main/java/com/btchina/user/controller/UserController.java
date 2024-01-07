@@ -2,19 +2,15 @@ package com.btchina.user.controller;
 
 
 import com.btchina.core.api.CommonResult;
-import com.btchina.core.api.ResultCode;
-import com.btchina.core.exception.GlobalException;
 import com.btchina.core.util.AuthHelper;
-import com.btchina.redis.service.RedisService;
 import com.btchina.user.entity.User;
 import com.btchina.user.model.form.EditUserForm;
 import com.btchina.user.model.form.GetUserForm;
-import com.btchina.user.model.vo.UserVO;
+import com.btchina.user.feign.vo.UserVO;
 import com.btchina.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,5 @@
 package com.btchina.model.enums;
 
-import com.btchina.entity.Answer;
 
 import java.util.Objects;
 

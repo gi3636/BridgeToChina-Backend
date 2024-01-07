@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.user.entity.User;
 import com.btchina.user.model.form.EditUserForm;
 import com.btchina.user.model.form.RegisterForm;
-import com.btchina.user.model.vo.UserVO;
+import com.btchina.user.feign.vo.UserVO;
 
 import java.util.List;
 import java.util.Map;

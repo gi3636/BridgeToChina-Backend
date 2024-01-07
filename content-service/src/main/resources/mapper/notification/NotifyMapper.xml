@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.btchina.content.notification.mapper.NotifyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.btchina.content.notification.model.Notify">
+        <id column="id" property="id"/>
+        <result column="sender_id" property="senderId"/>
+        <result column="receiver_id" property="receiverId"/>
+        <result column="object_id" property="objectId"/>
+        <result column="action_type" property="actionType"/>
+        <result column="template_id" property="templateId"/>
+        <result column="channel_type" property="channelType"/>
+        <result column="object_type" property="objectType"/>
+        <result column="is_read" property="isRead"/>
+        <result column="read_time" property="readTime"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        UPDATE tbl_notify
+        SET is_read   = #{isRead},
+            read_time = #{readTime}
+        WHERE id IN
+        <foreach collection="notifies" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <!-- <update id="updateByBatchPrimaryKey" parameterType="java.util.Map"> -->
+    <!--     UPDATE t_goods -->
+    <!--     SET NODE_ID = #{nodeId} -->
+    <!--     WHERE GOODS_ID IN -->
+    <!--     <foreach collection="list" index="index" item="item" open="(" separator="," close=")"> -->
+    <!--         #{item.goodsId} -->
+    <!--     </foreach> -->
+    <!-- </update> -->
+
+
+
+
+
+</mapper>

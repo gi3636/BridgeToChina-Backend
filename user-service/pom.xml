@@ -118,11 +118,6 @@
         </dependency>
         <dependency>
             <groupId>com.btchina</groupId>
-            <artifactId>feign-api</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.btchina</groupId>
             <artifactId>common-core</artifactId>
             <version>1.0.0</version>
         </dependency>

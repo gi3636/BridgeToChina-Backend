@@ -115,11 +115,7 @@
             <artifactId>common-redis</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.btchina</groupId>
-            <artifactId>feign-api</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+
         <dependency>
             <groupId>com.btchina</groupId>
             <artifactId>common-core</artifactId>
@@ -128,6 +124,11 @@
         <dependency>
             <groupId>com.btchina</groupId>
             <artifactId>common-amqp</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.btchina</groupId>
+            <artifactId>user-service</artifactId>
             <version>1.0.0</version>
         </dependency>
         <!--JWT(Json Web Token)登录支持-->

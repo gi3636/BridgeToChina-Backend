@@ -19,7 +19,6 @@
         <module>common</module>
         <module>gateway-service</module>
         <module>user-service</module>
-        <module>feign-api</module>
         <module>file-service</module>
         <module>content-service</module>
         <module>message-service</module>
@@ -118,6 +117,8 @@
                 <artifactId>annotations</artifactId>
                 <version>23.0.0</version>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
     <dependencies>

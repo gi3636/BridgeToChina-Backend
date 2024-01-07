@@ -8,7 +8,7 @@ import com.btchina.user.manager.UserManager;
 import com.btchina.user.mapper.UserMapper;
 import com.btchina.user.model.form.EditUserForm;
 import com.btchina.user.model.form.RegisterForm;
-import com.btchina.user.model.vo.UserVO;
+import com.btchina.user.feign.vo.UserVO;
 import com.btchina.user.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.util.JwtTokenUtil;
