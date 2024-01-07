@@ -1,12 +1,12 @@
 package com.btchina.content.comment.service;
 
-import com.btchina.content.comment.model.entity.Comment;
+import com.btchina.content.comment.model.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.btchina.content.comment.feign.qo.CommentAddQO;
-import com.btchina.content.comment.feign.qo.CommentLikeQO;
-import com.btchina.content.comment.feign.qo.CommentQueryQO;
-import com.btchina.content.comment.feign.qo.CommentUpdateQO;
-import com.btchina.content.comment.feign.vo.CommentVO;
+import com.btchina.content.comment.model.qo.CommentAddQO;
+import com.btchina.content.comment.model.qo.CommentLikeQO;
+import com.btchina.content.comment.model.qo.CommentQueryQO;
+import com.btchina.content.comment.model.qo.CommentUpdateQO;
+import com.btchina.content.comment.model.vo.CommentVO;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 

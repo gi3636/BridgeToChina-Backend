@@ -3,7 +3,7 @@
 <mapper namespace="com.btchina.content.comment.mapper.CommentMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.btchina.content.comment.model.entity.Comment">
+    <resultMap id="BaseResultMap" type="com.btchina.content.comment.model.Comment">
         <id column="id" property="id" />
         <result column="answer_id" property="answerId" />
         <result column="user_id" property="userId" />

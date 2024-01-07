@@ -4,10 +4,10 @@ import com.btchina.content.question.model.Answer;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
-import com.btchina.content.question.feign.qo.AnswerAddQO;
-import com.btchina.content.question.feign.qo.AnswerQueryQO;
-import com.btchina.content.question.feign.qo.AnswerUpdateQO;
-import com.btchina.content.question.feign.vo.AnswerVO;
+import com.btchina.content.question.model.qo.AnswerAddQO;
+import com.btchina.content.question.model.qo.AnswerQueryQO;
+import com.btchina.content.question.model.qo.AnswerUpdateQO;
+import com.btchina.feign.model.question.vo.AnswerVO;
 
 /**
  * <p>

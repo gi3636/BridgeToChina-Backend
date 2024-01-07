@@ -3,9 +3,9 @@ package com.btchina.content.comment.mq;
 
 
 import com.btchina.content.infra.constant.CommentConstant;
-import com.btchina.content.comment.model.entity.Comment;
+import com.btchina.content.comment.model.Comment;
 import com.btchina.content.comment.service.CommentService;
-import com.btchina.content.question.feign.QuestionClient;
+import com.btchina.feign.clients.QuestionClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;

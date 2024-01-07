@@ -1,13 +1,14 @@
 package com.btchina.content.tag.controller;
 
 
-import com.btchina.content.question.feign.qo.QueryQuestionTagQO;
-import com.btchina.content.question.feign.qo.QuestionEditTagQO;
+import com.btchina.feign.model.tag.qo.QueryQuestionTagQO;
+import com.btchina.feign.model.tag.qo.QuestionEditTagQO;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
-import com.btchina.content.tag.feign.qo.TagAddQO;
+import com.btchina.feign.model.tag.qo.TagAddQO;
 
-import com.btchina.content.tag.feign.vo.TagVO;
+import com.btchina.feign.model.tag.vo.TagListVO;
+import com.btchina.feign.model.tag.vo.TagVO;
 import com.btchina.content.tag.service.TagQuestionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,7 +60,7 @@ public class QuestionTagController {
 
     @ApiOperation(value = "查询问题标签")
     @PostMapping("/query")
-    public List<TagVO> getTags(@Validated @RequestBody QueryQuestionTagQO queryQuestionTagQO) {
+    public List<TagListVO> getTags(@Validated @RequestBody QueryQuestionTagQO queryQuestionTagQO) {
         return tagQuestionService.queryTag(queryQuestionTagQO);
     }
 

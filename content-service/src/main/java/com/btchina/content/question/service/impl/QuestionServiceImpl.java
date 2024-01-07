@@ -3,20 +3,21 @@ package com.btchina.content.question.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import com.btchina.content.question.feign.qo.*;
+import com.btchina.content.question.model.qo.*;
 import com.btchina.content.question.service.AnswerService;
 import com.btchina.content.question.service.QuestionService;
 import com.btchina.content.question.service.QuestionUserFavoriteService;
 import com.btchina.content.question.service.QuestionUserLikeService;
-import com.btchina.content.tag.feign.qo.TagAddQO;
+import com.btchina.feign.model.tag.qo.QuestionEditTagQO;
+import com.btchina.feign.model.tag.qo.TagAddQO;
 import com.btchina.content.tag.service.TagService;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
-import com.btchina.content.question.feign.QuestionClient;
-import com.btchina.content.tag.feign.TagClient;
-import com.btchina.content.question.feign.vo.AnswerVO;
+import com.btchina.feign.clients.QuestionClient;
+import com.btchina.feign.clients.TagClient;
+import com.btchina.feign.model.question.vo.AnswerVO;
 import com.btchina.content.infra.constant.QuestionConstant;
 import com.btchina.content.question.model.Answer;
 import com.btchina.content.question.model.Question;
@@ -26,9 +27,9 @@ import com.btchina.content.question.mapper.QuestionMapper;
 import com.btchina.content.question.mapper.es.QuestionRepository;
 import com.btchina.content.question.model.doc.QuestionDoc;
 import com.btchina.content.infra.enums.QueryTypeEnum;
-import com.btchina.content.question.feign.vo.QuestionVO;
-import com.btchina.user.entity.User;
-import com.btchina.user.feign.UserClient;
+import com.btchina.feign.model.question.vo.QuestionVO;
+import com.btchina.feign.model.user.vo.UserVO;
+import com.btchina.feign.clients.UserClient;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -372,7 +373,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         if (questionDoc == null) {
             throw GlobalException.from("问题不存在");
         }
-        User user = userClient.findById(questionDoc.getUserId());
+        UserVO user = userClient.findById(questionDoc.getUserId());
         BeanUtils.copyProperties(questionDoc, questionVO);
         //装换标签和图片
         if (questionDoc.getTags() != null) {
@@ -748,7 +749,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 questionVO.setTags(new ArrayList<>());
             }
             if (!isSeo) {
-                User user = userClient.findById(questionVO.getUserId());
+                UserVO user = userClient.findById(questionVO.getUserId());
                 if (user != null) {
                     questionVO.setNickname(user.getNickname());
                     questionVO.setAvatar(user.getAvatar());

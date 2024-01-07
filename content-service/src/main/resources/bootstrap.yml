@@ -1,5 +1,5 @@
 logging:
-  home: /data
+  home: /data/logs
 spring:
   main:
     allow-bean-definition-overriding: true

@@ -1,6 +1,6 @@
 package com.btchina.content.comment.service.impl;
 
-import com.btchina.content.comment.model.entity.CommentUserLike;
+import com.btchina.content.comment.model.CommentUserLike;
 import com.btchina.content.comment.mapper.CommentUserLikeMapper;
 import com.btchina.content.comment.service.CommentUserLikeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

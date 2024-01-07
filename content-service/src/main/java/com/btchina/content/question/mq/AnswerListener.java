@@ -2,7 +2,7 @@ package com.btchina.content.question.mq;
 
 
 import com.btchina.content.infra.constant.AnswerConstant;
-import com.btchina.content.question.feign.QuestionClient;
+import com.btchina.feign.clients.QuestionClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;

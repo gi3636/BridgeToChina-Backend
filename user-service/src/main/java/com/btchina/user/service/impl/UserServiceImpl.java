@@ -8,7 +8,7 @@ import com.btchina.user.manager.UserManager;
 import com.btchina.user.mapper.UserMapper;
 import com.btchina.user.model.form.EditUserForm;
 import com.btchina.user.model.form.RegisterForm;
-import com.btchina.user.feign.vo.UserVO;
+import com.btchina.feign.model.user.vo.UserVO;
 import com.btchina.user.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.util.JwtTokenUtil;
@@ -72,7 +72,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!DigestUtil.md5Hex(password).equals(user.getPassword())) {
             throw GlobalException.from(ResultCode.PASSWORD_WRONG);
         }
-        UserVO userVo = UserVO.convert(user);
+        UserVO userVo = new UserVO();
+        BeanUtils.copyProperties(user, userVo);
         userVo.setToken(jwtTokenUtil.generateToken(user.getId(), user.getUsername()));
         return userVo;
     }

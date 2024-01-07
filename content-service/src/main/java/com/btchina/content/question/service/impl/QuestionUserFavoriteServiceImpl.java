@@ -1,6 +1,6 @@
 package com.btchina.content.question.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.btchina.content.question.feign.qo.QuestionFavouriteQO;
+import com.btchina.content.question.model.qo.QuestionFavouriteQO;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.content.infra.constant.QuestionConstant;

@@ -2,10 +2,11 @@ package com.btchina.content.tag.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.btchina.content.tag.model.TagQuestion;
-import com.btchina.content.tag.feign.qo.TagAddQO;
-import com.btchina.content.tag.feign.vo.TagVO;
-import com.btchina.content.question.feign.qo.QueryQuestionTagQO;
-import com.btchina.content.question.feign.qo.QuestionEditTagQO;
+import com.btchina.feign.model.tag.qo.TagAddQO;
+import com.btchina.feign.model.tag.vo.TagListVO;
+import com.btchina.feign.model.tag.vo.TagVO;
+import com.btchina.feign.model.tag.qo.QueryQuestionTagQO;
+import com.btchina.feign.model.tag.qo.QuestionEditTagQO;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface TagQuestionService extends IService<TagQuestion> {
 
     Boolean deleteTag(Long questionId);
 
-    List<TagVO> queryTag(QueryQuestionTagQO queryQuestionTagQO);
+    List<TagListVO> queryTag(QueryQuestionTagQO queryQuestionTagQO);
 
 
     Boolean editTag(QuestionEditTagQO editQuestionTagForm);

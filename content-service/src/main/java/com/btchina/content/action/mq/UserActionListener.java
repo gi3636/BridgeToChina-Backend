@@ -3,7 +3,7 @@ package com.btchina.content.action.mq;
 
 
 import com.btchina.user.constant.UserActionConstant;
-import com.btchina.content.action.feign.qo.UserActionForm;
+import com.btchina.feign.model.userAction.qo.UserActionForm;
 import com.btchina.content.action.service.UserActionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;

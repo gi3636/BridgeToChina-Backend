@@ -3,8 +3,8 @@ package com.btchina.content.tag.service;
 import com.btchina.core.api.PageResult;
 import com.btchina.content.tag.model.Tag;
 import com.btchina.content.tag.model.doc.TagDoc;
-import com.btchina.content.tag.feign.qo.TagAddQO;
-import com.btchina.content.tag.feign.qo.TagQueryQO;
+import com.btchina.feign.model.tag.qo.TagAddQO;
+import com.btchina.feign.model.tag.qo.TagQueryQO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

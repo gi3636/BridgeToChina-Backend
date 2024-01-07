@@ -2,8 +2,8 @@ package com.btchina.content.news.controller;
 
 
 import com.btchina.content.news.model.News;
-import com.btchina.content.news.feign.qo.NewsAddQO;
-import com.btchina.content.news.feign.qo.NewsQueryQO;
+import com.btchina.content.news.model.qo.NewsAddQO;
+import com.btchina.content.news.model.qo.NewsQueryQO;
 import com.btchina.content.news.service.NewsService;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.PageResult;

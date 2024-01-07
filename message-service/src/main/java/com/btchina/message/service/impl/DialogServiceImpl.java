@@ -14,9 +14,8 @@ import com.btchina.message.model.vo.DialogVO;
 import com.btchina.message.service.DialogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.message.service.DialogUserService;
-import com.btchina.user.entity.User;
-import com.btchina.user.feign.UserClient;
-import com.btchina.user.feign.vo.UserVO;
+import com.btchina.feign.clients.UserClient;
+import com.btchina.feign.model.user.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,7 @@ public class DialogServiceImpl extends ServiceImpl<DialogMapper, Dialog> impleme
         queryWrapper.eq(DialogUser::getUserId, userId);
         queryWrapper.eq(DialogUser::getToUserId, dialogAddForm.getToUserId());
         DialogUser dialogUser = dialogUserService.getOne(queryWrapper);
-        User toUser = userClient.findById(dialogAddForm.getToUserId());
+        UserVO toUser = userClient.findById(dialogAddForm.getToUserId());
         if (dialogUser != null) {
             DialogVO dialogVO = new DialogVO();
             Dialog dialog = this.baseMapper.selectById(dialogUser.getDialogId());

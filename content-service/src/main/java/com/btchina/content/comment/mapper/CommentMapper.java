@@ -1,6 +1,6 @@
 package com.btchina.content.comment.mapper;
 
-import com.btchina.content.comment.model.entity.Comment;
+import com.btchina.content.comment.model.Comment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

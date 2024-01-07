@@ -5,13 +5,15 @@ import com.btchina.content.tag.model.Tag;
 import com.btchina.content.tag.model.TagQuestion;
 import com.btchina.content.tag.manager.TagManager;
 import com.btchina.content.tag.mapper.TagQuestionMapper;
-import com.btchina.content.tag.feign.qo.TagAddQO;
-import com.btchina.content.tag.feign.vo.TagVO;
-import com.btchina.content.question.feign.qo.QueryQuestionTagQO;
-import com.btchina.content.question.feign.qo.QuestionEditTagQO;
+import com.btchina.feign.model.tag.qo.TagAddQO;
+import com.btchina.feign.model.tag.vo.TagListVO;
+import com.btchina.feign.model.tag.vo.TagVO;
+import com.btchina.feign.model.tag.qo.QueryQuestionTagQO;
+import com.btchina.feign.model.tag.qo.QuestionEditTagQO;
 import com.btchina.content.tag.service.TagQuestionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.content.tag.service.TagService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,22 +62,25 @@ public class TagQuestionServiceImpl extends ServiceImpl<TagQuestionMapper, TagQu
     }
 
     @Override
-    public List<TagVO> queryTag(QueryQuestionTagQO queryQuestionTagQO) {
-        List<TagVO> tagVOS = new ArrayList<>();
+    public List<TagListVO> queryTag(QueryQuestionTagQO queryQuestionTagQO) {
+        List<TagListVO> tagVOS = new ArrayList<>();
         List<Long> ids = queryQuestionTagQO.getIds();
         for (Long id : ids) {
-            List<Tag> tags = new ArrayList<>();
+            List<TagVO> tags = new ArrayList<>();
             LambdaQueryWrapper<TagQuestion> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(TagQuestion::getQuestionId, id);
             List<TagQuestion> tagQuestions = list(queryWrapper);
             for (TagQuestion tagQuestion : tagQuestions) {
                 Tag tag = tagService.getById(tagQuestion.getTagId());
-                tags.add(tag);
+                TagVO tagVO = new TagVO();
+                BeanUtils.copyProperties(tag, tagVO);
+                tags.add(tagVO);
             }
-            TagVO tagVO = new TagVO();
-            tagVO.setId(id);
-            tagVO.setTags(tags);
-            tagVOS.add(tagVO);
+
+            TagListVO tagListVO = new TagListVO();
+            tagListVO.setId(id);
+            tagListVO.setTags(tags);
+            tagVOS.add(tagListVO);
         }
         return tagVOS;
     }

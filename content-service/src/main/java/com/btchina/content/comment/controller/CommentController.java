@@ -1,11 +1,11 @@
 package com.btchina.content.comment.controller;
 
 
-import com.btchina.content.comment.feign.qo.CommentAddQO;
-import com.btchina.content.comment.feign.qo.CommentLikeQO;
-import com.btchina.content.comment.feign.qo.CommentQueryQO;
-import com.btchina.content.comment.feign.qo.CommentUpdateQO;
-import com.btchina.content.comment.feign.vo.CommentVO;
+import com.btchina.content.comment.model.qo.CommentAddQO;
+import com.btchina.content.comment.model.qo.CommentLikeQO;
+import com.btchina.content.comment.model.qo.CommentQueryQO;
+import com.btchina.content.comment.model.qo.CommentUpdateQO;
+import com.btchina.content.comment.model.vo.CommentVO;
 import com.btchina.content.comment.service.CommentService;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.core.api.PageResult;
 import com.btchina.content.tag.model.Tag;
-import com.btchina.content.tag.feign.qo.TagQueryQO;
+import com.btchina.feign.model.tag.qo.TagQueryQO;
 import com.btchina.content.infra.constant.TagConstant;
 import com.btchina.content.tag.mapper.TagMapper;
 import com.btchina.content.tag.model.doc.TagDoc;

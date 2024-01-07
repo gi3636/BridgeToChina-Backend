@@ -131,6 +131,11 @@
             <artifactId>user-service</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.btchina</groupId>
+            <artifactId>feign-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!--JWT(Json Web Token)登录支持-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

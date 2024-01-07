@@ -3,14 +3,14 @@ package com.btchina.content.comment.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.btchina.content.infra.constant.CommentConstant;
-import com.btchina.content.comment.model.entity.Comment;
-import com.btchina.content.comment.model.entity.CommentUserLike;
+import com.btchina.content.comment.model.Comment;
+import com.btchina.content.comment.model.CommentUserLike;
 import com.btchina.content.comment.mapper.CommentMapper;
-import com.btchina.content.comment.feign.qo.CommentAddQO;
-import com.btchina.content.comment.feign.qo.CommentLikeQO;
-import com.btchina.content.comment.feign.qo.CommentQueryQO;
-import com.btchina.content.comment.feign.qo.CommentUpdateQO;
-import com.btchina.content.comment.feign.vo.CommentVO;
+import com.btchina.content.comment.model.qo.CommentAddQO;
+import com.btchina.content.comment.model.qo.CommentLikeQO;
+import com.btchina.content.comment.model.qo.CommentQueryQO;
+import com.btchina.content.comment.model.qo.CommentUpdateQO;
+import com.btchina.content.comment.model.vo.CommentVO;
 import com.btchina.content.comment.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.content.comment.service.CommentUserLikeService;
@@ -19,9 +19,10 @@ import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
-import com.btchina.content.question.feign.QuestionClient;
-import com.btchina.user.feign.UserClient;
-import com.btchina.user.feign.vo.UserVO;
+import com.btchina.feign.clients.QuestionClient;
+import com.btchina.feign.clients.UserClient;
+import com.btchina.feign.model.question.vo.AnswerVO;
+import com.btchina.feign.model.user.vo.UserVO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         if (userId == null) {
             throw new GlobalException(ResultCode.UNAUTHORIZED);
         }
-        Answer answer = questionClient.findAnswerById(commentAddQO.getAnswerId());
+        AnswerVO answer = questionClient.findAnswerById(commentAddQO.getAnswerId());
         if (answer == null) {
             throw new GlobalException("回答不存在");
         }

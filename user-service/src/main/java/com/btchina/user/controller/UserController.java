@@ -6,11 +6,12 @@ import com.btchina.core.util.AuthHelper;
 import com.btchina.user.entity.User;
 import com.btchina.user.model.form.EditUserForm;
 import com.btchina.user.model.form.GetUserForm;
-import com.btchina.user.feign.vo.UserVO;
+import com.btchina.feign.model.user.vo.UserVO;
 import com.btchina.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +37,15 @@ public class UserController {
 
     @ApiOperation(value = "根据id查询用户信息")
     @GetMapping("{id}")
-    public User findById(@PathVariable("id") Long id) {
+    public UserVO findById(@PathVariable("id") Long id) {
         User user = userService.getBaseMapper().selectById(id);
         if (user != null) {
             user.setPassword(null);
         }
-        return user;
+
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return userVO;
     }
 
     @ApiOperation(value = "根据id查询用户信息")

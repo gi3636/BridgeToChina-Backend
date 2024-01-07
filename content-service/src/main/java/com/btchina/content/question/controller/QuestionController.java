@@ -2,15 +2,16 @@ package com.btchina.content.question.controller;
 
 
 
-import com.btchina.content.question.feign.qo.*;
-import com.btchina.content.tag.feign.qo.AutoCompleteQO;
+import cn.hutool.core.bean.BeanUtil;
+import com.btchina.content.question.model.qo.*;
+import com.btchina.feign.model.tag.qo.AutoCompleteQO;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
 import com.btchina.content.question.model.Question;
 import com.btchina.content.question.model.doc.QuestionDoc;
-import com.btchina.content.question.feign.vo.QuestionVO;
+import com.btchina.feign.model.question.vo.QuestionVO;
 import com.btchina.content.question.service.QuestionService;
 import com.btchina.content.question.service.QuestionUserFavoriteService;
 import com.btchina.content.question.service.QuestionUserLikeService;
@@ -218,8 +219,11 @@ public class QuestionController {
 
     @ApiOperation(value = "获取问题")
     @GetMapping("/findById/{id}")
-    public Question findById(@PathVariable("id") Long id) {
-        return questionService.getById(id);
+    public QuestionVO findById(@PathVariable("id") Long id) {
+        QuestionVO questionVO = new QuestionVO();
+        Question question = questionService.getById(id);
+        BeanUtil.copyProperties(question, questionVO);
+        return questionVO;
     }
 
     @ApiOperation(value = "增加问题回答数")

@@ -4,23 +4,22 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.content.infra.constant.AnswerConstant;
-import com.btchina.content.question.feign.QuestionClient;
-import com.btchina.content.question.feign.qo.AnswerAddQO;
-import com.btchina.content.question.feign.qo.AnswerQueryQO;
-import com.btchina.content.question.feign.qo.AnswerUpdateQO;
-import com.btchina.content.question.feign.vo.AnswerVO;
+import com.btchina.feign.clients.QuestionClient;
+import com.btchina.content.question.model.qo.AnswerAddQO;
+import com.btchina.content.question.model.qo.AnswerQueryQO;
+import com.btchina.content.question.model.qo.AnswerUpdateQO;
+import com.btchina.feign.model.question.vo.AnswerVO;
 import com.btchina.content.question.mapper.AnswerMapper;
 import com.btchina.content.question.model.Answer;
 import com.btchina.content.question.model.AnswerUserUse;
-import com.btchina.content.question.model.Question;
 import com.btchina.content.question.service.AnswerService;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
-import com.btchina.user.entity.User;
-import com.btchina.user.feign.UserClient;
-import com.btchina.user.feign.vo.UserVO;
+import com.btchina.feign.clients.UserClient;
+import com.btchina.feign.model.question.vo.QuestionVO;
+import com.btchina.feign.model.user.vo.UserVO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +60,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         if (userId == null) {
             throw GlobalException.from(ResultCode.UNAUTHORIZED);
         }
-        Question question = questionClient.findById(answerAddQO.getQuestionId());
+        QuestionVO question = questionClient.findById(answerAddQO.getQuestionId());
         if (question == null) {
             throw GlobalException.from("问题不存在");
         }
@@ -216,7 +215,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         }
         AnswerVO answerVO = new AnswerVO();
         BeanUtils.copyProperties(answer, answerVO);
-        User user = userClient.findById(answer.getUserId());
+        UserVO user = userClient.findById(answer.getUserId());
         if (user != null) {
             answerVO.setNickname(user.getNickname());
             answerVO.setAvatar(user.getAvatar());

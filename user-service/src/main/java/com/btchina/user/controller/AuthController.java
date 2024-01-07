@@ -4,7 +4,7 @@ package com.btchina.user.controller;
 import com.btchina.core.api.CommonResult;
 import com.btchina.user.model.form.LoginForm;
 import com.btchina.user.model.form.RegisterForm;
-import com.btchina.user.feign.vo.UserVO;
+import com.btchina.feign.model.user.vo.UserVO;
 import com.btchina.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

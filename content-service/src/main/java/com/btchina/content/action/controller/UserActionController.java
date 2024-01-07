@@ -1,10 +1,10 @@
 package com.btchina.content.action.controller;
 
 
-import com.btchina.content.action.feign.vo.UserActionVO;
+import com.btchina.feign.model.userAction.vo.UserActionVO;
 import com.btchina.core.api.CommonResult;
-import com.btchina.content.action.feign.qo.UserActionForm;
-import com.btchina.content.action.feign.qo.GetUserActionForm;
+import com.btchina.feign.model.userAction.qo.UserActionForm;
+import com.btchina.feign.model.userAction.qo.GetUserActionForm;
 import com.btchina.content.action.service.UserActionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

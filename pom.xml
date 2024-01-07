@@ -23,6 +23,7 @@
         <module>content-service</module>
         <module>message-service</module>
         <module>admin-service</module>
+        <module>feign-api</module>
     </modules>
 
     <properties>

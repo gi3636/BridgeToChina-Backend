@@ -2,11 +2,11 @@ package com.btchina.content.question.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import com.btchina.content.question.feign.qo.*;
+import com.btchina.content.question.model.qo.*;
 import com.btchina.core.api.PageResult;
 import com.btchina.content.question.model.Question;
 import com.btchina.content.question.model.doc.QuestionDoc;
-import com.btchina.content.question.feign.vo.QuestionVO;
+import com.btchina.feign.model.question.vo.QuestionVO;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.util.List;

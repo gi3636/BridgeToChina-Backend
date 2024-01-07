@@ -3,20 +3,19 @@ package com.btchina.content.action.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.btchina.content.action.feign.qo.GetUserActionForm;
-import com.btchina.content.action.feign.qo.UserActionForm;
-import com.btchina.content.action.feign.vo.UserActionVO;
+import com.btchina.feign.model.userAction.qo.GetUserActionForm;
+import com.btchina.feign.model.userAction.qo.UserActionForm;
+import com.btchina.feign.model.userAction.vo.UserActionVO;
 import com.btchina.content.action.mapper.UserActionMapper;
 import com.btchina.content.action.model.UserAction;
 import com.btchina.content.action.service.UserActionService;
-import com.btchina.content.question.feign.QuestionClient;
-import com.btchina.content.question.feign.vo.QuestionVO;
-import com.btchina.content.question.model.Question;
-import com.btchina.message.feign.MessageClient;
-import com.btchina.message.feign.qo.NotifyAddForm;
+import com.btchina.feign.clients.QuestionClient;
+import com.btchina.feign.model.question.vo.QuestionVO;
+import com.btchina.feign.clients.MessageClient;
+import com.btchina.feign.model.message.qo.NotifyAddForm;
 import com.btchina.model.enums.ActionEnum;
-import com.btchina.user.feign.UserClient;
-import com.btchina.user.feign.vo.UserVO;
+import com.btchina.feign.clients.UserClient;
+import com.btchina.feign.model.user.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +68,7 @@ public class UserActionServiceImpl extends ServiceImpl<UserActionMapper, UserAct
             switch (userActionForm.getObjectType()) {
                 case 1:
                     //问题
-                    Question question = questionClient.findById(userActionForm.getObjectId());
+                    QuestionVO question = questionClient.findById(userActionForm.getObjectId());
                     if (question != null) {
                         BeanUtils.copyProperties(userActionForm, notifyAddForm);
                         notifyAddForm.setSenderId(userActionForm.getUserId());

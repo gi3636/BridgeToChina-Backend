@@ -15,7 +15,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableRedisSerialize
 @SpringBootApplication
 @EnableMq
-@EnableFeignClients(basePackages = {"com.btchina.**.**.feign"})
+@EnableFeignClients(basePackages = {"com.btchina.feign.clients"})
 @EnableDefaultExceptionAdvice
 @EnableLongToStringConfig
 public class ContentServiceApplication {

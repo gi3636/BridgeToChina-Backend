@@ -2,8 +2,8 @@ package com.btchina.content.news.service;
 
 import com.btchina.content.news.model.News;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.btchina.content.news.feign.qo.NewsAddQO;
-import com.btchina.content.news.feign.qo.NewsQueryQO;
+import com.btchina.content.news.model.qo.NewsAddQO;
+import com.btchina.content.news.model.qo.NewsQueryQO;
 import com.btchina.core.api.PageResult;
 
 /**

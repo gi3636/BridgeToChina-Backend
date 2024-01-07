@@ -1,6 +1,6 @@
 package com.btchina.content.question.service;
 
-import com.btchina.content.question.feign.qo.QuestionFavouriteQO;
+import com.btchina.content.question.model.qo.QuestionFavouriteQO;
 import com.btchina.content.question.model.QuestionUserFavorite;
 import com.baomidou.mybatisplus.extension.service.IService;
 

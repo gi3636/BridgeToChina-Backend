@@ -1,9 +1,9 @@
 package com.btchina.content.action.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.btchina.content.action.feign.qo.GetUserActionForm;
-import com.btchina.content.action.feign.qo.UserActionForm;
-import com.btchina.content.action.feign.vo.UserActionVO;
+import com.btchina.feign.model.userAction.qo.GetUserActionForm;
+import com.btchina.feign.model.userAction.qo.UserActionForm;
+import com.btchina.feign.model.userAction.vo.UserActionVO;
 import com.btchina.content.action.model.UserAction;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.btchina.content.question.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.btchina.content.action.feign.UserActionClient;
+import com.btchina.feign.clients.UserActionClient;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.content.infra.constant.QuestionConstant;
@@ -14,8 +14,7 @@ import com.btchina.content.question.service.QuestionUserLikeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.btchina.model.enums.ActionEnum;
 import com.btchina.model.enums.ObjectEnum;
-import com.btchina.content.action.feign.qo.UserActionForm;
-import com.btchina.user.feign.UserClient;
+import com.btchina.feign.model.userAction.qo.UserActionForm;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

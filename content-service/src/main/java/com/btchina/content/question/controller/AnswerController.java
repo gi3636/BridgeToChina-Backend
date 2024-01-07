@@ -1,17 +1,16 @@
 package com.btchina.content.question.controller;
 
 
-import com.btchina.content.question.model.Answer;
-import com.btchina.content.question.feign.qo.AnswerUseQO;
+import com.btchina.content.question.model.qo.AnswerUseQO;
 import com.btchina.content.question.service.AnswerService;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
-import com.btchina.content.question.feign.qo.AnswerAddQO;
-import com.btchina.content.question.feign.qo.AnswerQueryQO;
-import com.btchina.content.question.feign.qo.AnswerUpdateQO;
-import com.btchina.content.question.feign.vo.AnswerVO;
+import com.btchina.content.question.model.qo.AnswerAddQO;
+import com.btchina.content.question.model.qo.AnswerQueryQO;
+import com.btchina.content.question.model.qo.AnswerUpdateQO;
+import com.btchina.feign.model.question.vo.AnswerVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,8 +108,8 @@ public class AnswerController {
 
     @ApiOperation(value = "获取回答详情")
     @PostMapping("/findById")
-    public Answer findById(@Validated @RequestBody Long answerId) {
-        return answerService.findById(answerId);
+    public AnswerVO findById(@Validated @RequestBody Long answerId) {
+        return answerService.findVOById(answerId);
     }
 
     @ApiOperation(value = "获取回答详情")

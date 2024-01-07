@@ -1,7 +1,7 @@
 package com.btchina.content.notification.mq;
 
 
-import com.btchina.content.notification.feign.vo.NotifyVO;
+import com.btchina.content.notification.model.vo.NotifyVO;
 import com.btchina.content.notification.model.Notify;
 import com.btchina.core.util.JsonUtils;
 import com.btchina.message.constant.NotifyConstant;
