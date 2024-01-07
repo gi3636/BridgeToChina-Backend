@@ -1,6 +1,8 @@
 logging:
   home: /data/logs
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: gateway-service
   profiles:
