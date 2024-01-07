@@ -1,6 +1,8 @@
 logging:
   home: /data
 spring:
+  main:
+    allow-bean-definition-overriding: true
   profiles:
     active: @spring.profiles.active@
   application:
