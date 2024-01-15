@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.btchina.content.school.mapper.SchoolMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.btchina.content.school.model.School">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="introduction" property="introduction" />
+        <result column="detail" property="detail" />
+        <result column="logo" property="logo" />
+        <result column="sort" property="sort" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+</mapper>
