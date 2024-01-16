@@ -11,7 +11,7 @@ import com.btchina.user.model.form.RegisterForm;
 import com.btchina.feign.model.user.vo.UserVO;
 import com.btchina.user.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.btchina.util.JwtTokenUtil;
+import com.btchina.core.util.JwtTokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

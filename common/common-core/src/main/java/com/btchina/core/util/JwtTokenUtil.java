@@ -1,4 +1,4 @@
-package com.btchina.util;
+package com.btchina.core.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;

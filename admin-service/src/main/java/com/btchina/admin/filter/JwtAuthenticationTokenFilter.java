@@ -6,7 +6,7 @@ import com.btchina.admin.entity.LoginUser;
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.redis.service.RedisService;
-import com.btchina.util.JwtTokenUtil;
+import com.btchina.core.util.JwtTokenUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;

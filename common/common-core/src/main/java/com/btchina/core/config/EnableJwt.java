@@ -1,6 +1,6 @@
 package com.btchina.core.config;
 
-import com.btchina.util.JwtTokenUtil;
+import com.btchina.core.util.JwtTokenUtil;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

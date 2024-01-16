@@ -1,2 +1,2 @@
-#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-#  cn.sticki.common.web.anno.RequestLimitAspect
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com/btchina/core/i18n/MessageResourceConfig,\
+com/btchina/core/i18n/MessageSourceUtil

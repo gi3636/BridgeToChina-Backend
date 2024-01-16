@@ -2,7 +2,7 @@ package com.btchina.gateway.filter;
 
 import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
-import com.btchina.util.JwtTokenUtil;
+import com.btchina.core.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

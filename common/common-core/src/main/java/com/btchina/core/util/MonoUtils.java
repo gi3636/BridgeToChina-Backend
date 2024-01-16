@@ -1,4 +1,4 @@
-package com.btchina.gateway.utils;
+package com.btchina.core.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

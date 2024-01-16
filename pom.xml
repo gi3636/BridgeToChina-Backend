@@ -47,6 +47,7 @@
         <jasypt.version>2.1.0</jasypt.version>
         <minio.version>8.3.4</minio.version>
         <okhttp3.version>4.9.0</okhttp3.version>
+        <fastjson.version>2.0.32</fastjson.version>
         <druid.version>1.2.9</druid.version>
         <jetcache.version>2.6.4</jetcache.version>
         <hystrix.version>2.2.10.RELEASE</hystrix.version>

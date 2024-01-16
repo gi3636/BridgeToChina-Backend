@@ -5,7 +5,7 @@ import com.btchina.admin.filter.JwtAuthenticationTokenFilter;
 import com.btchina.admin.handler.AccessDeniedHandlerImpl;
 import com.btchina.admin.handler.AuthenticationEntryPointImpl;
 import com.btchina.redis.service.RedisService;
-import com.btchina.util.JwtTokenUtil;
+import com.btchina.core.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)// 开启权限注解
