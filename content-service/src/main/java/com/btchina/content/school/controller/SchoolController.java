@@ -1,21 +1,14 @@
 package com.btchina.content.school.controller;
 
 
-import com.btchina.content.question.model.Question;
+import com.btchina.content.school.business.SchoolBusiness;
+import com.btchina.content.school.model.qo.SchoolListQO;
+import com.btchina.content.school.model.vo.SchoolVO;
 import com.btchina.core.api.CommonResult;
-import com.btchina.core.api.ResultCode;
-import com.btchina.core.exception.GlobalException;
-import com.btchina.core.i18n.MessageSourceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Locale;
+import java.util.List;
 
 /**
  * <p>
@@ -29,28 +22,15 @@ import java.util.Locale;
 @RequestMapping("/school")
 public class SchoolController {
 
-    @Autowired
-    private MessageSource messageSource;
 
     @Autowired
-    private MessageSourceUtil messageSourceUtil;
+    private SchoolBusiness schoolBusiness;
 
-    @GetMapping("/test")
-    public CommonResult<String> test() {
-        System.out.println(LocaleContextHolder.getLocale());
-        String result = messageSource.getMessage("test",
-                new String[]{"message"}, Locale.SIMPLIFIED_CHINESE);
-        System.out.println("result: " + result);
-        System.out.println("result: " + result);
-        System.out.println("test: " + messageSourceUtil.getMessage("test"));
-        return CommonResult.success(result);
+    @PostMapping("/list")
+    public CommonResult<List<SchoolVO>> list(@RequestBody SchoolListQO schoolListQO) {
+        System.out.println("schoolListQO = " + schoolListQO);
+        return CommonResult.success(schoolBusiness.list(schoolListQO));
     }
-
-    @GetMapping("/test1")
-    public CommonResult<String> test1() {
-        throw GlobalException.from(ResultCode.USER_NOT_LOGIN);
-    }
-
 
 }
 
