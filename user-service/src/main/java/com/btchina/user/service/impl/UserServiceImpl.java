@@ -46,7 +46,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //查询是否有用户
         User existUser = userManager.getAndSetCacheByUsername(registerForm.getUsername());
         if (existUser != null) {
-            throw GlobalException.from(ResultCode.USER_EXITS);
+            throw GlobalException.from(ResultCode.USER_EXISTS);
         }
         User user = new User();
         //将密码进行加密操作

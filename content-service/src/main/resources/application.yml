@@ -1,8 +1,3 @@
 server:
   port: 8100
   address: 0.0.0.0
-spring:
-  messages:
-    basename: i18n/message
-    encoding: UTF-8
-    cache-duration: 3600

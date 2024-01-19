@@ -3,6 +3,8 @@ package com.btchina.content.school.controller;
 
 import com.btchina.content.question.model.Question;
 import com.btchina.core.api.CommonResult;
+import com.btchina.core.api.ResultCode;
+import com.btchina.core.exception.GlobalException;
 import com.btchina.core.i18n.MessageSourceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -39,9 +41,16 @@ public class SchoolController {
         String result = messageSource.getMessage("test",
                 new String[]{"message"}, Locale.SIMPLIFIED_CHINESE);
         System.out.println("result: " + result);
+        System.out.println("result: " + result);
         System.out.println("test: " + messageSourceUtil.getMessage("test"));
         return CommonResult.success(result);
     }
+
+    @GetMapping("/test1")
+    public CommonResult<String> test1() {
+        throw GlobalException.from(ResultCode.USER_NOT_LOGIN);
+    }
+
 
 }
 

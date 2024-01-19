@@ -1,60 +1,58 @@
 package com.btchina.core.api;
 
+import lombok.Getter;
+
 /**
  * 枚举了一些常用API操作码
  * Created by macro on 2019/4/19.
  */
+@Getter
 public enum ResultCode implements IErrorCode {
-    SUCCESS(200, "操作成功"),
-    FAILED(500, "操作失败"),
-    VALIDATE_FAILED(404, "参数检验失败"),
-    UNAUTHORIZED(401, "暂未登录或token已经过期"),
-    FORBIDDEN(403, "没有相关权限"),
-    TOKEN_INVALID(500, "token验证失败"),
 
-    //用户相关
-    USER_NOT_FOUND(20001, "用户不存在"),
-    PASSWORD_WRONG(20002, "密码错误"),
-    USER_EXITS(20003, "用户已存在"),
-    PASSWORD_NOT_SAME(20004, "密码不一致"),
-    USER_NOT_LOGIN(20005, "用户未登录"),
-    GET_STS_TOKEN_ERROR(20100, "获取stsToken失败"),
-    UPLOAD_ERROR(20101, "上传文件失败"),
-    FILE_EMPTY(20102, "文件为空"),
 
-    CREATED_INDEX_FAILED(20201, "创建索引失败"),
+    SUCCESS(200, "validation.success"),
+    FAILED(500, "validation.error"),
+    VALIDATE_FAILED(404, "parameter.validation.failed"),
+    UNAUTHORIZED(401, "not.logged.in.or.token.expired"),
+    FORBIDDEN(403, "no.related.permissions"),
+    TOKEN_INVALID(500, "token.validation.failed"),
 
-    INDEX_EXISTS(20202, "索引已存在"),
-    QueryError(20203, "查询数据错误"),
-    NOTE_NOT_EXIST(20204, "笔记不存在"),
-    COMMENT_NOT_EXIST(20205, "评论不存在"),
-    COMMENT_NOTE_NOT_MATCH(20206, "评论笔记不匹配"),
-    LOGIN_FAILED(20207, "登录失败"),
-    QUESTION_NOT_EXIST(20208, "问题不存在"),
-    ANSWER_NOT_EXIST(20209, "回答不存在"),
+    // User-related
+    USER_NOT_FOUND(20001, "user.not.found"),
+    PASSWORD_WRONG(20002, "incorrect.password"),
+    USER_EXISTS(20003, "user.already.exists"),
+    PASSWORD_NOT_SAME(20004, "passwords.not.match"),
+    USER_NOT_LOGIN(20005, "user.not.logged.in"),
+    GET_STS_TOKEN_ERROR(20100, "failed.to.get.stsToken"),
+    UPLOAD_ERROR(20101, "file.upload.failed"),
+    FILE_EMPTY(20102, "empty.file"),
 
-    /**
-     * 消息相关
-     */
-    MESSAGE_NOT_EXIST(20300, "消息不存在"),
-    NOTIFY_NOT_EXIST(20400, "通知不存在");
+    CREATED_INDEX_FAILED(20201, "index.creation.failed"),
+
+    INDEX_EXISTS(20202, "index.already.exists"),
+    QUERY_ERROR(20203, "data.query.error"),
+    NOTE_NOT_EXIST(20204, "note.not.exists"),
+    COMMENT_NOT_EXIST(20205, "comment.not.exists"),
+    COMMENT_NOTE_NOT_MATCH(20206, "comment.note.not.match"),
+    LOGIN_FAILED(20207, "login.failed"),
+    QUESTION_NOT_EXIST(20208, "question.not.exists"),
+    ANSWER_NOT_EXIST(20209, "answer.not.exists"),
+
+    // Message-related
+    MESSAGE_NOT_EXIST(20300, "message.not.exists"),
+    NOTIFY_NOT_EXIST(20400, "notification.not.exists");
 
 
     private long code;
+    private String key;
     private String message;
 
-    private ResultCode(long code, String message) {
+    ResultCode(long code, String key) {
         this.code = code;
-        this.message = message;
+        this.key = key;
     }
 
-    public long getCode() {
-        return code;
-    }
 
-    public String getMessage() {
-        return message;
-    }
 
 
 }
