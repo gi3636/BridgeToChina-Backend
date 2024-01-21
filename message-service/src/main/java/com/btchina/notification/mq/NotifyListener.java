@@ -1,13 +1,13 @@
-package com.btchina.content.notification.mq;
+package com.btchina.notification.mq;
 
 
-import com.btchina.content.notification.model.vo.NotifyVO;
-import com.btchina.content.notification.model.Notify;
+import com.btchina.notification.model.vo.NotifyVO;
+import com.btchina.notification.model.Notify;
 import com.btchina.core.util.JsonUtils;
 import com.btchina.message.constant.NotifyConstant;
 import com.btchina.message.model.send.NotificationMessage;
 import com.btchina.message.netty.UserConnectPool;
-import com.btchina.content.notification.service.NotifyService;
+import com.btchina.notification.service.NotifyService;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;

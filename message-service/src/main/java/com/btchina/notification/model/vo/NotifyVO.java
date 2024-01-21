@@ -1,4 +1,4 @@
-package com.btchina.content.notification.model.vo;
+package com.btchina.notification.model.vo;
 
 import com.btchina.feign.model.question.vo.QuestionVO;
 import io.swagger.annotations.ApiModelProperty;

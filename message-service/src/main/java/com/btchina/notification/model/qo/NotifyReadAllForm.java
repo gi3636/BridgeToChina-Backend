@@ -1,4 +1,4 @@
-package com.btchina.content.notification.model.qo;
+package com.btchina.notification.model.qo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

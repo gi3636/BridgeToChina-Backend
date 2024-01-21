@@ -23,38 +23,38 @@ import reactor.core.publisher.Mono;
 @Order(-1)
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
-	//@Resource
-	//private VisitRecordService visitRecordService;
+    //@Resource
+    //private VisitRecordService visitRecordService;
 
-	@Override
-	public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
-		ServerHttpResponse response = exchange.getResponse();
-		ServerHttpRequest request = exchange.getRequest();
+    @Override
+    public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+        ServerHttpResponse response = exchange.getResponse();
+        ServerHttpRequest request = exchange.getRequest();
 
-		if (response.isCommitted()) {
-			return Mono.error(ex);
-		}
+        if (response.isCommitted()) {
+            return Mono.error(ex);
+        }
 
-		// 设置返回信息和HTTP状态码
-		CommonResult<Object> result;
-		HttpStatus httpStatus;
-		if (ex instanceof ResponseStatusException) {
-			// HTTP状态码异常
-			log.warn("Http Status Warn : {}, url: {}", ex.getMessage(), request.getURI());
-			httpStatus = ((ResponseStatusException) ex).getStatus();
-		} else {
-			// 系统异常
-			log.error("Error Gateway, {}: {}, url: {}", ex.getClass(), ex.getMessage(), request.getURI());
-			httpStatus = HttpStatus.BAD_GATEWAY;
-		}
-		System.out.println("httpStatus:"+httpStatus);
-		result = CommonResult.failed(ex.getMessage());
-		response.setStatusCode(httpStatus);
+        // 设置返回信息和HTTP状态码
+        CommonResult<Object> result;
+        HttpStatus httpStatus;
+        if (ex instanceof ResponseStatusException) {
+            // HTTP状态码异常
+            log.warn("Http Status Warn : {}, url: {}", ex.getMessage(), request.getURI());
+            httpStatus = ((ResponseStatusException) ex).getStatus();
+        } else {
+            // 系统异常
+            log.error("Error Gateway, {}: {}, url: {}", ex.getClass(), ex.getMessage(), request.getURI());
+            httpStatus = HttpStatus.BAD_GATEWAY;
+        }
+        System.out.println("httpStatus:" + httpStatus);
+        result = CommonResult.failed(500, ex.getMessage(), false);
+        response.setStatusCode(httpStatus);
 
-		// 由于系统异常，不会正常走过滤器，故手动保存访问记录
-		//visitRecordService.add(exchange);
+        // 由于系统异常，不会正常走过滤器，故手动保存访问记录
+        //visitRecordService.add(exchange);
 
-		return MonoUtils.buildMonoWrap(response, result);
-	}
+        return MonoUtils.buildMonoWrap(response, result);
+    }
 
 }

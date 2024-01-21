@@ -1,5 +1,6 @@
 package com.btchina.content.school.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -42,6 +43,5 @@ public class SchoolVO implements Serializable {
 
     @ApiModelProperty("更新时间")
     private Date updatedTime;
-
 
 }

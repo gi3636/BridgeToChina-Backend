@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     public Object doException(GlobalException e) {
         log.error("系统故障：{}", e.getMessage());
         e.printStackTrace();
-        return CommonResult.failed(e.getCode(), (e.getMessage()));
+        return CommonResult.failed(e.getCode(), e.getMessage(), false);
     }
 
 
@@ -59,33 +59,32 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult error(GlobalException e) {
         log.error("异常信息：{} {}", e.getCode(), e.getMessage(), e);
-        return CommonResult.failed(e.getCode(), (e.getMessage()));
+        return CommonResult.failed(e.getCode(), (e.getMessage()), false);
     }
 
     @ExceptionHandler(value = {BindException.class, ValidationException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<CommonResult<String>> handleValidatedException(Exception e) {
-        String key = null;
+        String message = null;
         MessageSourceUtil messageSourceUtil = SpringUtil.getBean(MessageSourceUtil.class);
         if (e instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
-            key = ex.getBindingResult().getAllErrors().stream()
-                    .map(ObjectError::getDefaultMessage)
+            message = ex.getBindingResult().getAllErrors().stream()
+                    .map(objectError -> messageSourceUtil.getMessage(objectError.getDefaultMessage()))
                     .collect(Collectors.joining("; ")
                     );
         } else if (e instanceof ConstraintViolationException) {
             ConstraintViolationException ex = (ConstraintViolationException) e;
-            key = ex.getConstraintViolations().stream()
-                    .map(ConstraintViolation::getMessage)
+            message = ex.getConstraintViolations().stream()
+                    .map(objectError -> messageSourceUtil.getMessage(objectError.getMessage()))
                     .collect(Collectors.joining("; ")
                     );
         } else if (e instanceof BindException) {
             BindException ex = (BindException) e;
-            key = ex.getAllErrors().stream()
-                    .map(ObjectError::getDefaultMessage)
+            message = ex.getAllErrors().stream()
+                    .map(objectError -> messageSourceUtil.getMessage(objectError.getDefaultMessage()))
                     .collect(Collectors.joining("; ")
                     );
         }
-        String message = messageSourceUtil.getMessage(key);
         CommonResult<String> resp = CommonResult.failed(message);
 
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);

@@ -22,14 +22,19 @@ public class GlobalException extends RuntimeException {
     private MessageSourceUtil messageSourceUtil;
     public GlobalException(ResultCode resultCode) {
         super(resultCode.getMessage());
+        if (messageSourceUtil == null) {
+            messageSourceUtil = SpringUtil.getBean(MessageSourceUtil.class);
+        }
         this.code = resultCode.getCode();
         this.message = messageSourceUtil.getMessage(resultCode.getKey());
     }
 
     private GlobalException(long code, String key) {
+        if (messageSourceUtil == null) {
+            messageSourceUtil = SpringUtil.getBean(MessageSourceUtil.class);
+        }
         this.code = code;
-        MessageSource messageSource = SpringUtil.getBean(MessageSource.class);
-        this.message = messageSource.getMessage(key, new String[]{"validation"}, LocaleContextHolder.getLocale());
+        this.message = messageSourceUtil.getMessage(key);
     }
 
 

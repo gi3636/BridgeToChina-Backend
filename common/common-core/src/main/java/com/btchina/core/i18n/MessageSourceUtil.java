@@ -12,7 +12,12 @@ public class MessageSourceUtil {
     MessageSource messageSource;
 
     public String getMessage(String key, Object... vals) {
-        String message = messageSource.getMessage(key, new String[]{"message"}, LocaleContextHolder.getLocale());
+        String message = messageSource.getMessage(key,  new String[]{"validation","message"}, LocaleContextHolder.getLocale());
+        return String.format(message, vals);
+    }
+
+    public String getMessage(String key, String file, Object... vals) {
+        String message = messageSource.getMessage(key, new String[]{file}, LocaleContextHolder.getLocale());
         return String.format(message, vals);
     }
 

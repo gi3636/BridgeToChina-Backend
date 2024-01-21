@@ -1,7 +1,7 @@
-package com.btchina.content.notification.mapper;
+package com.btchina.notification.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.btchina.content.notification.model.Notify;
+import com.btchina.notification.model.Notify;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;

@@ -1,15 +1,15 @@
-package com.btchina.content.notification.controller;
+package com.btchina.notification.controller;
 
 
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
-import com.btchina.content.notification.model.qo.NotifyQueryForm;
-import com.btchina.content.notification.model.qo.NotifyReadAllForm;
-import com.btchina.content.notification.model.qo.NotifyReadForm;
-import com.btchina.content.notification.model.vo.NotifyVO;
+import com.btchina.notification.model.qo.NotifyQueryForm;
+import com.btchina.notification.model.qo.NotifyReadAllForm;
+import com.btchina.notification.model.qo.NotifyReadForm;
+import com.btchina.notification.model.vo.NotifyVO;
 import com.btchina.feign.model.message.qo.NotifyAddForm;
-import com.btchina.content.notification.service.NotifyService;
+import com.btchina.notification.service.NotifyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

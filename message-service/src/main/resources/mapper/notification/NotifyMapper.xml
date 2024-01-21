@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.btchina.content.notification.mapper.NotifyMapper">
+<mapper namespace="com.btchina.notification.mapper.NotifyMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.btchina.content.notification.model.Notify">
+    <resultMap id="BaseResultMap" type="com.btchina.notification.model.Notify">
         <id column="id" property="id"/>
         <result column="sender_id" property="senderId"/>
         <result column="receiver_id" property="receiverId"/>

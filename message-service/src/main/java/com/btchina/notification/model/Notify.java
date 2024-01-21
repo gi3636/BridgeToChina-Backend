@@ -1,4 +1,4 @@
-package com.btchina.content.notification.model;
+package com.btchina.notification.model;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;

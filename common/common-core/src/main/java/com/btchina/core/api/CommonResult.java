@@ -1,7 +1,11 @@
 package com.btchina.core.api;
 
+import com.btchina.core.i18n.MessageSourceUtil;
+import com.btchina.core.util.SpringUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 通用返回对象
@@ -17,12 +21,29 @@ public class CommonResult<T> {
     @ApiModelProperty("返回数据")
     private T data;
 
+
     protected CommonResult() {
     }
 
-    protected CommonResult(long code, String message, T data) {
+    protected CommonResult(long code, String key, T data) {
+        MessageSourceUtil messageSourceUtil = SpringUtil.getBean(MessageSourceUtil.class);
         this.code = code;
-        this.message = message;
+        if (StringUtils.isEmpty(key)) {
+            this.message = "";
+        } else {
+            this.message = messageSourceUtil.getMessage(key);
+        }
+        this.data = data;
+    }
+
+    protected CommonResult(long code, String key, T data, boolean needTranslate) {
+        if (needTranslate) {
+            MessageSourceUtil messageSourceUtil = SpringUtil.getBean(MessageSourceUtil.class);
+            this.message = messageSourceUtil.getMessage(key);
+        }else {
+            this.message = key;
+        }
+        this.code = code;
         this.data = data;
     }
 
@@ -32,7 +53,7 @@ public class CommonResult<T> {
      * @param data 获取的数据
      */
     public static <T> CommonResult<T> success(T data) {
-        return new CommonResult<T>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), data);
+        return new CommonResult<T>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getKey(), data);
     }
 
     /**
@@ -51,7 +72,7 @@ public class CommonResult<T> {
      * @param errorCode 错误码
      */
     public static <T> CommonResult<T> failed(IErrorCode errorCode) {
-        return new CommonResult<T>(errorCode.getCode(), errorCode.getMessage(), null);
+        return new CommonResult<T>(errorCode.getCode(), errorCode.getKey(), null);
     }
 
     /**
@@ -72,6 +93,14 @@ public class CommonResult<T> {
      */
     public static <T> CommonResult<T> failed(long errorCode, String message) {
         return new CommonResult<T>(errorCode, message, null);
+    }
+
+    public static <T> CommonResult<T> failed(long errorCode, String message, boolean needTranslate) {
+        if (needTranslate) {
+            return new CommonResult<T>(errorCode, message, null);
+        } else {
+            return new CommonResult<T>(errorCode, message,null, false);
+        }
     }
 
 
@@ -130,7 +159,6 @@ public class CommonResult<T> {
     public static <T> CommonResult<T> forbidden(T data) {
         return new CommonResult<T>(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMessage(), data);
     }
-
 
 
     public long getCode() {

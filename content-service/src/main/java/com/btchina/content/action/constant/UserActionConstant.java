@@ -1,4 +1,4 @@
-package com.btchina.user.constant;
+package com.btchina.content.action.constant;
 
 public class UserActionConstant {
     public static final String INDEX = "user.action";

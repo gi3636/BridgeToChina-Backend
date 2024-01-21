@@ -13,6 +13,7 @@ public enum ResultCode implements IErrorCode {
     SUCCESS(200, "validation.success"),
     FAILED(500, "validation.error"),
     VALIDATE_FAILED(404, "parameter.validation.failed"),
+    ARGUMENT_NOT_VALID(400, "parameter.validation.failed"),
     UNAUTHORIZED(401, "not.logged.in.or.token.expired"),
     FORBIDDEN(403, "no.related.permissions"),
     TOKEN_INVALID(500, "token.validation.failed"),

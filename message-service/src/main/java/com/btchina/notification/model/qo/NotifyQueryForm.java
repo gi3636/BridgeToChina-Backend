@@ -1,4 +1,4 @@
-package com.btchina.content.notification.model.qo;
+package com.btchina.notification.model.qo;
 
 import com.btchina.core.api.PageQueryParam;
 import io.swagger.annotations.ApiModelProperty;

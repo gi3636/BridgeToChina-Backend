@@ -7,5 +7,7 @@ package com.btchina.core.api;
 public interface IErrorCode {
     long getCode();
 
+    String getKey();
+
     String getMessage();
 }
