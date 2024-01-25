@@ -7,7 +7,7 @@
         <artifactId>cs-platform</artifactId>
         <version>1.0.0</version>
     </parent>
-    <groupId>com.btchina</groupId>
+
     <artifactId>file-service</artifactId>
     <version>1.0.0</version>
     <name>file-service</name>
@@ -17,6 +17,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.btchina</groupId>
@@ -47,7 +48,16 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.btchina.file.FileServiceApplication</mainClass>
+                    <skip>true</skip>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 将依赖到的包都放进去 -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

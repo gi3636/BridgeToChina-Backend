@@ -119,10 +119,9 @@
                 <artifactId>annotations</artifactId>
                 <version>23.0.0</version>
             </dependency>
-
-
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -130,6 +129,7 @@
             <version>1.18.22</version>
         </dependency>
     </dependencies>
+
     <profiles>
         <profile>
             <activation>
@@ -160,7 +160,55 @@
             </properties>
         </profile>
     </profiles>
+
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <!-- 一般而言，target与source是保持一致的，但是，有时候为了让程序能在其他版本的jdk中运行(对于低版本目标jdk，源代码中不能使用低版本jdk中不支持的语法)，会存在target不同于source的情况 -->
+                    <encoding>UTF-8</encoding><!-- 字符集编码 -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <skipTests>true</skipTests>    <!--默认关掉单元测试 -->
+                </configuration>
+            </plugin>
+            <!-- 用来生成feign接口 -->
+            <!-- <plugin> -->
+            <!--     <groupId>org.apache.maven.plugins</groupId> -->
+            <!--     <artifactId>maven-jar-plugin</artifactId> -->
+            <!--     <executions> -->
+            <!--         <execution> -->
+            <!--             <id>interface</id> -->
+            <!--             <goals> -->
+            <!--                 <goal>jar</goal> -->
+            <!--             </goals> -->
+            <!--             <phase>package</phase> -->
+            <!--             <configuration> -->
+            <!--                 <classifier>interface</classifier> -->
+            <!--                 <includes> -->
+            <!--                     <include>**/com/btchina/**/feign/**</include> -->
+            <!--                 </includes> -->
+            <!--                 <finalName>${project.artifactId}-${project.version}</finalName> -->
+            <!--                 <archive> -->
+            <!--                     <addMavenDescriptor>false</addMavenDescriptor> -->
+            <!--                 </archive> -->
+            <!--             </configuration> -->
+            <!--         </execution> -->
+            <!--     </executions> -->
+            <!-- </plugin> -->
+        </plugins>
+
+
         <resources>
             <!-- 增加分环境读取配置 -->
             <resource>

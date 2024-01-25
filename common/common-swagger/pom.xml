@@ -11,6 +11,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>common-swagger</artifactId>
+    <version>1.0.0</version>
+
     <dependencies>
         <!--Swagger-UI API文档生产工具-->
         <!-- Swagger 3.0.0 相关依赖 -->

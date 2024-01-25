@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>common-redis</artifactId>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
