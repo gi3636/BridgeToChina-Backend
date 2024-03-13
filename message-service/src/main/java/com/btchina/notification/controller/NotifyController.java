@@ -10,8 +10,8 @@ import com.btchina.notification.model.qo.NotifyReadForm;
 import com.btchina.notification.model.vo.NotifyVO;
 import com.btchina.feign.model.message.qo.NotifyAddForm;
 import com.btchina.notification.service.NotifyService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,20 +29,20 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-03-30
  */
 @RestController
-@Api(tags = "消息通知模块")
+@Tag(name = "消息通知模块")
 @RequestMapping("/message/notify")
 public class NotifyController {
 
     @Autowired
     private NotifyService notifyService;
 
-    @ApiOperation("添加通知")
+    @Parameter(name = "添加通知")
     @PostMapping("/add")
     public Boolean add(@Validated @RequestBody NotifyAddForm notifyAddForm) {
         return notifyService.add(notifyAddForm);
     }
 
-    @ApiOperation("查询通知列表")
+    @Parameter(name ="查询通知列表")
     @PostMapping("/list")
     public CommonResult<PageResult<NotifyVO>> list(@Validated @RequestBody NotifyQueryForm notifyQueryForm) {
         Long userId = AuthHelper.getUserId();
@@ -50,7 +50,7 @@ public class NotifyController {
         return CommonResult.success(result);
     }
 
-    @ApiOperation("已读通知")
+    @Parameter(name ="已读通知")
     @PostMapping("/read")
     public CommonResult<Void> read(@Validated @RequestBody NotifyReadForm notifyReadForm) {
         Long userId = AuthHelper.getUserId();
@@ -62,7 +62,7 @@ public class NotifyController {
     }
 
 
-    @ApiOperation("已读全部通知")
+    @Parameter(name ="已读全部通知")
     @PostMapping("/readAll")
     public CommonResult<Void> read(@Validated @RequestBody NotifyReadAllForm notifyReadAllForm) {
         Long userId = AuthHelper.getUserId();

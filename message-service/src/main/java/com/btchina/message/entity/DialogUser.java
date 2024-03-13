@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,36 +26,36 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("tbl_dialog_user")
-@ApiModel(value = "DialogUser对象", description = "用户对话表")
+@Tag(name = "DialogUser对象", description = "用户对话表")
 public class DialogUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("ID")
+    @Schema(description ="ID")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @ApiModelProperty("用户ID")
+    @Schema(description ="用户ID")
     private Long userId;
 
-    @ApiModelProperty("对方用户ID")
+    @Schema(description ="对方用户ID")
     private Long toUserId;
 
-    @ApiModelProperty("会话ID")
+    @Schema(description ="会话ID")
     private Long dialogId;
 
-    @ApiModelProperty("未读消息数")
+    @Schema(description ="未读消息数")
     private Integer unreadCount;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
-    @ApiModelProperty("是否删除;1是删除，0是不删除")
+    @Schema(description ="是否删除;1是删除，0是不删除")
     @TableLogic
     private Boolean deleted;
 

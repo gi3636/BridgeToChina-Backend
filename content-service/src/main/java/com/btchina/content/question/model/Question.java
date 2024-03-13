@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.ToString;
 
@@ -26,57 +26,57 @@ import lombok.ToString;
 @Data
 @ToString
 @TableName("tbl_question")
-@ApiModel(value = "Question对象", description = "问答表")
+@Schema(name = "Question对象", description = "问答表")
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("Id")
+    @Schema(description ="Id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @ApiModelProperty("用户Id")
+    @Schema(description ="用户Id")
     private Long userId;
 
-    @ApiModelProperty("最佳回答Id")
+    @Schema(description ="最佳回答Id")
     private Long bestAnswerId;
 
-    @ApiModelProperty("标题")
+    @Schema(description ="标题")
     private String title;
 
-    @ApiModelProperty("内容")
+    @Schema(description ="内容")
     private String content;
 
-    @ApiModelProperty("收藏数")
+    @Schema(description ="收藏数")
     private Integer favoriteCount;
 
-    @ApiModelProperty("点赞数")
+    @Schema(description ="点赞数")
     private Integer likeCount;
 
-    @ApiModelProperty("浏览数")
+    @Schema(description ="浏览数")
     private Integer viewCount;
 
-    @ApiModelProperty("回答数")
+    @Schema(description ="回答数")
     private Integer answerCount;
 
-    @ApiModelProperty("图片,多个图片用逗号分隔")
+    @Schema(description ="图片,多个图片用逗号分隔")
     private String images;
 
-    @ApiModelProperty("是否公开 1是公开，0是个人可见")
+    @Schema(description ="是否公开 1是公开，0是个人可见")
     private Boolean isPublic;
 
-    @ApiModelProperty("审核状态 0是未审核 1是审核通过 2是审核不通过")
+    @Schema(description ="审核状态 0是未审核 1是审核通过 2是审核不通过")
     private Integer status;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
-    @ApiModelProperty("是否删除;1是删除，0是不删除")
+    @Schema(description ="是否删除;1是删除，0是不删除")
     @TableLogic
     private Boolean deleted;
 }

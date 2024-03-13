@@ -7,8 +7,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +24,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("tbl_tag_question")
-@ApiModel(value = "TagQuestion对象", description = "标签问题表")
+@Schema(name = "TagQuestion对象", description = "标签问题表")
 public class TagQuestion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,17 +32,17 @@ public class TagQuestion implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @ApiModelProperty("标签id")
+    @Schema(description ="标签id")
     private Long tagId;
 
-    @ApiModelProperty("问题Id")
+    @Schema(description ="问题Id")
     private Long questionId;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 

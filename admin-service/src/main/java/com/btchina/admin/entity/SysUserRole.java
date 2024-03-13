@@ -1,7 +1,8 @@
 package com.btchina.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @TableName("tbl_sys_user_role")
-@ApiModel(value = "SysUserRole对象", description = "用户角色表")
+@Schema(name = "SysUserRole对象", description = "用户角色表")
 public class SysUserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -8,8 +8,9 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,30 +25,30 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("tbl_tag")
-@ApiModel(value = "Tag对象", description = "标签表")
+@Schema(name = "Tag对象", description = "标签表")
 public class Tag implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("标签ID")
+    @Schema(description ="标签ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty("标签内容")
+    @Schema(description ="标签内容")
     private String name;
 
-    @ApiModelProperty("标签引用次数")
+    @Schema(description ="标签引用次数")
     private Integer count;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
-    @ApiModelProperty("是否删除;1是删除，0是不删除")
+    @Schema(description ="是否删除;1是删除，0是不删除")
     @TableLogic
     private Boolean deleted;
 

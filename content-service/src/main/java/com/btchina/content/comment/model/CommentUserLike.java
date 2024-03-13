@@ -7,8 +7,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,32 +24,32 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("tbl_comment_user_like")
-@ApiModel(value = "CommentUserLike对象", description = "评论点赞数表")
+@Schema(name = "CommentUserLike对象", description = "评论点赞数表")
 public class CommentUserLike implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id")
+    @Schema(description ="id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @ApiModelProperty("用户id")
+    @Schema(description ="用户id")
     private Long userId;
 
-    @ApiModelProperty("评论id")
+    @Schema(description ="评论id")
     private Long commentId;
 
-    @ApiModelProperty("回答id")
+    @Schema(description ="回答id")
     private Long answerId;
 
-    @ApiModelProperty("点赞状态 0是取消 1是点赞")
+    @Schema(description ="点赞状态 0是取消 1是点赞")
     private Integer status;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 

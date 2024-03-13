@@ -1,12 +1,13 @@
 package com.btchina.feign.model.message.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -14,38 +15,38 @@ import javax.validation.constraints.Size;
 public class UserVO {
 
     @NotNull(message = "id不能为空")
-    @ApiModelProperty("用户id")
+    @Schema(description ="用户id")
     private Long id;
 
-    @ApiModelProperty("用户名")
+    @Schema(description ="用户名")
     private String username;
 
-    @ApiModelProperty("手机号")
+    @Schema(description ="手机号")
     private String mobile;
 
-    @ApiModelProperty("昵称")
+    @Schema(description ="昵称")
     private String nickname;
 
-    @ApiModelProperty("头像")
+    @Schema(description ="头像")
     private String avatar;
 
     @Size(max = 2, message = "性别只能是0,1或2")
-    @ApiModelProperty("性别 0是保密 1是男 2是女")
+    @Schema(description ="性别 0是保密 1是男 2是女")
     private Integer sex;
 
-    @ApiModelProperty("国家")
+    @Schema(description ="国家")
     private String country;
 
-    @ApiModelProperty("城市")
+    @Schema(description ="城市")
     private String city;
 
-    @ApiModelProperty("简介")
+    @Schema(description ="简介")
     private String description;
 
-    @ApiModelProperty("个人介绍的背景图")
+    @Schema(description ="个人介绍的背景图")
     private String cover;
 
-    @ApiModelProperty("JwtToken")
+    @Schema(description ="JwtToken")
     private String token;
 
 }

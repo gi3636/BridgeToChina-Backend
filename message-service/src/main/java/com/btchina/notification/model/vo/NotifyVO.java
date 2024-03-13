@@ -1,7 +1,8 @@
 package com.btchina.notification.model.vo;
 
 import com.btchina.feign.model.question.vo.QuestionVO;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.ToString;
 
@@ -11,48 +12,48 @@ import java.util.Date;
 @ToString
 public class NotifyVO {
 
-    @ApiModelProperty("id")
+    @Schema(description ="id")
     private Long id;
 
-    @ApiModelProperty("发送者id, 0是系统发送")
+    @Schema(description ="发送者id, 0是系统发送")
     private Long senderId;
 
-    @ApiModelProperty("发送者名称")
+    @Schema(description ="发送者名称")
     private String senderName;
 
-    @ApiModelProperty("发送者头像")
+    @Schema(description ="发送者头像")
     private String senderAvatar;
 
-    @ApiModelProperty("接收者id")
+    @Schema(description ="接收者id")
     private Long receiverId;
 
-    @ApiModelProperty("对象id")
+    @Schema(description ="对象id")
     private Long objectId;
 
-    @ApiModelProperty("操作类型 1 点赞 2 收藏 3 评论 4 采用 5 回答 6 提问 7关注")
+    @Schema(description ="操作类型 1 点赞 2 收藏 3 评论 4 采用 5 回答 6 提问 7关注")
     private Integer actionType;
 
-    @ApiModelProperty("操作名称")
+    @Schema(description ="操作名称")
     private String actionName;
 
-    @ApiModelProperty("消息内容")
+    @Schema(description ="消息内容")
     private String content;
 
-    @ApiModelProperty("对象类型 1 问题 2 用户")
+    @Schema(description ="对象类型 1 问题 2 用户")
     private Integer objectType;
 
-    @ApiModelProperty("是否已读  1已读 0未读 ")
+    @Schema(description ="是否已读  1已读 0未读 ")
     private Boolean isRead;
 
-    @ApiModelProperty("问题信息")
+    @Schema(description ="问题信息")
     private QuestionVO question;
 
-    @ApiModelProperty("阅读时间")
+    @Schema(description ="阅读时间")
     private Date readTime;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     private Date updatedTime;
 }

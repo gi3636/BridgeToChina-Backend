@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.0</version>
+        <version>3.2.3</version>
         <relativePath/>
     </parent>
 
@@ -27,17 +27,17 @@
     </modules>
 
     <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <docker.space>BridgeToChina</docker.space>
-        <spring-boot.version>2.7.0</spring-boot.version>
-        <spring-cloud.version>2021.0.2</spring-cloud.version>
-        <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
+        <spring-boot.version>3.2.3</spring-boot.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <spring-cloud-alibaba.version>2023.0.0.0-RC1</spring-cloud-alibaba.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
         <mysql.version>8.0.29</mysql.version>
-        <mybatis-plus.version>3.5.1</mybatis-plus.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <hutool.version>5.8.0</hutool.version>
         <dynamic-ds.version>3.5.1</dynamic-ds.version>
         <captcha.version>2.2.2</captcha.version>
@@ -48,13 +48,13 @@
         <minio.version>8.3.4</minio.version>
         <okhttp3.version>4.9.0</okhttp3.version>
         <fastjson.version>2.0.32</fastjson.version>
-        <druid.version>1.2.9</druid.version>
+        <druid.version>1.2.20</druid.version>
         <jetcache.version>2.6.4</jetcache.version>
         <hystrix.version>2.2.10.RELEASE</hystrix.version>
-        <elasticsearch.version>7.17.3</elasticsearch.version>
         <dockerfile-maven-plugin.version>1.3.6</dockerfile-maven-plugin.version>
         <jwt.version>0.9.1</jwt.version>
-        <springfox-swagger.version>3.0.2</springfox-swagger.version>
+        <swagger-ui.version>4.4.0</swagger-ui.version>
+        <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
     </properties>
 
     <!-- 依赖管理 -->
@@ -94,7 +94,7 @@
             <!-- mybatis-plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
@@ -108,10 +108,9 @@
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp3.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
             <dependency>

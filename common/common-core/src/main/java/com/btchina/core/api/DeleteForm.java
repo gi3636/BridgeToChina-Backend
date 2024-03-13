@@ -1,15 +1,15 @@
 package com.btchina.core.api;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 public class DeleteForm {
 
     @NotNull(message = "id不能为空")
-    @ApiModelProperty(value = "id", required = true)
+    @Parameter(name = "id", required = true)
     private Long id;
 
 }

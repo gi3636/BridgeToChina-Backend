@@ -12,11 +12,7 @@
     <version>1.0.0</version>
     <name>file-service</name>
     <description>file-service</description>
-    <properties>
-        <java.version>11</java.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
+
 
     <dependencies>
         <dependency>

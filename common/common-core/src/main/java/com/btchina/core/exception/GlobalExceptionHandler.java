@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import java.util.stream.Collectors;
 
 /**
@@ -43,9 +43,14 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Object doException(GlobalException e) {
-        log.error("系统故障：{}", e.getMessage());
-        e.printStackTrace();
-        return CommonResult.failed(e.getCode(), e.getMessage(), false);
+        if (e instanceof GlobalException) {
+            GlobalException ge = (GlobalException) e;
+            log.error("系统故障：{}", ge.getMessage());
+            ge.printStackTrace();
+            System.out.println("系统故障：" + ge.getMessage());
+            return CommonResult.failed(ge.getCode(), ge.getMessage(), false);
+        }
+        return null;
     }
 
 

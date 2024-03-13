@@ -15,8 +15,8 @@ import com.btchina.feign.model.question.vo.QuestionVO;
 import com.btchina.content.question.service.QuestionService;
 import com.btchina.content.question.service.QuestionUserFavoriteService;
 import com.btchina.content.question.service.QuestionUserLikeService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @since 2023-02-01
  */
 @RestController
-@Api(tags = "问答模块")
+@Tag(name = "问答模块")
 @RequestMapping("/question")
 public class QuestionController {
 
@@ -48,7 +48,7 @@ public class QuestionController {
     private QuestionUserFavoriteService questionUserFavoriteService;
 
 
-    @ApiOperation(value = "发布问题")
+   @Parameter(name = "发布问题")
     @PostMapping("/add")
     public CommonResult<Void> addQuestion(@Validated @RequestBody QuestionAddQO questionAddQO) {
         Long selfId = AuthHelper.getUserId();
@@ -60,7 +60,7 @@ public class QuestionController {
     }
 
 
-    @ApiOperation(value = "编辑问题")
+   @Parameter(name = "编辑问题")
     @PostMapping("/edit")
     public CommonResult<Void> editQuestion(@Validated @RequestBody QuestionEditQO editQuestionForm) {
         Long selfId = AuthHelper.getUserId();
@@ -71,7 +71,7 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "删除问题")
+   @Parameter(name = "删除问题")
     @PostMapping("/delete")
     public CommonResult<Void> deleteQuestion(@RequestBody DeleteForm deleteForm) {
         Long selfId = AuthHelper.getUserId();
@@ -83,7 +83,7 @@ public class QuestionController {
     }
 
 
-    @ApiOperation(value = "获取问题列表")
+   @Parameter(name = "获取问题列表")
     @PostMapping("/list")
     public CommonResult<PageResult<QuestionVO>> getList(@Validated @RequestBody QuestionQueryQO questionQueryQO) {
         Long selfId = AuthHelper.getUserId();
@@ -91,7 +91,7 @@ public class QuestionController {
         return CommonResult.success(result);
     }
 
-    @ApiOperation(value = "获取问题列表")
+   @Parameter(name = "获取问题列表")
     @PostMapping("/seoList")
     public CommonResult<PageResult<QuestionVO>> getSeoList(@Validated @RequestBody QuestionQueryQO questionQueryQO) {
         Long selfId = AuthHelper.getUserId();
@@ -100,7 +100,7 @@ public class QuestionController {
     }
 
 
-    @ApiOperation(value = "搜索问题列表")
+   @Parameter(name = "搜索问题列表")
     @PostMapping("/search")
     public CommonResult<PageResult<QuestionVO>> search(@Validated @RequestBody QuestionSearchQO questionSearchQO) {
         Long selfId = AuthHelper.getUserId();
@@ -108,7 +108,7 @@ public class QuestionController {
         return CommonResult.success(result);
     }
 
-    @ApiOperation(value = "相关问题列表")
+   @Parameter(name = "相关问题列表")
     @PostMapping("/related")
     public CommonResult<PageResult<QuestionVO>> related(@Validated @RequestBody QuestionRelatedQO questionRelatedQO) {
         PageResult<QuestionVO> result = questionService.relatedQuestion(questionRelatedQO);
@@ -116,7 +116,7 @@ public class QuestionController {
     }
 
 
-    @ApiOperation(value = "获取es问题列表")
+   @Parameter(name = "获取es问题列表")
     @PostMapping("/list/es")
     public CommonResult<SearchHits<QuestionDoc>> getEsList(@Validated @RequestBody QuestionQueryQO questionQueryQO) {
         Long selfId = AuthHelper.getUserId();
@@ -125,7 +125,7 @@ public class QuestionController {
     }
 
 
-    @ApiOperation(value = "获取问题详情")
+   @Parameter(name = "获取问题详情")
     @GetMapping("/detail/{id}")
     public CommonResult<QuestionVO> getQuestionDetails(@PathVariable("id") Long id) {
         Long selfId = AuthHelper.getUserId();
@@ -134,14 +134,14 @@ public class QuestionController {
     }
 
 
-    @ApiOperation(value = "获取问题详情")
+   @Parameter(name = "获取问题详情")
     @GetMapping("/seoDetail/{id}")
     public CommonResult<Question> getSeoQuestionDetails(@PathVariable("id") Long id) {
         Question result = questionService.getById(id);
         return CommonResult.success(result);
     }
 
-    @ApiOperation(value = "增加浏览量")
+   @Parameter(name = "增加浏览量")
     @GetMapping("/addView/{id}")
     public CommonResult<Void> addView(@PathVariable("id") Long id) {
         Boolean isSuccess = questionService.addView(id);
@@ -151,7 +151,7 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "点赞")
+   @Parameter(name = "点赞")
     @PostMapping("/like")
     public CommonResult<Void> like(@Validated @RequestBody QuestionLikeQO questionLikeQO) {
         Long userId = AuthHelper.getUserId();
@@ -162,7 +162,7 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "取消赞")
+   @Parameter(name = "取消赞")
     @PostMapping("/unlike")
     public CommonResult<Void> unlike(@Validated @RequestBody QuestionLikeQO questionLikeQO) {
         Long userId = AuthHelper.getUserId();
@@ -175,7 +175,7 @@ public class QuestionController {
 
 
 
-    @ApiOperation(value = "收藏问题")
+   @Parameter(name = "收藏问题")
     @PostMapping("/favourite")
     public CommonResult<Void> favourite(@Validated @RequestBody QuestionFavouriteQO questionFavouriteQO) {
         Long userId = AuthHelper.getUserId();
@@ -186,7 +186,7 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "设置最佳回答")
+   @Parameter(name = "设置最佳回答")
     @PostMapping("/setBestAnswer")
     public CommonResult<Void> setBestAnswer(@Validated @RequestBody QuestionBestAnswerQO questionBestAnswerQO) {
         Long userId = AuthHelper.getUserId();
@@ -197,7 +197,7 @@ public class QuestionController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "取消最佳回答")
+   @Parameter(name = "取消最佳回答")
     @PostMapping("/cancelBestAnswer")
     public CommonResult<Void> cancelBestAnswer(@Validated @RequestBody QuestionBestAnswerQO questionBestAnswerQO) {
         Long userId = AuthHelper.getUserId();
@@ -209,7 +209,7 @@ public class QuestionController {
     }
 
 
-    @ApiOperation(value = "自动生成问题标题")
+   @Parameter(name = "自动生成问题标题")
     @PostMapping("/generateTitle")
     public CommonResult<String> generateTitle(@Validated @RequestBody AutoCompleteQO autoCompleteQO) {
         String result = questionService.generateTitle(autoCompleteQO.getKeyword());
@@ -217,7 +217,7 @@ public class QuestionController {
     }
 
 
-    @ApiOperation(value = "获取问题")
+   @Parameter(name = "获取问题")
     @GetMapping("/findById/{id}")
     public QuestionVO findById(@PathVariable("id") Long id) {
         QuestionVO questionVO = new QuestionVO();
@@ -226,20 +226,20 @@ public class QuestionController {
         return questionVO;
     }
 
-    @ApiOperation(value = "增加问题回答数")
+   @Parameter(name = "增加问题回答数")
     @PostMapping("/increase/answer/count")
     public void increaseAnswerCount(@Validated @RequestBody Long questionId) {
         questionService.increaseAnswerCount(questionId);
     }
 
 
-    @ApiOperation(value = "减少问题回答数")
+   @Parameter(name = "减少问题回答数")
     @PostMapping("/decrease/answer/count")
     public void decreaseAnswerCount(@Validated @RequestBody Long questionId) {
         questionService.decreaseAnswerCount(questionId);
     }
 
-    @ApiOperation(value = "根据id列表查询问题信息")
+   @Parameter(name = "根据id列表查询问题信息")
     @PostMapping("/findByIds")
     public Map<Long, QuestionVO> findByIds(@RequestBody List<Long> ids) {
         return questionService.findByIds(ids);

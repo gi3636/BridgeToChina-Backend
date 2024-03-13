@@ -1,19 +1,20 @@
 package com.btchina.content.question.model.qo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Data
-@ApiModel(description = "问题设置最佳答案")
+@Tag(name = "问题设置最佳答案")
 public class QuestionBestAnswerQO {
 
     @NotNull(message = "问题id不能为空")
-    @ApiModelProperty(required = true ,value = "问题id")
+    @Schema(description = "问题id", required = true)
     private Long questionId;
     @NotNull(message = "回答id不能为空")
-    @ApiModelProperty(required = true,value = "回答id")
+    @Schema(description = "回答id", required = true)
     private Long answerId;
 }

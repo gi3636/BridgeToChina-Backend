@@ -1,23 +1,20 @@
 package com.btchina.content.tag.controller;
 
 
-import com.btchina.feign.model.tag.qo.QueryQuestionTagQO;
-import com.btchina.feign.model.tag.qo.QuestionEditTagQO;
+import com.btchina.content.tag.service.TagQuestionService;
 import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
+import com.btchina.feign.model.tag.qo.QueryQuestionTagQO;
+import com.btchina.feign.model.tag.qo.QuestionEditTagQO;
 import com.btchina.feign.model.tag.qo.TagAddQO;
-
 import com.btchina.feign.model.tag.vo.TagListVO;
-import com.btchina.feign.model.tag.vo.TagVO;
-import com.btchina.content.tag.service.TagQuestionService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -30,14 +27,14 @@ import java.util.List;
  * @author franky
  * @since 2023-02-06
  */
-@Api(tags = "问题标签模块")
+@Tag(name = "问题标签模块")
 @RestController
 @RequestMapping("/tag/tagQuestion")
 public class QuestionTagController {
     @Autowired
     private TagQuestionService tagQuestionService;
 
-    @ApiOperation(value = "添加问题标签")
+   @Parameter(name = "添加问题标签")
     @PostMapping("/add")
     public CommonResult<Void> addTag(@Validated @RequestBody TagAddQO tagAddQO) {
         Boolean isSuccess = tagQuestionService.addTag(tagAddQO);
@@ -47,7 +44,7 @@ public class QuestionTagController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "删除问题标签")
+   @Parameter(name = "删除问题标签")
     @PostMapping("/delete")
     public CommonResult<Void> deleteTag(@RequestBody DeleteForm deleteForm) {
         Boolean isSuccess = tagQuestionService.deleteTag(deleteForm.getId());
@@ -58,14 +55,14 @@ public class QuestionTagController {
     }
 
 
-    @ApiOperation(value = "查询问题标签")
+   @Parameter(name = "查询问题标签")
     @PostMapping("/query")
     public List<TagListVO> getTags(@Validated @RequestBody QueryQuestionTagQO queryQuestionTagQO) {
         return tagQuestionService.queryTag(queryQuestionTagQO);
     }
 
 
-    @ApiOperation(value = "更改问题标签")
+   @Parameter(name = "更改问题标签")
     @PostMapping("/edit")
     public CommonResult<Void> editQuestionTags(@Validated @RequestBody QuestionEditTagQO editQuestionTagForm) {
         Boolean isSuccess = tagQuestionService.editTag(editQuestionTagForm);

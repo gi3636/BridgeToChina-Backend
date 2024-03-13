@@ -4,6 +4,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
 /**
  * 获取用户登录的账号信息
  * <p>

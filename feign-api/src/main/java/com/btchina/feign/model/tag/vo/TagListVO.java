@@ -1,7 +1,9 @@
 package com.btchina.feign.model.tag.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,11 +20,11 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ApiModel(value = "Tag对象", description = "标签表")
+@Tag(name = "Tag对象", description = "标签表")
 public class TagListVO implements Serializable {
-    @ApiModelProperty("标签ID")
+    @Schema(description ="标签ID")
     private Long id;
 
-    @ApiModelProperty("标签列表")
+    @Schema(description ="标签列表")
     private List<TagVO> tags;
 }

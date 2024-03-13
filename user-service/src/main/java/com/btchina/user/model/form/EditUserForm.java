@@ -1,34 +1,35 @@
 package com.btchina.user.model.form;
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString
 public class EditUserForm {
-    @ApiModelProperty("标签,多个标签用逗号隔开")
+    @Schema(description ="标签,多个标签用逗号隔开")
     private String tags;
 
-    @ApiModelProperty("昵称")
+    @Schema(description ="昵称")
     private String nickname;
 
-    @ApiModelProperty("头像")
+    @Schema(description ="头像")
     private String avatar;
 
-    @ApiModelProperty("性别 0是保密 1是男 2是女")
+    @Schema(description ="性别 0是保密 1是男 2是女")
     private Integer sex;
 
-    @ApiModelProperty("国家")
+    @Schema(description ="国家")
     private String country;
 
-    @ApiModelProperty("城市")
+    @Schema(description ="城市")
     private String city;
 
-    @ApiModelProperty("简介")
+    @Schema(description ="简介")
     private String description;
 
-    @ApiModelProperty("个人介绍的背景图")
+    @Schema(description ="个人介绍的背景图")
     private String cover;
 
 }

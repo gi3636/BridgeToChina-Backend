@@ -2,7 +2,7 @@ package com.btchina.core.api.valid;
 
 import lombok.Data;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.io.Serializable;
 import java.util.*;
 

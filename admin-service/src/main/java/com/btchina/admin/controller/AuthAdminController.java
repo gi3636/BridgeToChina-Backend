@@ -6,10 +6,8 @@ import com.btchina.admin.model.form.LoginForm;
 import com.btchina.admin.model.vo.SysUserVO;
 import com.btchina.admin.service.SysUserService;
 import com.btchina.core.api.CommonResult;
-import com.btchina.core.api.ResultCode;
-import com.btchina.core.exception.GlobalException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-08-29
  */
 
-@Api(tags = "管理后台授权模块")
+@Tag(name = "管理后台授权模块")
 @RestController
 @RequestMapping("/admin/auth")
 public class AuthAdminController {
@@ -35,13 +33,13 @@ public class AuthAdminController {
 
     @PreAuthorize("hasAuthority('test1')")
     @GetMapping("/hello")
-    @ApiOperation(value = "测试")
+   @Parameter(name = "测试")
     public CommonResult<Void> hello() {
         return CommonResult.success(null);
     }
 
 
-    @ApiOperation(value = "用户登录")
+   @Parameter(name = "用户登录")
     @PostMapping("login")
     public CommonResult<SysUserVO> login(@Validated @RequestBody LoginForm loginForm) {
         SysUserVO userVo = sysUserService.login(loginForm.getUsername(), loginForm.getPassword());
@@ -49,7 +47,7 @@ public class AuthAdminController {
     }
 
 
-    @ApiOperation(value = "用户登出")
+   @Parameter(name = "用户登出")
     @GetMapping("logout")
     public CommonResult<SysUserVO> logout() {
         Boolean isSuccess = sysUserService.logout();

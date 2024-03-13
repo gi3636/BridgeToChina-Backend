@@ -1,7 +1,8 @@
 package com.btchina.content.comment.model.vo;
 
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.ToString;
 
@@ -21,41 +22,41 @@ import java.util.Date;
 public class CommentVO implements Serializable {
 
 
-    @ApiModelProperty("评论id")
+    @Schema(description ="评论id")
     private Long id;
 
-    @ApiModelProperty("回答id")
+    @Schema(description ="回答id")
     private Long answerId;
 
-    @ApiModelProperty("用户id")
+    @Schema(description ="用户id")
     private Long userId;
 
-    @ApiModelProperty("用户昵称")
+    @Schema(description ="用户昵称")
     private String nickname;
 
-    @ApiModelProperty("用户头像")
+    @Schema(description ="用户头像")
     private String avatar;
 
-    @ApiModelProperty("回复的评论id")
+    @Schema(description ="回复的评论id")
     private Long parentId;
 
-    @ApiModelProperty("回复的对象id")
+    @Schema(description ="回复的对象id")
     private Long toUserId;
 
-    @ApiModelProperty("回复的对象昵称")
+    @Schema(description ="回复的对象昵称")
     private String toNickname;
 
-    @ApiModelProperty("评论内容")
+    @Schema(description ="评论内容")
     private String content;
 
-    @ApiModelProperty("评论点赞数")
+    @Schema(description ="评论点赞数")
     private Integer likeCount;
-    @ApiModelProperty("是否点赞 0-否 1-是")
+    @Schema(description ="是否点赞 0-否 1-是")
     private Integer likeStatus;
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     private Date updatedTime;
 
 }

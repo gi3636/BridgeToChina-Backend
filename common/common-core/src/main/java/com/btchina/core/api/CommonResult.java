@@ -2,10 +2,10 @@ package com.btchina.core.api;
 
 import com.btchina.core.i18n.MessageSourceUtil;
 import com.btchina.core.util.SpringUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 通用返回对象
@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Data
 public class CommonResult<T> {
 
-    @ApiModelProperty("返回码")
+    @Schema(description = "返回码")
     private long code;
-    @ApiModelProperty("返回信息")
+    @Schema(description = "返回信息")
     private String message;
-    @ApiModelProperty("返回数据")
+    @Schema(description = "返回数据")
     private T data;
 
 
@@ -40,7 +40,7 @@ public class CommonResult<T> {
         if (needTranslate) {
             MessageSourceUtil messageSourceUtil = SpringUtil.getBean(MessageSourceUtil.class);
             this.message = messageSourceUtil.getMessage(key);
-        }else {
+        } else {
             this.message = key;
         }
         this.code = code;
@@ -99,7 +99,7 @@ public class CommonResult<T> {
         if (needTranslate) {
             return new CommonResult<T>(errorCode, message, null);
         } else {
-            return new CommonResult<T>(errorCode, message,null, false);
+            return new CommonResult<T>(errorCode, message, null, false);
         }
     }
 

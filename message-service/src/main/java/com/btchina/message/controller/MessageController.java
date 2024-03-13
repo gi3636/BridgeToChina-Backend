@@ -8,8 +8,8 @@ import com.btchina.message.model.form.MessageQueryForm;
 import com.btchina.message.model.form.MessageReadForm;
 import com.btchina.message.model.vo.MessageVO;
 import com.btchina.message.service.MessageService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,14 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-03-30
  */
 @RestController
-@Api(tags = "消息模块")
+@Tag(name = "消息模块")
 @RequestMapping("/message/")
 public class MessageController {
 
     @Autowired
     private MessageService messageService;
 
-    @ApiOperation("获取消息列表")
+    @Parameter(name ="获取消息列表")
     @PostMapping("list")
     public CommonResult<PageResult<MessageVO>> list(@Validated @RequestBody MessageQueryForm messageQueryForm) {
         Long userId = AuthHelper.getUserId();
@@ -42,7 +42,7 @@ public class MessageController {
         return CommonResult.success(messageVOList);
     }
 
-    @ApiOperation("已读消息")
+    @Parameter(name ="已读消息")
     @PostMapping("read")
     public CommonResult<Void> read(@Validated @RequestBody MessageReadForm messageReadForm) {
         Long userId = AuthHelper.getUserId();

@@ -3,8 +3,9 @@ package com.btchina.admin.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +22,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @TableName("tbl_sys_role_menu")
-@ApiModel(value = "SysRoleMenu对象", description = "角色菜单表")
+@Schema(name = "SysRoleMenu对象", description = "角色菜单表")
 public class SysRoleMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,10 +30,10 @@ public class SysRoleMenu implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty("角色ID")
+    @Schema(description ="角色ID")
     private Long roleId;
 
-    @ApiModelProperty("菜单ID")
+    @Schema(description ="菜单ID")
     private Long menuId;
 
 

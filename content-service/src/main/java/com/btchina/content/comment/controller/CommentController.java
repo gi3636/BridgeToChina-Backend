@@ -11,8 +11,9 @@ import com.btchina.core.api.CommonResult;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
 import com.btchina.core.util.AuthHelper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author franky
  * @since 2023-02-25
  */
-@Api(tags = "评论模块")
+@Tag(name = "评论模块")
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -37,7 +38,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @ApiOperation(value = "添加评论")
+    @Parameter(name = "添加评论")
     @PostMapping("/add")
     public CommonResult<Void> addComment(@Validated @RequestBody CommentAddQO commentAddQO) {
         Long userId = AuthHelper.getUserId();
@@ -49,7 +50,7 @@ public class CommentController {
     }
 
 
-    @ApiOperation(value = "删除评论")
+    @Parameter(name = "删除评论")
     @PostMapping("/del")
     public CommonResult<Void> delComment(@Validated @RequestBody DeleteForm deleteForm) {
         Long userId = AuthHelper.getUserId();
@@ -61,7 +62,7 @@ public class CommentController {
     }
 
 
-    @ApiOperation(value = "修改评论")
+   @Parameter(name = "修改评论")
     @PostMapping("/update")
     public CommonResult<Void> updateComment(@Validated @RequestBody CommentUpdateQO commentUpdateQO) {
         Long userId = AuthHelper.getUserId();
@@ -73,7 +74,7 @@ public class CommentController {
     }
 
 
-    @ApiOperation(value = "查询回答评论")
+   @Parameter(name = "查询回答评论")
     @PostMapping("/list")
     public CommonResult<PageResult<CommentVO>> list(@Validated @RequestBody CommentQueryQO commentQueryQO) {
         Long userId = AuthHelper.getUserId();
@@ -82,7 +83,7 @@ public class CommentController {
     }
 
 
-    @ApiOperation(value = "点赞评论")
+   @Parameter(name = "点赞评论")
     @PostMapping("/like")
     public CommonResult<Void> like(@Validated @RequestBody CommentLikeQO commentLikeQO) {
         Long userId = AuthHelper.getUserId();

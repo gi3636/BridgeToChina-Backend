@@ -8,8 +8,8 @@ import com.btchina.user.model.form.EditUserForm;
 import com.btchina.user.model.form.GetUserForm;
 import com.btchina.feign.model.user.vo.UserVO;
 import com.btchina.user.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +28,14 @@ import java.util.Map;
  */
 @RestController
 @Slf4j
-@Api(tags = "用户模块")
+@Tag(name = "用户模块")
 @RequestMapping("/user/")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "根据id查询用户信息")
+    @Parameter(name = "根据id查询用户信息")
     @GetMapping("{id}")
     public UserVO findById(@PathVariable("id") Long id) {
         User user = userService.getBaseMapper().selectById(id);
@@ -48,7 +48,7 @@ public class UserController {
         return userVO;
     }
 
-    @ApiOperation(value = "根据id查询用户信息")
+    @Parameter(name = "根据id查询用户信息")
     @PostMapping("/getDetail")
     public CommonResult<UserVO> getDetail(@RequestBody GetUserForm getUserForm) {
         UserVO userVO = userService.getDetail(getUserForm.getId());
@@ -56,13 +56,13 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "根据id列表查询用户信息")
+    @Parameter(name = "根据id列表查询用户信息")
     @PostMapping("/findByIds")
     public Map<Long, UserVO> findByIds(@RequestBody List<Long> ids) {
         return userService.findByIds(ids);
     }
 
-    @ApiOperation(value = "获取多个用户信息")
+    @Parameter(name = "获取多个用户信息")
     @PostMapping("/getBatchUserInfo")
     public CommonResult<Map<Long, UserVO>> getBatchUserInfo(@RequestBody List<Long> ids) {
         Map<Long, UserVO> userVOMap = userService.findByIds(ids);
@@ -70,7 +70,7 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "编辑用户信息")
+    @Parameter(name = "编辑用户信息")
     @PostMapping("/edit")
     public CommonResult<Void> edit(@RequestBody EditUserForm editUserForm) {
         Long id = AuthHelper.getUserId();

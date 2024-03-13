@@ -1,6 +1,6 @@
 package com.btchina.core.api.valid.group;
 
-import javax.validation.groups.Default;
+import jakarta.validation.groups.Default;
 
 public interface BizCreate extends Default {
 

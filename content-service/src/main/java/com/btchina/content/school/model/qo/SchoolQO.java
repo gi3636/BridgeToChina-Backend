@@ -4,12 +4,14 @@ import com.btchina.core.api.valid.ValidGroup;
 import com.btchina.core.api.valid.group.BizCreate;
 import com.btchina.core.api.valid.group.BizQuery;
 import com.btchina.core.api.valid.group.BizUpdate;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import java.io.Serializable;
 
 /**
@@ -21,7 +23,7 @@ import java.io.Serializable;
  * @since 2024-01-15
  */
 @Data
-@ApiModel(value = "学校添加对象")
+@Tag(name = "学校添加对象")
 public class SchoolQO implements Serializable {
 
     @NotBlank(groups = BizUpdate.class, message = "school.id.notBlank")
@@ -29,25 +31,25 @@ public class SchoolQO implements Serializable {
     private String id;
 
     @NotBlank(groups = {BizCreate.class, BizUpdate.class, BizQuery.class}, message = "school.name.notBlank")
-    @ApiModelProperty("学校名称")
+    @Schema(description ="学校名称")
     private String name;
 
     @Null(groups = {BizQuery.class}, message = "school.introduction.null")
     @NotBlank(groups = BizCreate.class, message = "school.introduction.notBlank")
-    @ApiModelProperty("学校简介")
+    @Schema(description ="学校简介")
     private String introduction;
 
 
     @NotBlank(groups = BizCreate.class, message = "school.detail.notBlank")
-    @ApiModelProperty("学校介绍")
+    @Schema(description ="学校介绍")
     private String detail;
 
 
     @Null(groups = {BizQuery.class}, message = "school.logo.null")
     @NotBlank(groups = BizCreate.class, message = "school.logo.notBlank")
-    @ApiModelProperty("学校图标")
+    @Schema(description ="学校图标")
     private String logo;
 
-    @ApiModelProperty("排序")
+    @Schema(description ="排序")
     private Integer sort;
 }

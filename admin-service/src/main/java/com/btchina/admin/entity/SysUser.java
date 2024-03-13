@@ -1,8 +1,9 @@
 package com.btchina.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,7 @@ import java.util.Date;
 @Getter
 @Setter
 @TableName("tbl_sys_user")
-@ApiModel(value = "SysUser对象", description = "用户账户")
+@Schema(name = "SysUser对象", description = "用户账户")
 public class SysUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,30 +29,30 @@ public class SysUser implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty("用户名")
+    @Schema(description ="用户名")
     private String username;
 
-    @ApiModelProperty("密码")
+    @Schema(description ="密码")
     private String password;
 
-    @ApiModelProperty("盐")
+    @Schema(description ="盐")
     private String salt;
 
-    @ApiModelProperty("姓名")
+    @Schema(description ="姓名")
     private String name;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("创建者")
+    @Schema(description ="创建者")
     private Long createdBy;
 
-    @ApiModelProperty("修改时间")
+    @Schema(description ="修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
-    @ApiModelProperty("修改人")
+    @Schema(description ="修改人")
     private Long updatedBy;
 
 

@@ -1,15 +1,16 @@
 package com.btchina.content.comment.model.qo;
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class CommentUpdateQO {
 
-    @ApiModelProperty("评论id")
+    @Schema(description ="评论id")
     private Long id;
 
-    @ApiModelProperty("内容")
+    @Schema(description ="内容")
     private String content;
 
 }

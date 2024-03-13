@@ -2,14 +2,20 @@ package com.btchina.content.question.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
+import com.btchina.content.infra.constant.QuestionConstant;
+import com.btchina.content.infra.enums.QueryTypeEnum;
+import com.btchina.content.question.mapper.QuestionMapper;
+import com.btchina.content.question.mapper.es.QuestionRepository;
+import com.btchina.content.question.model.Answer;
+import com.btchina.content.question.model.Question;
+import com.btchina.content.question.model.QuestionUserFavorite;
+import com.btchina.content.question.model.QuestionUserLike;
+import com.btchina.content.question.model.doc.QuestionDoc;
 import com.btchina.content.question.model.qo.*;
 import com.btchina.content.question.service.AnswerService;
 import com.btchina.content.question.service.QuestionService;
 import com.btchina.content.question.service.QuestionUserFavoriteService;
 import com.btchina.content.question.service.QuestionUserLikeService;
-import com.btchina.feign.model.tag.qo.QuestionEditTagQO;
-import com.btchina.feign.model.tag.qo.TagAddQO;
 import com.btchina.content.tag.service.TagService;
 import com.btchina.core.api.DeleteForm;
 import com.btchina.core.api.PageResult;
@@ -17,31 +23,16 @@ import com.btchina.core.api.ResultCode;
 import com.btchina.core.exception.GlobalException;
 import com.btchina.feign.clients.QuestionClient;
 import com.btchina.feign.clients.TagClient;
-import com.btchina.feign.model.question.vo.AnswerVO;
-import com.btchina.content.infra.constant.QuestionConstant;
-import com.btchina.content.question.model.Answer;
-import com.btchina.content.question.model.Question;
-import com.btchina.content.question.model.QuestionUserFavorite;
-import com.btchina.content.question.model.QuestionUserLike;
-import com.btchina.content.question.mapper.QuestionMapper;
-import com.btchina.content.question.mapper.es.QuestionRepository;
-import com.btchina.content.question.model.doc.QuestionDoc;
-import com.btchina.content.infra.enums.QueryTypeEnum;
-import com.btchina.feign.model.question.vo.QuestionVO;
-import com.btchina.feign.model.user.vo.UserVO;
 import com.btchina.feign.clients.UserClient;
+import com.btchina.feign.model.question.vo.AnswerVO;
+import com.btchina.feign.model.question.vo.QuestionVO;
+import com.btchina.feign.model.tag.qo.QuestionEditTagQO;
+import com.btchina.feign.model.tag.qo.TagAddQO;
+import com.btchina.feign.model.user.vo.UserVO;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import org.elasticsearch.common.lucene.search.function.CombineFunction;
-import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
-import org.elasticsearch.index.query.functionscore.FieldValueFactorFunctionBuilder;
-import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
@@ -50,13 +41,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+
+import org.springframework.data.elasticsearch.core.query.BaseQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateResponse;
 import org.springframework.stereotype.Service;
@@ -92,7 +83,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private QuestionClient questionClient;
 
     @Autowired
-    ElasticsearchRestTemplate elasticsearchRestTemplate;
+    ElasticsearchTemplate elasticsearchRestTemplate;
 
     @Autowired
     @Lazy
@@ -435,10 +426,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         List<String> idStrList = ids.stream().map(Object::toString).collect(Collectors.toList());
         log.info("idStrList:{}", idStrList);
 
-        NativeSearchQuery query = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.termsQuery("id", idStrList))
-                .build();
-        return elasticsearchRestTemplate.search(query, QuestionDoc.class).stream().map(SearchHit::getContent).collect(Collectors.toList());
+        //NativeSearchQuery query = new NativeSearchQueryBuilder()
+        //        .withQuery(QueryBuilders.termsQuery("id", idStrList))
+        //        .build();
+        //return elasticsearchRestTemplate.search(query, QuestionDoc.class).stream().map(SearchHit::getContent).collect(Collectors.toList());
+        return null;
         //return questionRepository.findAllByIdIn(idStrList);
     }
 
@@ -456,17 +448,18 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
 
     public SearchHits<QuestionDoc> searchByEs(String keyword, Integer currentPage, Integer pageSize) {
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery(keyword, "searchContent", "title", "content"));
-        Pageable page = PageRequest.of(currentPage - 1, pageSize);
-        //指定多个field
-        NativeSearchQuery query = new NativeSearchQueryBuilder()
-                .withQuery(boolQueryBuilder)
-                .withPageable(page)
-                .withSort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
-                .build();
-        //3.执行查询
-        return elasticsearchRestTemplate.search(query, QuestionDoc.class);
+        //BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        //boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery(keyword, "searchContent", "title", "content"));
+        //Pageable page = PageRequest.of(currentPage - 1, pageSize);
+        ////指定多个field
+        //NativeSearchQuery query = new NativeSearchQueryBuilder()
+        //        .withQuery(boolQueryBuilder)
+        //        .withPageable(page)
+        //        .withSort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
+        //        .build();
+        ////3.执行查询
+        //return elasticsearchRestTemplate.search(query, QuestionDoc.class);
+        return null;
     }
 
     @Override
@@ -590,40 +583,41 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 //        new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.termQuery("type", 2), ScoreFunctionBuilders.weightFactorFunction(1)),
                 //        new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery("type", 1), ScoreFunctionBuilders.weightFactorFunction(1))
                 //};
-                BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+                //BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
                 //ScoreFunctionBuilder<?> scoreFunctionBuilder = ScoreFunctionBuilders.fieldValueFactorFunction("likeCount").modifier(FieldValueFactorFunction.Modifier.LN1P).factor(0.1f);
                 //FunctionScoreQueryBuilder query = QueryBuilders.functionScoreQuery(boolQueryBuilder,scoreFunctionBuilder).boostMode(CombineFunction.SUM);
-
-                FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder(
-                        "likeCount");
-                // 额外分数=log(1+score)
-                fieldQuery.factor(0.1f);
-                fieldQuery.modifier(FieldValueFactorFunction.Modifier.LOG1P);
-                // 最终分数=_score+额外分数
-                FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders
-                        .functionScoreQuery(boolQueryBuilder, fieldQuery)
-                        .boostMode(CombineFunction.SUM);
+                //
+                //FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder(
+                //        "likeCount");
+                //// 额外分数=log(1+score)
+                //fieldQuery.factor(0.1f);
+                //fieldQuery.modifier(FieldValueFactorFunction.Modifier.LOG1P);
+                //// 最终分数=_score+额外分数
+                //FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders
+                //        .functionScoreQuery(boolQueryBuilder, fieldQuery)
+                //        .boostMode(CombineFunction.SUM);
                 //根据分值倒序排列
 
-                boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery("测试", "title", "content"));
-                boolQueryBuilder.must().add(QueryBuilders.rangeQuery("createdTime").gte(1675853174178L));
-                //boolQueryBuilder.must().add(scoreFunctionBuilder);
-                long now = System.currentTimeMillis() / 1000L;
-                long daySecond = 60 * 60 * 24;
-                long dayTime = now - (now + 8 * 3600) % daySecond;
-                log.info("dayTime:{}", dayTime);
-                //指定多个field
-                NativeSearchQuery query1 = new NativeSearchQueryBuilder()
-                        //.withQuery(queryBuilder)
-                        .withQuery(functionScoreQueryBuilder)
-                        //.withPageable(page)
-                        //排序
-                        .withSort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
-                        //.withSort(sort)
-                        .build();
-                //3.执行查询
-                SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query1, QuestionDoc.class);
-                return result;
+                //boolQueryBuilder.must().add(QueryBuilders.multiMatchQuery("测试", "title", "content"));
+                //boolQueryBuilder.must().add(QueryBuilders.rangeQuery("createdTime").gte(1675853174178L));
+                ////boolQueryBuilder.must().add(scoreFunctionBuilder);
+                //long now = System.currentTimeMillis() / 1000L;
+                //long daySecond = 60 * 60 * 24;
+                //long dayTime = now - (now + 8 * 3600) % daySecond;
+                //log.info("dayTime:{}", dayTime);
+                ////指定多个field
+                //NativeSearchQuery query1 = new NativeSearchQueryBuilder()
+                //        //.withQuery(queryBuilder)
+                //        .withQuery(functionScoreQueryBuilder)
+                //        //.withPageable(page)
+                //        //排序
+                //        .withSort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
+                //        //.withSort(sort)
+                //        .build();
+                ////3.执行查询
+                //SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query1, QuestionDoc.class);
+                //return result;
+                return null;
             //查询对象
             case MY:
                 log.info("查询我的问题");
@@ -648,36 +642,37 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     public PageResult<QuestionVO> queryHotQuestion(QuestionQueryQO questionQueryQO, Long selfId, Boolean isSeo) {
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder("likeCount")
-                .modifier(FieldValueFactorFunction.Modifier.LOG1P)
-                .factor(0.1f);
-
-        // 最终分数=_score+额外分数
-        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders
-                .functionScoreQuery(boolQueryBuilder, fieldQuery)
-                .boostMode(CombineFunction.SUM);
-
-        if (questionQueryQO.getDate() != null) {
-            RangeQueryBuilder timeRangeQuery = QueryBuilders.rangeQuery("createdTime")
-                    //.gte(LocalDateTime.now(ZoneOffset.UTC).minusDays(3))
-                    //.lte(LocalDateTime.now(ZoneOffset.UTC));
-                    .gte(questionQueryQO.getDate());
-            boolQueryBuilder.filter(timeRangeQuery);
-        }
-
-        Pageable page = PageRequest.of(questionQueryQO.getCurrentPage() - 1, questionQueryQO.getPageSize());
-        NativeSearchQuery query = new NativeSearchQueryBuilder()
-                .withQuery(functionScoreQueryBuilder)
-                .withSort(SortBuilders.scoreSort().order(SortOrder.DESC))
-                .withPageable(page)
-                .build();
-
-        // 3.执行查询
-        SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
-        List<QuestionVO> questionVOList = convertSearchHits(result, selfId, isSeo);
-        //封装分页结果
-        return convertToPageResult(result, questionVOList, questionQueryQO);
+        //BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        //FieldValueFactorFunctionBuilder fieldQuery = new FieldValueFactorFunctionBuilder("likeCount")
+        //        .modifier(FieldValueFactorFunction.Modifier.LOG1P)
+        //        .factor(0.1f);
+        //
+        //// 最终分数=_score+额外分数
+        //FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders
+        //        .functionScoreQuery(boolQueryBuilder, fieldQuery)
+        //        .boostMode(CombineFunction.SUM);
+        //
+        //if (questionQueryQO.getDate() != null) {
+        //    RangeQueryBuilder timeRangeQuery = QueryBuilders.rangeQuery("createdTime")
+        //            //.gte(LocalDateTime.now(ZoneOffset.UTC).minusDays(3))
+        //            //.lte(LocalDateTime.now(ZoneOffset.UTC));
+        //            .gte(questionQueryQO.getDate());
+        //    boolQueryBuilder.filter(timeRangeQuery);
+        //}
+        //
+        //Pageable page = PageRequest.of(questionQueryQO.getCurrentPage() - 1, questionQueryQO.getPageSize());
+        //NativeSearchQuery query = new NativeSearchQueryBuilder()
+        //        .withQuery(functionScoreQueryBuilder)
+        //        .withSort(SortBuilders.scoreSort().order(SortOrder.DESC))
+        //        .withPageable(page)
+        //        .build();
+        //
+        //// 3.执行查询
+        //SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
+        //List<QuestionVO> questionVOList = convertSearchHits(result, selfId, isSeo);
+        ////封装分页结果
+        //return convertToPageResult(result, questionVOList, questionQueryQO);
+        return null;
     }
 
     /**
@@ -688,18 +683,19 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
      * @return
      */
     public PageResult<QuestionVO> queryNewQuestion(QuestionQueryQO questionQueryQO, Long selfId, Boolean isSeo) {
-        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-        Pageable page = PageRequest.of(questionQueryQO.getCurrentPage() - 1, questionQueryQO.getPageSize());
-        NativeSearchQuery query = new NativeSearchQueryBuilder()
-                .withQuery(queryBuilder)
-                .withSort(SortBuilders.fieldSort("createdTime").order(SortOrder.DESC))
-                .withPageable(page)
-                .build();
-        // 3.执行查询
-        SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
-        List<QuestionVO> questionVOList = convertSearchHits(result, selfId, isSeo);
-        //封装分页结果
-        return convertToPageResult(result, questionVOList, questionQueryQO);
+        //BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        //Pageable page = PageRequest.of(questionQueryQO.getCurrentPage() - 1, questionQueryQO.getPageSize());
+        //NativeSearchQuery query = new NativeSearchQueryBuilder()
+        //        .withQuery(queryBuilder)
+        //        .withSort(SortBuilders.fieldSort("createdTime").order(SortOrder.DESC))
+        //        .withPageable(page)
+        //        .build();
+        //// 3.执行查询
+        //SearchHits<QuestionDoc> result = elasticsearchRestTemplate.search(query, QuestionDoc.class);
+        //List<QuestionVO> questionVOList = convertSearchHits(result, selfId, isSeo);
+        ////封装分页结果
+        //return convertToPageResult(result, questionVOList, questionQueryQO);
+        return null;
     }
 
     public PageResult<QuestionVO> convertToPageResult(SearchHits<QuestionDoc> result, List<QuestionVO> questionVOList, QuestionQueryQO questionQueryQO) {

@@ -1,24 +1,25 @@
 package com.btchina.content.comment.model.qo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Data
-@ApiModel(description = "评论点赞参数对象")
+@Schema(description = "评论点赞参数对象")
 public class CommentLikeQO {
     @NotNull(message = "评论id不能为空")
-    @ApiModelProperty("评论id")
+    @Schema(description ="评论id")
     private Long id;
 
     @NotNull(message = "回答id不能为空")
-    @ApiModelProperty("回答id")
+    @Schema(description ="回答id")
     private Long answerId;
 
     @NotNull(message = "状态不能为空")
-    @ApiModelProperty("状态 0是取消 1是点赞")
+    @Schema(description ="状态 0是取消 1是点赞")
     private Integer status;
 
 }

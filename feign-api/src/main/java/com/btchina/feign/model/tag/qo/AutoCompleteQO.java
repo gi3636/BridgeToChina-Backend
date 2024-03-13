@@ -1,10 +1,11 @@
 package com.btchina.feign.model.tag.qo;
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class AutoCompleteQO {
-    @ApiModelProperty(required = true, value = "关键字")
+    @Schema(description = "关键字", required = true)
     private String keyword;
 }

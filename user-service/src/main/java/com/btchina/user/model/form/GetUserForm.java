@@ -1,14 +1,15 @@
 package com.btchina.user.model.form;
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 public class GetUserForm {
 
-    @ApiModelProperty(value = "用户id",required = true)
+    @Schema(description = "用户id",required = true)
     @NotNull(message = "id不能为空")
     private Long id;
 }

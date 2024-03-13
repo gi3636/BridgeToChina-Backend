@@ -7,8 +7,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +24,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("tbl_question_user_favorite")
-@ApiModel(value = "QuestionUserFavorite对象", description = "问题收藏表")
+@Schema(name = "QuestionUserFavorite对象", description = "问题收藏表")
 public class QuestionUserFavorite implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,20 +32,20 @@ public class QuestionUserFavorite implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @ApiModelProperty("用户id")
+    @Schema(description ="用户id")
     private Long userId;
 
-    @ApiModelProperty("问题Id")
+    @Schema(description ="问题Id")
     private Long questionId;
 
-    @ApiModelProperty("收藏状态 0是取消 1是收藏")
+    @Schema(description ="收藏状态 0是取消 1是收藏")
     private Integer status;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 

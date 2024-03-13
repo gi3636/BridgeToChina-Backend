@@ -41,7 +41,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         if (ex instanceof ResponseStatusException) {
             // HTTP状态码异常
             log.warn("Http Status Warn : {}, url: {}", ex.getMessage(), request.getURI());
-            httpStatus = ((ResponseStatusException) ex).getStatus();
+            httpStatus = HttpStatus.valueOf(((ResponseStatusException) ex).getStatusCode().value());
         } else {
             // 系统异常
             log.error("Error Gateway, {}: {}, url: {}", ex.getClass(), ex.getMessage(), request.getURI());

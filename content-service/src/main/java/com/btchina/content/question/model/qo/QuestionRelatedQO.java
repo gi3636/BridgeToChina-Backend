@@ -1,15 +1,17 @@
 package com.btchina.content.question.model.qo;
 
 import com.btchina.core.api.PageQueryParam;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString
-@ApiModel(description = "相关问题搜索")
+@Schema(description = "相关问题搜索")
 public class QuestionRelatedQO extends PageQueryParam {
-    @ApiModelProperty(required = true ,value = "关键字",example = "测试")
+    @Schema(description ="关键字", required = true)
     public String keyword;
 }

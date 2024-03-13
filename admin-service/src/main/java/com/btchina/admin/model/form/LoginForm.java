@@ -1,19 +1,20 @@
 package com.btchina.admin.model.form;
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Data
 public class LoginForm {
 
     @NotBlank(message = "用户名不能为空")
-    @ApiModelProperty(value = "用户名", example = "franky", required = true)
+    @Schema(description = "用户名", example = "franky", required = true)
     private String username;
 
     @NotBlank(message = "密码不能为空")
-    @ApiModelProperty(value = "密码", example = "123123", required = true)
+    @Schema(description = "密码", example = "123123", required = true)
     private String password;
 
 }

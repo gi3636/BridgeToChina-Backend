@@ -1,6 +1,7 @@
 package com.btchina.message.model.send;
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -21,10 +22,10 @@ import java.io.Serializable;
 public class NotificationMessage implements Serializable {
 
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty(" 1是回执消息，2是聊天消息 3是pong消息 4是通知消息")
+    @Schema(description =" 1是回执消息，2是聊天消息 3是pong消息 4是通知消息")
     final private Integer dataType = 4;
 
-    //@ApiModelProperty("消息通知内容")
+    //@Schema(description ="消息通知内容")
     //private NotifyVO notifyVO;
 
 }

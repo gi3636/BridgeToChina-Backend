@@ -1,7 +1,9 @@
 package com.btchina.content.school.model.qo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,10 +17,10 @@ import java.io.Serializable;
  * @since 2024-01-15
  */
 @Data
-@ApiModel(value = "学校列表查询对象")
+@Tag(name = "学校列表查询对象")
 public class SchoolListQO implements Serializable {
 
-    @ApiModelProperty(value = "学校名称")
+    @Schema(description = "学校名称")
     private String name;
 
 }

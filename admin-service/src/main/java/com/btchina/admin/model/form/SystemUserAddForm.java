@@ -4,23 +4,24 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
 public class SystemUserAddForm {
 
-    @ApiModelProperty("用户名")
+    @Schema(description ="用户名")
     private String username;
 
-    @ApiModelProperty("密码")
+    @Schema(description ="密码")
     private String password;
 
-    @ApiModelProperty("姓名")
+    @Schema(description ="姓名")
     private String name;
 
 }

@@ -11,8 +11,8 @@ import com.btchina.content.question.model.qo.AnswerAddQO;
 import com.btchina.content.question.model.qo.AnswerQueryQO;
 import com.btchina.content.question.model.qo.AnswerUpdateQO;
 import com.btchina.feign.model.question.vo.AnswerVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author franky
  * @since 2023-02-25
  */
-@Api(tags = "回答模块")
+@Tag(name = "回答模块")
 @RestController
 @RequestMapping("/answer")
 public class AnswerController {
@@ -39,7 +39,7 @@ public class AnswerController {
     private AnswerService answerService;
 
 
-    @ApiOperation(value = "添加回答")
+    @Parameter(name = "添加回答")
     @PostMapping("/add")
     public CommonResult<Void> addAnswer(@Validated @RequestBody AnswerAddQO answerAddQO) {
         Long userId = AuthHelper.getUserId();
@@ -50,7 +50,7 @@ public class AnswerController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "删除回答")
+    @Parameter(name = "删除回答")
     @PostMapping("/delete")
     public CommonResult<Void> delAnswer(@Validated @RequestBody DeleteForm deleteForm) {
         Long userId = AuthHelper.getUserId();
@@ -61,7 +61,7 @@ public class AnswerController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "修改回答")
+    @Parameter(name = "修改回答")
     @PostMapping("/update")
     public CommonResult<Void> updateAnswer(@Validated @RequestBody AnswerUpdateQO answerUpdateQO) {
         Long userId = AuthHelper.getUserId();
@@ -72,7 +72,7 @@ public class AnswerController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "查询回答")
+    @Parameter(name = "查询回答")
     @PostMapping("/list")
     public CommonResult<PageResult<AnswerVO>> getAnswerList(@Validated @RequestBody AnswerQueryQO answerQueryQO) {
         Long userId = AuthHelper.getUserId();
@@ -81,7 +81,7 @@ public class AnswerController {
     }
 
 
-    @ApiOperation(value = "采用回答")
+    @Parameter(name = "采用回答")
     @PostMapping("/use")
     public CommonResult<Void> use(@Validated @RequestBody AnswerUseQO answerUseQO) {
         Long userId = AuthHelper.getUserId();
@@ -93,26 +93,26 @@ public class AnswerController {
     }
 
 
-    @ApiOperation(value = "增加评论数")
+    @Parameter(name = "增加评论数")
     @PostMapping("/increase/comment/count")
     public void addCommentCount(@Validated @RequestBody Long answerId) {
         answerService.increaseCommentCount(answerId);
     }
 
-    @ApiOperation(value = "减少评论数")
+    @Parameter(name = "减少评论数")
     @PostMapping("/decrease/comment/count")
     public void decreaseCommentCount(@Validated @RequestBody Long answerId) {
         answerService.decreaseCommentCount(answerId);
     }
 
 
-    @ApiOperation(value = "获取回答详情")
+    @Parameter(name = "获取回答详情")
     @PostMapping("/findById")
     public AnswerVO findById(@Validated @RequestBody Long answerId) {
         return answerService.findVOById(answerId);
     }
 
-    @ApiOperation(value = "获取回答详情")
+    @Parameter(name = "获取回答详情")
     @PostMapping("/findVOById")
     public AnswerVO findVOById(@Validated @RequestBody Long answerId) {
         return answerService.findVOById(answerId);

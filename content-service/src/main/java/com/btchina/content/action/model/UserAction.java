@@ -8,8 +8,9 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,36 +25,36 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("tbl_user_action")
-@ApiModel(value = "UserAction对象", description = "用户动态表")
+@Schema(name = "UserAction对象", description = "用户动态表")
 public class UserAction implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id")
+    @Schema(description ="id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @ApiModelProperty("用户id")
+    @Schema(description ="用户id")
     private Long userId;
 
-    @ApiModelProperty("对象id")
+    @Schema(description ="对象id")
     private Long objectId;
 
-    @ApiModelProperty("操作类型 1 点赞 2 收藏 3 评论 4 采用 5 回答 6 提问 7关注")
+    @Schema(description ="操作类型 1 点赞 2 收藏 3 评论 4 采用 5 回答 6 提问 7关注")
     private Integer actionType;
 
-    @ApiModelProperty("对象类型 1 问题 2 用户")
+    @Schema(description ="对象类型 1 问题 2 用户")
     private Integer objectType;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
-    //@ApiModelProperty("是否删除;1是删除，0是不删除")
+    //@Schema(description ="是否删除;1是删除，0是不删除")
     //@TableLogic
     //private Boolean deleted;
 

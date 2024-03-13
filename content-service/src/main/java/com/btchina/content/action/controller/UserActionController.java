@@ -6,8 +6,9 @@ import com.btchina.core.api.CommonResult;
 import com.btchina.feign.model.userAction.qo.UserActionForm;
 import com.btchina.feign.model.userAction.qo.GetUserActionForm;
 import com.btchina.content.action.service.UserActionService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,13 +27,13 @@ import java.util.List;
  * @since 2023-03-30
  */
 @RestController
-@Api(tags = "用户动态模块")
+@Tag(name = "用户动态模块")
 @RequestMapping("/user/userAction")
 public class UserActionController {
 
     @Autowired
     private UserActionService userActionService;
-    @ApiOperation(value = "添加用户动态")
+   @Parameter(name = "添加用户动态")
     @PostMapping("/add")
     public CommonResult<Void> add(@RequestBody UserActionForm userActionForm) {
         Boolean isSuccess = userActionService.add(userActionForm);
@@ -42,7 +43,7 @@ public class UserActionController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "删除用户动态")
+   @Parameter(name = "删除用户动态")
     @PostMapping("/delete")
     public CommonResult<Void> delete(@RequestBody UserActionForm userActionForm) {
         Boolean isSuccess = userActionService.delete(userActionForm);
@@ -52,7 +53,7 @@ public class UserActionController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "获取用户动态列表")
+   @Parameter(name = "获取用户动态列表")
     @PostMapping("/list")
     public CommonResult<List<UserActionVO>> list(@RequestBody GetUserActionForm getUserActionForm) {
         List<UserActionVO> result = userActionService.list(getUserActionForm);

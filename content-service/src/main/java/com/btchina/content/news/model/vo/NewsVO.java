@@ -1,8 +1,9 @@
 package com.btchina.content.news.model.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,41 +21,40 @@ import java.util.Date;
  * @since 2023-04-23
  */
 @Data
-@ToString
-@ApiModel(value = "NewsVO对象" )
+@Schema(name = "NewsVO对象" )
 public class NewsVO implements Serializable {
 
-    @ApiModelProperty("Id")
+    @Schema(description ="Id")
     private Long id;
 
-    @ApiModelProperty("分类ID")
+    @Schema(description ="分类ID")
     private Long categoryId;
 
-    @ApiModelProperty("标题")
+    @Schema(description ="标题")
     private String title;
 
-    @ApiModelProperty("内容")
+    @Schema(description ="内容")
     private String content;
 
-    @ApiModelProperty("是否置顶 1是置顶 0是不置顶")
+    @Schema(description ="是否置顶 1是置顶 0是不置顶")
     private Boolean isTop;
 
-    @ApiModelProperty("来源")
+    @Schema(description ="来源")
     private String comeFrom;
 
-    @ApiModelProperty("点赞数")
+    @Schema(description ="点赞数")
     private Integer likeCount;
 
-    @ApiModelProperty("浏览数")
+    @Schema(description ="浏览数")
     private Integer viewCount;
 
-    @ApiModelProperty("审核状态 0是未审核 1是审核通过 2是审核不通过")
+    @Schema(description ="审核状态 0是未审核 1是审核通过 2是审核不通过")
     private Integer status;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     private Date updatedTime;
 
 }

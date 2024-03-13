@@ -1,8 +1,10 @@
 package com.btchina.content.school.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,31 +19,31 @@ import java.util.Date;
  * @since 2024-01-15
  */
 @Data
-@ApiModel(value = "学校列表返回对象")
+@Tag(name = "学校列表返回对象")
 public class SchoolVO implements Serializable {
 
-    @ApiModelProperty("id")
+    @Schema(description ="id")
     private String id;
 
-    @ApiModelProperty("学校名称")
+    @Schema(description ="学校名称")
     private String name;
 
-    @ApiModelProperty("学校简介")
+    @Schema(description ="学校简介")
     private String introduction;
 
-    @ApiModelProperty("学校介绍")
+    @Schema(description ="学校介绍")
     private String detail;
 
-    @ApiModelProperty("学校图标")
+    @Schema(description ="学校图标")
     private String logo;
 
-    @ApiModelProperty("排序")
+    @Schema(description ="排序")
     private Integer sort;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     private Date createdTime;
 
-    @ApiModelProperty("更新时间")
+    @Schema(description ="更新时间")
     private Date updatedTime;
 
 }

@@ -29,7 +29,7 @@ public class LoggerFilter implements GlobalFilter , Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        String method = request.getMethodValue();
+        String method = request.getMethod().name();
 
         if (HttpMethod.POST.matches(method)) {
             return DataBufferUtils.join(exchange.getRequest().getBody())
@@ -72,7 +72,7 @@ public class LoggerFilter implements GlobalFilter , Ordered {
     private void logtrace(ServerWebExchange exchange, String param) {
         ServerHttpRequest serverHttpRequest = exchange.getRequest();
         String path = serverHttpRequest.getURI().getPath();
-        String method = serverHttpRequest.getMethodValue();
+        String method = serverHttpRequest.getMethod().name();
         String headers = serverHttpRequest.getHeaders().entrySet()
                 .stream()
                 .map(entry -> "            " + entry.getKey() + ": [" + String.join(";", entry.getValue()) + "]")

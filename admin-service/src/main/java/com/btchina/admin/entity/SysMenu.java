@@ -1,8 +1,10 @@
 package com.btchina.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +22,7 @@ import java.util.Date;
 @Getter
 @Setter
 @TableName("tbl_sys_menu")
-@ApiModel(value = "SysMenu对象", description = "菜单表")
+@Tag(name = "SysMenu对象", description = "菜单表")
 public class SysMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,42 +30,42 @@ public class SysMenu implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty("上级菜单")
+    @Schema(description ="上级菜单")
     private Long parentId;
 
-    @ApiModelProperty("显示名称")
+    @Schema(description ="显示名称")
     private String title;
 
-    @ApiModelProperty("类型")
+    @Schema(description ="类型")
     private String type;
 
-    @ApiModelProperty("别名")
+    @Schema(description ="别名")
     private String name;
 
-    @ApiModelProperty("菜单图标")
+    @Schema(description ="菜单图标")
     private String icon;
 
-    @ApiModelProperty("路由地址")
+    @Schema(description ="路由地址")
     private String path;
 
-    @ApiModelProperty("重定向")
+    @Schema(description ="重定向")
     private String redirect;
 
-    @ApiModelProperty("隐藏菜单")
+    @Schema(description ="隐藏菜单")
     private Boolean hidden;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description ="创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
-    @ApiModelProperty("创建者")
+    @Schema(description ="创建者")
     private Long createdBy;
 
-    @ApiModelProperty("修改时间")
+    @Schema(description ="修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedTime;
 
-    @ApiModelProperty("修改人")
+    @Schema(description ="修改人")
     private Long updatedBy;
 
 
